@@ -1,12 +1,43 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
-const NAV_LINKS = [
-  { label: '概览', href: '#hero' },
-  { label: '商业前景', href: '#business' },
-  { label: '技术全景', href: '#technology' },
-  { label: '运动生理学', href: '#physiology' },
+interface NavLink {
+  label: string;
+  href: string;
+}
+
+interface SubmenuGroup {
+  label: string;
+  href: string;
+  children?: NavLink[];
+}
+
+const DESKTOP_LINKS: (NavLink | SubmenuGroup)[] = [
+  { label: '首页', href: '/' },
+  { label: '商业前景', href: '/business' },
+  {
+    label: '技术全景',
+    href: '/technology',
+    children: [
+      { label: '技术概览', href: '/technology' },
+      { label: '呼吸检测', href: '/technology/respiration' },
+      { label: '核心体温', href: '/technology/temperature' },
+      { label: '组合方案', href: '/technology/combinations' },
+    ],
+  },
+  { label: '运动生理学', href: '/physiology' },
+];
+
+const MOBILE_LINKS_FULL: NavLink[] = [
+  { label: '首页', href: '/' },
+  { label: '商业前景', href: '/business' },
+  { label: '技术概览', href: '/technology' },
+  { label: '呼吸检测', href: '/technology/respiration' },
+  { label: '核心体温', href: '/technology/temperature' },
+  { label: '组合方案', href: '/technology/combinations' },
+  { label: '运动生理学', href: '/physiology' },
 ];
 
 function HeartLogo() {
@@ -88,6 +119,28 @@ function GitHubIcon() {
   );
 }
 
+function ChevronDown() {
+  return (
+    <svg
+      width="10"
+      height="6"
+      viewBox="0 0 10 6"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M1 1l4 4 4-4" />
+    </svg>
+  );
+}
+
+function isSubmenuGroup(item: NavLink | SubmenuGroup): item is SubmenuGroup {
+  return 'children' in item && Array.isArray(item.children);
+}
+
 export function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -95,31 +148,58 @@ export function Nav() {
     <nav className="sticky top-0 z-50 bg-[#020617]/80 backdrop-blur-xl border-b border-white/[0.06]">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
         {/* Logo */}
-        <a
-          href="#hero"
-          className="flex items-center gap-2 font-heading text-lg font-bold text-white"
+        <Link
+          href="/"
+          className="flex items-center gap-2 font-heading text-lg font-bold text-white hover:text-green-400 transition-colors duration-200"
         >
           <HeartLogo />
           HeartBeat
-        </a>
+        </Link>
 
         {/* Desktop links */}
-        <div className="hidden gap-8 md:flex">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-sm text-[#94A3B8] transition-colors duration-200 hover:text-white"
-            >
-              {link.label}
-            </a>
-          ))}
+        <div className="hidden items-center gap-1 md:flex">
+          {DESKTOP_LINKS.map((item) => {
+            if (isSubmenuGroup(item)) {
+              return (
+                <div key={item.label} className="group relative">
+                  <div className="flex items-center gap-1 px-3 py-2 text-sm text-[#94A3B8] transition-colors duration-200 hover:text-white cursor-pointer rounded-md">
+                    {item.label}
+                    <ChevronDown />
+                  </div>
+                  {/* Submenu dropdown */}
+                  <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                    <div className="glass-card py-2 min-w-[160px]">
+                      {item.children!.map((child) => (
+                        <Link
+                          key={child.href}
+                          href={child.href}
+                          className="block px-4 py-2 text-sm text-[#94A3B8] hover:text-white hover:bg-white/[0.06] transition-colors duration-150"
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="px-3 py-2 text-sm text-[#94A3B8] transition-colors duration-200 hover:text-white rounded-md"
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </div>
 
         {/* Desktop GitHub + mobile toggle */}
         <div className="flex items-center gap-4">
           <a
-            href="https://github.com"
+            href="https://github.com/Paipai112/heartbeat-3in1-research"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-white transition-all duration-200 hover:bg-white/20"
@@ -130,7 +210,7 @@ export function Nav() {
 
           <button
             type="button"
-            aria-label="Toggle menu"
+            aria-label={mobileOpen ? '关闭菜单' : '打开菜单'}
             className="md:hidden"
             onClick={() => setMobileOpen((prev) => !prev)}
           >
@@ -142,17 +222,29 @@ export function Nav() {
       {/* Mobile dropdown */}
       {mobileOpen && (
         <div className="border-t border-white/[0.06] bg-[#020617]/95 backdrop-blur-xl md:hidden">
-          <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-4">
-            {NAV_LINKS.map((link) => (
-              <a
+          <div className="mx-auto flex max-w-7xl flex-col gap-1 px-6 py-4">
+            {MOBILE_LINKS_FULL.map((link) => (
+              <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="text-sm text-[#94A3B8] transition-colors duration-200 hover:text-white"
+                className="text-sm text-[#94A3B8] transition-colors duration-200 hover:text-white py-2"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
+            <div className="mt-2 pt-3 border-t border-white/[0.06]">
+              <a
+                href="https://github.com/Paipai112/heartbeat-3in1-research"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center gap-2 text-sm text-[#94A3B8] hover:text-white transition-colors duration-200 py-2"
+              >
+                <GitHubIcon />
+                GitHub
+              </a>
+            </div>
           </div>
         </div>
       )}
