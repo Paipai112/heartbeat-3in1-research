@@ -56,9 +56,9 @@ export function Footer() {
   return (
     <footer className="bg-[#020617] border-t border-white/[0.06] py-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid md:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
           {/* Col 1 - Brand (span 2) */}
-          <div className="md:col-span-2">
+          <div className="sm:col-span-2 lg:col-span-2">
             <div className="flex items-center gap-2 mb-4">
               <HeartLogo />
               <span className="font-heading font-bold text-white text-lg">
@@ -108,8 +108,8 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Col 4 - Sources (moved to row 2 on md) */}
-          <div className="md:col-span-4 lg:col-span-1">
+          {/* Col 4 - Sources */}
+          <div>
             <h3 className="text-white text-sm uppercase font-semibold mb-4">
               参考来源
             </h3>

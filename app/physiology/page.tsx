@@ -23,10 +23,10 @@ function MetricCard({
 }: MetricCardProps) {
   return (
     <div className="glass-card p-6">
-      <div className="flex items-start justify-between mb-2">
+      <div className="flex items-start justify-between mb-3">
         <div>
-          <h4 className="text-sm font-semibold text-white">{name}</h4>
-          <p className="text-xs text-[#64748B] font-mono">{nameEn}</p>
+          <h4 className="text-base font-semibold text-white">{name}</h4>
+          <p className="text-sm text-[#64748B] font-mono">{nameEn}</p>
         </div>
         {relevance === "high" && (
           <span className="text-xs px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 border border-green-500/20 shrink-0">
@@ -39,15 +39,15 @@ function MetricCard({
           </span>
         )}
       </div>
-      <div className="flex gap-3 text-xs mb-3">
+      <div className="flex gap-3 text-sm mb-3">
         <span className="text-green-400 font-mono">{unit}</span>
         <span className="text-[#475569]">|</span>
         <span className="text-[#94A3B8]">{range}</span>
       </div>
-      <p className="text-xs text-[#94A3B8] leading-relaxed mb-2">
+      <p className="text-sm text-[#94A3B8] leading-relaxed mb-3">
         {description}
       </p>
-      <div className="data-highlight text-xs">
+      <div className="data-highlight text-sm">
         <span className="text-[#64748B]">训练应用：</span>
         {application}
       </div>
