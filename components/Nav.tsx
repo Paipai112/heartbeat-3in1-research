@@ -25,6 +25,7 @@ const DESKTOP_LINKS: (NavLink | SubmenuGroup)[] = [
       { label: '呼吸检测', href: '/technology/respiration' },
       { label: '核心体温', href: '/technology/temperature' },
       { label: '组合方案', href: '/technology/combinations' },
+      { label: '汗液分析', href: '/technology/sweat' },
     ],
   },
   { label: '运动生理学', href: '/physiology' },
@@ -37,6 +38,7 @@ const MOBILE_LINKS_FULL: NavLink[] = [
   { label: '呼吸检测', href: '/technology/respiration' },
   { label: '核心体温', href: '/technology/temperature' },
   { label: '组合方案', href: '/technology/combinations' },
+  { label: '汗液分析', href: '/technology/sweat' },
   { label: '运动生理学', href: '/physiology' },
 ];
 

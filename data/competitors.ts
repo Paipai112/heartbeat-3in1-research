@@ -244,4 +244,170 @@ export const competitorProducts: CompetitorProduct[] = [
     url: "https://ouraring.com/product/rings/gen4",
     notes: "OURA Ring 证明了用户愿意为小型化的多参数（HR+呼吸+体温）设备支付 $349+(subscription) 并有持续付费意愿。但戒指形态在运动场景几乎不可用（出汗滑脱、数据中断、不适合高强度训练），其体温测量仅限于夜间。这进一步强化了胸带形态在运动可穿戴领域的唯一性——只有胸带能同时满足运动心率精度、躯干体温可靠性和长时间佩戴舒适性。",
   },
+
+  // ════════════════════════════════════════════════════════════════
+  // Sweat-Analysis Competitors
+  // ════════════════════════════════════════════════════════════════
+  {
+    id: "flowbio-s1",
+    name: "FLOWBIO S1",
+    company: "FLOWBIO",
+    category: "sweat",
+    formFactor: "chest-pod",
+    price: "$299",
+    metrics: ["sodium", "potassium", "hydration-status"],
+    technology: "ISE (Ion-Selective Electrode) Na+ and K+ sensors",
+    accuracy: "Na+ within ±5% of lab reference in controlled cycling trials; drift increases beyond 90 min of continuous heavy sweating",
+    certifications: ["CE"],
+    batteryLife: "Rechargeable, ~20 hours active use",
+    connectivity: ["BLE", "ANT+"],
+    ecosystem: ["FLOWBIO App", "Garmin Connect", "TrainingPeaks"],
+    strengths: [
+      "Worn by WorldTour teams (INEOS, Bora-Hansgrohe) validates credibility at the elite level",
+      "Real-time Na+ mg/L readout during activity closes the hydration feedback loop that lab tests cannot provide",
+      "Dual sweat channel design reduces sensor fouling compared to single-channel ISE wearables"
+    ],
+    weaknesses: [
+      "No lactate or glucose sensing — limited to electrolyte panel only, missing broader metabolic picture",
+      "Proprietary calibration cartridge required pre-ride; fails open mid-ride if calibration drifts",
+      "$299 plus no consumable-lock revenue model limits company scale vs. razor/blade competitors"
+    ],
+    website: "https://www.flowbio.com/",
+    notes: "FLOWBIO S1 是汗水电解质分析领域商业化最成熟的产品，已被英力士和博拉车队用于环法补水策略优化。其 ISE 钠钾传感器可在运动中实时显示 mg/L 浓度，但缺乏乳酸和葡萄糖检测能力使其停留在电解质面板层面。其与胸带心率带共置的形态（通过专用夹具固定在现有心率带上）与我们的三合一集成胸带形成直接路线对比——他们是配件逻辑，我们是集成逻辑。",
+  },
+  {
+    id: "nix-hydration-biosensor",
+    name: "Nix Hydration Biosensor",
+    company: "Nix Biosensors",
+    category: "sweat",
+    formFactor: "forearm-patch",
+    price: "$129 device + $25/4-pack single-use patches (~$6.25 per session)",
+    metrics: ["sodium", "potassium", "chloride", "fluid-loss-rate"],
+    technology: "ISE array with microfluidics — 4-ISE sensor array embedded in single-use adhesive patch with sweat-rate tracking via channel fill-rate",
+    accuracy: "Electrolyte concentration ±8-12% vs. lab reference; sweat-rate accuracy degrades in extremely high (>2 L/h) or low (<0.3 L/h) sweat rates",
+    certifications: [],
+    batteryLife: "Sensor pod rechargeable, ~36 hours; patch is single-use (disposable)",
+    connectivity: ["BLE"],
+    ecosystem: ["Nix App", "Apple Health", "Garmin Connect"],
+    strengths: [
+      "Razor/blade model creates recurring revenue that pure hardware competitors lack — $25/mo for weekly athletes",
+      "Forearm placement avoids chest-strap discomfort and is accessible mid-activity without removing jersey",
+      "Fluid-loss rate estimation via patch microchannel fill speed gives actionable 'when to drink' guidance beyond concentration alone"
+    ],
+    weaknesses: [
+      "Single-use patches create ongoing cost ($25/4) and environmental waste — a headwind in the sustainability-conscious athlete segment",
+      "Patch adhesion fails in humid conditions, open-water swimming, or extremely hairy forearms — limits addressable activities",
+      "Forearm sweat composition lags core body changes by 5-15 minutes vs. chest/torso placement, reducing real-time relevance"
+    ],
+    website: "https://nixbiosensors.com/",
+    notes: "Nix 采用前臂贴片+可拆卸传感器的分离式设计，利用 ISE 阵列检测汗液电解质并通过微流控通道充填速度估算出汗率。其刀片+刀架商业模式（$129 硬件 + 一次性贴片）在消费可穿戴中少见，产生了可持续的经常性收入。但贴片在潮湿环境下的粘附问题和高出汗用户更换成本限制了其在高强度耐力运动中的采用。前臂汗液成分在生理学上确实滞后于躯干，这一点在实时补水指导场景中是一个真实但常被忽略的弱点。",
+  },
+  {
+    id: "gatorade-gx-sweat-patch",
+    name: "Gatorade Gx Sweat Patch",
+    company: "PepsiCo / Gatorade",
+    category: "sweat",
+    formFactor: "forearm-patch",
+    price: "$25 / 2-pack single-use (disposable, no reusable electronics)",
+    metrics: ["sodium", "sweat-rate", "chloride-estimate"],
+    technology: "Colorimetric — paper-based chemical assay with Gx App smartphone camera reading (no electronic sensor)",
+    accuracy: "Semi-quantitative color-scale resolution; Na+ binned into low/medium/high tiers rather than continuous mg/L; lab correlation ~75-85%",
+    certifications: [],
+    batteryLife: "None — passive patch, no electronics",
+    connectivity: ["none"],
+    ecosystem: ["Gatorade Gx App"],
+    strengths: [
+      "Lowest per-use cost among any wearable sweat test at $12.50/session — accessible to high school and amateur athletes",
+      "Zero-electronics, zero-charging design eliminates every hardware reliability failure mode that plagues active sensor wearables",
+      "PepsiCo distribution and Gatorade brand reach give it unrivalled retail shelf presence — sold in DICK'S, Walmart, Amazon alongside Gatorade bottles"
+    ],
+    weaknesses: [
+      "Single-use, post-hoc only — no real-time data during activity; user peels off, scans with phone, waits for color development, then reads result",
+      "Colorimetric binning (low/med/high) is too coarse for precision hydration planning — a 500 mg/L vs 900 mg/L difference matters for cramping risk",
+      "Consumer trust eroding — widely criticized as a marketing data-harvest funnel for Gatorade product upsell rather than a serious training tool"
+    ],
+    website: "https://www.gatorade.com/gx-sweat-patch",
+    notes: "Gatorade Gx Sweat Patch 是汗水分析在消费市场的最大规模分发试验——以极低成本比色法将汗钠概念引入大众认知。但其核心局限（一次性、事后读取、半定量分级）意味着它本质上是一个营销漏斗工具而非训练设备。PepsiCo 退出该产品线的传闻持续不断，表明大型 CPG 公司难以在可穿戴硬件领域找到盈利模式。它证明了消费者对汗水分析的好奇心，但未能证明消费者愿意为此持续付费——这一模式需要可实时反馈的电子传感器来解决。",
+  },
+  {
+    id: "epicore-discovery-patch",
+    name: "Discovery Patch",
+    company: "Epicore Biosystems",
+    category: "sweat",
+    formFactor: "body-patch",
+    price: "Enterprise pricing (undisclosed per-unit; estimated $15-50/patch depending on panel and volume)",
+    metrics: ["sodium", "potassium", "ammonium", "lactate", "glucose", "pH", "sweat-rate", "temperature"],
+    technology: "Microfluidic multi-chamber with colorimetric and electrochemical sensors — microchannels route sweat to distinct assay zones on a flexible adhesive patch",
+    accuracy: "Lab-grade colorimetric resolution in controlled settings; electrochemical channels ±5-10% for lactate/glucose; field accuracy highly dependent on sweat-rate adequacy and patch seating",
+    certifications: [],
+    batteryLife: "None — passive patch; companion reader device provides power for electrochemical channels",
+    connectivity: ["BLE (via companion reader)"],
+    ecosystem: ["Epicore Connect Platform (enterprise dashboard)"],
+    strengths: [
+      "Most comprehensive sweat panel of any single wearable — 8+ analytes in one patch including lactate and glucose which no consumer competitor offers",
+      "Microfluidic architecture prevents evaporation and external contamination artifacts that plague open-electrode ISE sensors",
+      "Enterprise-first model (mining, military, industrial safety) sidesteps consumer adoption risk — validated in extreme environments where dehydration is a safety issue"
+    ],
+    weaknesses: [
+      "Enterprise-only pricing and no direct-to-consumer channel — completely inaccessible to athletes and coaches outside corporate contracts",
+      "Multi-chamber microfluidic design requires minimum sweat rate (~0.5 μL/min) to fill all channels; low-sweat users get incomplete panels",
+      "Companion reader device adds bulk and cost — not a single-integrated form factor, more akin to a portable lab than a wearable"
+    ],
+    website: "https://www.epicorebiosystems.com/",
+    notes: "Epicore Discovery Patch 代表了汗液分析的技术上限——单个贴片中集成 8+ 分析物的微流控多腔室设计，包括目前消费级产品完全不具备的乳酸和葡萄糖通道。但其企业级定价和依赖外接读取设备的系统架构使其无法触达消费者市场。Epicore 的路线验证了两点：(1) 多分析物汗液贴片在技术上已经可行，(2) 消费化的关键瓶颈不是传感器数量而是系统集成度和单位成本。这为我们的三合一胸带提供了重要的技术对标：集成什么分析物、以什么成本、用什么样的读取方式。",
+  },
+  {
+    id: "hdrop-gen-2",
+    name: "hDrop Gen 2",
+    company: "hDrop Technologies",
+    category: "sweat",
+    formFactor: "forearm-wearable",
+    price: "$150",
+    metrics: ["hydration-status", "sodium-estimate", "potassium-estimate", "sweat-rate"],
+    technology: "Bioelectrical Impedance Analysis (BIA) — measures skin impedance changes to estimate hydration and electrolyte shifts, not direct chemical sweat sensing",
+    accuracy: "Hydration-status trend accuracy ±10-15% vs. DEXA/plasma osmolality; electrolyte estimates are derived from impedance phase angle, not direct ISE measurement — not comparable to chemical assay",
+    certifications: ["CE"],
+    batteryLife: "Rechargeable, ~30 hours active use",
+    connectivity: ["BLE", "ANT+"],
+    ecosystem: ["hDrop App", "Garmin Connect", "Apple Health"],
+    strengths: [
+      "Non-invasive impedance method requires no consumables, no patches, no calibration — just wear and go, lowest friction of any sweat/hydration wearable",
+      "Continuous trend monitoring over hours/days gives hydration trajectory context that single-point sweat tests cannot provide",
+      "At $150 with no recurring cost, it is the cheapest total-cost-of-ownership hydration wearable for multi-season use"
+    ],
+    weaknesses: [
+      "Impedance-based hydration is an indirect proxy, not a direct sweat analyte measurement — confounded by skin temperature, sweat accumulation on skin, and movement artifacts",
+      "No chemical sweat sensing means it cannot differentiate sodium from potassium from lactate — a black-box hydration score with no electrolyte-specific guidance",
+      "Marketing overstates BIA hydration accuracy vs. gold-standard methods; independent validation data is sparse and company-sponsored only"
+    ],
+    website: "https://www.hdrop.com/",
+    notes: "hDrop Gen 2 走了一条与化学汗液传感器完全不同的路线——用生物电阻抗分析（BIA）来估计水合状态和电解质变化，本质上是将体脂秤的 BIA 原理微型化到前臂穿戴设备中。其最大优势是零耗材、零校准、即戴即用，但代价是数据本质上是间接推断而非直接测量。汗液中的实际钠浓度与 BIA 推导的电解质变化之间缺乏直接的化学对应关系，这在高强度运动中当汗液成分快速变化时会产生显著误差。定位上 hDrop 更接近 Whoop 的水合功能而非 FLOWBIO 的化学分析——面向健康追踪而非竞技训练。",
+  },
+  {
+    id: "kenzen-patch",
+    name: "Kenzen Patch",
+    company: "Kenzen",
+    category: "sweat",
+    formFactor: "chest-patch",
+    price: "Enterprise/industrial pricing (per-worker subscription model, undisclosed)",
+    metrics: ["sodium", "potassium", "temperature", "heart-rate", "sweat-rate"],
+    technology: "ISE electrolyte sensors + thermistor + optical HR — multi-modal flexible patch combining sweat chemistry with vital-sign monitoring",
+    accuracy: "Na+ within ±8-12% in industrial settings (high ambient temperature, 35-45°C); HR ±3-5 bpm (optical on chest with movement); temperature ±0.3°C skin surface",
+    certifications: ["FDA 510(k) (core temperature algorithm component)"],
+    batteryLife: "Single-shift disposable (~8-12 hours); data pod is rechargeable and reusable across patches",
+    connectivity: ["BLE"],
+    ecosystem: ["Kenzen Worker Health Platform (enterprise dashboard)"],
+    strengths: [
+      "Only sweat wearable with FDA 510(k) clearance for its core temperature algorithm — a regulatory moat that no consumer sweat competitor has crossed",
+      "Combines sweat chemistry with continuous vital signs (HR, skin temp) in a single chest patch — closest to a full physiological-status monitor in the sweat category",
+      "Industrial-validated in extreme heat conditions (construction, mining, firefighting) where consumer wearables would fail — ruggedness is a genuine differentiator"
+    ],
+    weaknesses: [
+      "Enterprise-only — no consumer product, no athlete pricing, no public documentation on sensor specifications or validation data",
+      "Single-shift disposable patch model optimized for employer compliance rather than athletic performance — no historical trending or training-integration features",
+      "Optical HR sensor on chest is inherently inferior to ECG electrodes for the motion-intensive use case of sports, limiting crossover potential to the athletic market"
+    ],
+    website: "https://www.kenzen.com/",
+    notes: "Kenzen Patch 是目前汗水分析赛道中唯一拥有 FDA 510(k) 认证的产品（针对核心体温算法），使其在工业安全市场上具有硬性合规壁垒。其多模态融合设计（ISE 电解质 + 热敏电阻体温 + 光学心率）是汗水可穿戴中最接近我们三合一胸带理念的产品——只不过它选择了贴片形态和企业市场而非消费运动市场。Kenzen 证明了 ISE + 温度 + 心率的传感器融合在单设备中技术上可行且可以通过 FDA，这为我们的消费化路线提供了重要的法规可行性信号。但其光学心率方案在运动场景下的精度劣势也再次验证了 ECG 电极对于运动胸带是不可妥协的传感器选择。",
+  },
 ];

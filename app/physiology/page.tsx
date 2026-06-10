@@ -44,7 +44,7 @@ function MetricCard({
         <span className="text-[#475569]">|</span>
         <span className="text-[#94A3B8]">{range}</span>
       </div>
-      <p className="text-sm text-[#94A3B8] leading-relaxed mb-3">
+      <p className="text-base text-[#94A3B8] leading-relaxed mb-3">
         {description}
       </p>
       <div className="data-highlight text-sm">

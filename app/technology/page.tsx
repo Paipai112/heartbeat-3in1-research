@@ -27,7 +27,7 @@ function TechCard({
       {subtitle && (
         <p className="text-xs text-[#64748B] mb-3 font-mono">{subtitle}</p>
       )}
-      <div className="text-sm text-[#94A3B8] leading-relaxed">{children}</div>
+      <div className="text-base text-[#94A3B8] leading-relaxed">{children}</div>
     </div>
   );
 }
@@ -500,6 +500,64 @@ export default function TechnologyPage() {
         </div>
       </section>
 
+      {/* Sweat Analysis Summary */}
+      <section className="bg-[#0A1120] py-20 lg:py-28">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="mb-12">
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white mb-3">
+              汗液分析：从生化盲区到实时窗口
+            </h2>
+            <p className="text-base text-[#94A3B8] max-w-2xl">
+              六大汗液传感技术路线对比。ISE 离子选择性电极最成熟（FLOWBIO S1 已在职业车队使用），
+              电导法最易集成到胸带，微针阵列是颠覆性的未来方向。
+            </p>
+          </div>
+
+          <div className="overflow-x-auto mb-8">
+            <table className="w-full text-sm min-w-[700px]">
+              <thead>
+                <tr className="border-b border-white/[0.06]">
+                  <th className="text-left py-3 px-3 text-[#94A3B8] font-normal">技术</th>
+                  <th className="text-center py-3 px-3 text-[#94A3B8] font-normal">精度</th>
+                  <th className="text-center py-3 px-3 text-[#94A3B8] font-normal">多指标</th>
+                  <th className="text-center py-3 px-3 text-[#94A3B8] font-normal">成熟度</th>
+                  <th className="text-center py-3 px-3 text-[#94A3B8] font-normal">胸带集成</th>
+                  <th className="text-left py-3 px-3 text-[#94A3B8] font-normal">代表产品</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/[0.04]">
+                {[
+                  ["ISE 离子选择性电极", "±2-5%", "★★★★★", "★★★★★", "★★★★", "FLOWBIO S1 ($299)", false],
+                  ["微流控比色法", "半定量", "★★★★★", "★★★★", "★★", "Epicore (Enterprise)", false],
+                  ["电化学安培法", "±5-10%", "★★★", "★★★★", "★★★", "研究原型", false],
+                  ["阻抗/电导法", "±10-15%", "★", "★★★", "★★★★★", "hDrop Gen 2 ($150)", false],
+                  ["比色贴片/纸基", "±20-30%", "★★★", "★★★", "★", "Gatorade Gx ($25/2pk)", false],
+                  ["微针阵列", "±10-15%*", "★★★★★", "★★", "★★★", "研究阶段", true],
+                ].map(([tech, accuracy, multi, maturity, chest, product, highlight], i) => (
+                  <tr key={i} className={highlight ? "bg-green-500/5" : ""}>
+                    <td className="py-3 px-3 text-white font-medium">{tech}</td>
+                    <td className="py-3 px-3 text-[#94A3B8] text-center">{accuracy}</td>
+                    <td className="py-3 px-3 text-[#94A3B8] text-center">{multi}</td>
+                    <td className="py-3 px-3 text-[#94A3B8] text-center">{maturity}</td>
+                    <td className="py-3 px-3 text-center">
+                      <span className={chest + " font-semibold"}>{chest}</span>
+                    </td>
+                    <td className="py-3 px-3 text-[#94A3B8]">{product}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <Link
+            href="/technology/sweat"
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 text-white hover:bg-white/10 px-6 py-2.5 transition-colors text-sm"
+          >
+            深入了解汗液分析技术 →
+          </Link>
+        </div>
+      </section>
+
       {/* Chip Solutions */}
       <section className="bg-[#0A1120] py-20 lg:py-28">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -617,6 +675,11 @@ export default function TechnologyPage() {
               severity="medium"
               solution="分阶段策略：Wellness → OTC (510k Class II) → 诊断级。ISO 13485 QMS + IEC 60601电气安全 + ISO 10993生物相容性。"
             />
+            <ChallengeCard
+              title="汗液传感器集成到胸带"
+              severity="medium"
+              solution="汗液收集需要微流控导流结构将胸骨区汗液引导至ISE/电导传感器区。FLOWBIO S1已验证夹扣式可行性。挑战在于汗液新鲜度（新旧汗液分离）、盐结晶堵塞、以及ISE电极与ECG电极的间距隔离（>5mm）。"
+            />
           </div>
         </div>
       </section>
@@ -639,7 +702,7 @@ export default function TechnologyPage() {
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
                 href: "/technology/respiration",
@@ -691,6 +754,23 @@ export default function TechnologyPage() {
                   >
                     <rect x="2" y="3" width="20" height="14" rx="2" />
                     <path d="M8 21h8M12 17v4" />
+                  </svg>
+                ),
+              },
+              {
+                href: "/technology/sweat",
+                title: "汗液分析",
+                desc: "ISE vs 微流控 vs 微针阵列，胸带集成可行性深度分析",
+                icon: (
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#22D3EE"
+                    strokeWidth="1.5"
+                  >
+                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
                   </svg>
                 ),
               },

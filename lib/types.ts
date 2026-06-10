@@ -26,17 +26,39 @@ export interface MarketDataPoint {
 }
 
 export interface CompetitorProduct {
+  // Core identity
+  id?: string;
   name: string;
-  manufacturer: string;
+  manufacturer?: string;
+  company?: string;
+  // Category & form factor (sweat-analysis)
+  category?: "sweat" | "heart-rate" | "respiration" | "temperature" | "multi-parameter";
+  formFactor?: "chest-pod" | "forearm-patch" | "body-patch" | "forearm-wearable" | "chest-patch";
+  // Pricing
   price: string;
-  ecg: boolean;
-  respiration: boolean;
-  temperature: boolean;
-  respirationTech: string;
-  temperatureTech: string;
+  // Legacy boolean fields (existing entries)
+  ecg?: boolean;
+  respiration?: boolean;
+  temperature?: boolean;
+  // Legacy tech & accuracy (existing entries)
+  respirationTech?: string;
+  temperatureTech?: string;
   accuracy: string;
-  certification: string;
-  url: string;
+  // Legacy certification string (existing entries) vs new certifications array
+  certification?: string;
+  certifications?: string[];
+  // Legacy URL
+  url?: string;
+  website?: string;
+  // Sweat-analysis fields
+  metrics?: string[];
+  technology?: string;
+  batteryLife?: string;
+  connectivity?: string[];
+  ecosystem?: string[];
+  strengths?: string[];
+  weaknesses?: string[];
+  // Shared
   notes: string;
 }
 

@@ -54,7 +54,7 @@ function ScenarioCard({
       <h3 className="font-heading text-xl font-bold text-white mb-3">
         {name}
       </h3>
-      <p className="text-sm text-[#94A3B8] mb-4 leading-relaxed">
+      <p className="text-base text-[#94A3B8] mb-4 leading-relaxed">
         {description}
       </p>
       <div className="mb-3">

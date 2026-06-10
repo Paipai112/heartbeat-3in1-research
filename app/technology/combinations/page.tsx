@@ -345,7 +345,7 @@ export default function CombinationsPage() {
             </p>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-xs">
+              <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-white/[0.06]">
                     <th className="text-left py-3 px-3 text-[#94A3B8] font-normal">方案</th>
@@ -564,7 +564,7 @@ export default function CombinationsPage() {
                     <h4 className="text-sm font-semibold text-white mb-1.5">
                       {item.title}
                     </h4>
-                    <p className="text-xs text-[#94A3B8] leading-relaxed">
+                    <p className="text-base text-[#94A3B8] leading-relaxed">
                       {item.text}
                     </p>
                   </div>
@@ -586,7 +586,7 @@ export default function CombinationsPage() {
             <div className="grid lg:grid-cols-2 gap-6">
               {/* 功耗表 */}
               <div className="overflow-x-auto">
-                <table className="w-full text-xs">
+                <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-white/[0.06]">
                       <th className="text-left py-3 px-3 text-[#94A3B8] font-normal">子系统</th>
@@ -812,7 +812,7 @@ export default function CombinationsPage() {
                 技术方案与定位
               </h3>
 
-              <div className="space-y-4 text-xs text-[#94A3B8] leading-relaxed">
+              <div className="space-y-4 text-base text-[#94A3B8] leading-relaxed">
                 <p>
                   <span className="text-white font-semibold">适用场景: </span>
                   训练强度监测 + 呼吸效率评估。面向跑步、骑行、铁人三项等高强度有氧运动爱好者，
@@ -875,7 +875,7 @@ export default function CombinationsPage() {
               竞争对比
             </h3>
             <div className="overflow-x-auto">
-              <table className="w-full text-xs">
+              <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-white/[0.06]">
                     <th className="text-left py-3 px-3 text-[#94A3B8] font-normal">产品</th>
@@ -997,7 +997,7 @@ export default function CombinationsPage() {
                 技术方案与定位
               </h3>
 
-              <div className="space-y-4 text-xs text-[#94A3B8] leading-relaxed">
+              <div className="space-y-4 text-base text-[#94A3B8] leading-relaxed">
                 <p>
                   <span className="text-white font-semibold">适用场景: </span>
                   热适应训练、高温环境运动、军事/工业高温作业安全监测。核心体温是热应激
@@ -1062,7 +1062,7 @@ export default function CombinationsPage() {
               竞争格局
             </h3>
             <div className="overflow-x-auto">
-              <table className="w-full text-xs">
+              <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-white/[0.06]">
                     <th className="text-left py-3 px-3 text-[#94A3B8] font-normal">产品</th>
@@ -1171,7 +1171,7 @@ export default function CombinationsPage() {
                 技术方案与定位
               </h3>
 
-              <div className="space-y-4 text-xs text-[#94A3B8] leading-relaxed">
+              <div className="space-y-4 text-base text-[#94A3B8] leading-relaxed">
                 <p>
                   <span className="text-white font-semibold">适用场景: </span>
                   高温环境下的呼吸训练、热适应 + 呼吸节律优化、与现有 ECG 胸带或手表搭配使用。
@@ -1471,7 +1471,7 @@ export default function CombinationsPage() {
                       {sc.text}
                     </span>
                   </div>
-                  <div className="text-xs text-[#94A3B8] leading-relaxed">
+                  <div className="text-base text-[#94A3B8] leading-relaxed">
                     {challenge.body}
                   </div>
                 </GlassCard>
@@ -1501,7 +1501,7 @@ export default function CombinationsPage() {
                 GATT 服务列表
               </h3>
               <div className="overflow-x-auto">
-                <table className="w-full text-xs">
+                <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-white/[0.06]">
                       <th className="text-left py-2.5 px-3 text-[#94A3B8] font-normal">
@@ -1578,7 +1578,7 @@ export default function CombinationsPage() {
                 设备 Profile
               </h3>
               <div className="overflow-x-auto mb-4">
-                <table className="w-full text-xs">
+                <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-white/[0.06]">
                       <th className="text-left py-2.5 px-3 text-[#94A3B8] font-normal">
@@ -1628,7 +1628,7 @@ export default function CombinationsPage() {
                 <h4 className="text-xs font-semibold text-amber-400 mb-1">
                   ANT+ 借道策略说明
                 </h4>
-                <p className="text-xs text-[#94A3B8] leading-relaxed">
+                <p className="text-base text-[#94A3B8] leading-relaxed">
                   ANT+ 联盟目前没有标准化的核心体温 Profile。CORE Body Temperature Monitor
                   使用的策略是借用 Muscle Oxygen Profile (Device Type 31) 的未使用字段
                   传输体温数据——这是 ANT+ 生态中获取 Garmin 码表和手表兼容性的最佳实践。
@@ -1660,7 +1660,7 @@ export default function CombinationsPage() {
           />
 
           <div className="overflow-x-auto mb-8">
-            <table className="w-full text-xs">
+            <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/[0.06]">
                   <th className="text-left py-3 px-3 text-[#94A3B8] font-normal">市场</th>
@@ -1798,7 +1798,7 @@ export default function CombinationsPage() {
                         {step.timeline}
                       </span>
                     </div>
-                    <p className="text-xs text-[#94A3B8] leading-relaxed">
+                    <p className="text-base text-[#94A3B8] leading-relaxed">
                       {step.description}
                     </p>
                   </div>
@@ -1908,7 +1908,7 @@ export default function CombinationsPage() {
                   <h4 className="text-sm font-semibold text-white mb-2">
                     {item.title}
                   </h4>
-                  <p className="text-xs text-[#94A3B8] leading-relaxed">
+                  <p className="text-base text-[#94A3B8] leading-relaxed">
                     {item.description}
                   </p>
                 </GlassCard>
@@ -1916,7 +1916,7 @@ export default function CombinationsPage() {
             </div>
 
             <DataHighlight>
-              <p className="text-sm text-[#94A3B8] leading-relaxed">
+              <p className="text-base text-[#94A3B8] leading-relaxed">
                 <span className="text-green-400 font-semibold">核心结论: </span>
                 方案 A (MAX30001+TMP117+nRF52840) 不是最便宜的方案，也不是精度最高的方案，
                 但它是量产风险最低、上市速度最快、生态系统最全面的方案。在竞争窗口有限的消费电子市场，

@@ -147,7 +147,7 @@ function SubSectionCard({
       <h4 className="font-heading text-base font-semibold text-white mb-3">
         {title}
       </h4>
-      <div className="text-sm text-[#94A3B8] leading-relaxed space-y-2">
+      <div className="text-base text-[#94A3B8] leading-relaxed space-y-2">
         {children}
       </div>
     </GlassCard>
@@ -294,7 +294,7 @@ export default function RespirationPage() {
           />
 
           <div className="overflow-x-auto mb-8">
-            <table className="w-full text-xs min-w-[900px]">
+            <table className="w-full text-sm min-w-[900px]">
               <thead>
                 <tr className="border-b border-white/[0.06]">
                   <th className="text-left py-3 px-3 text-[#94A3B8] font-normal w-[120px]">
@@ -1324,7 +1324,7 @@ export default function RespirationPage() {
                   多频生物阻抗谱
                 </h4>
               </div>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">
+              <p className="text-base text-[#94A3B8] leading-relaxed">
                 传统单频（50kHz）BioZ仅反映胸腔平均阻抗变化。多频阻抗谱（MF-BioZ,
                 5-500kHz
                 多频率同时/分时激励）可以区分不同组织成分的阻抗特性：低频（5-50kHz）主要反映细胞外液和胸腔壁组织，中频（50-200kHz）穿透细胞膜反映细胞内液，高频（200-500kHz）对不同组织的介电弛豫特性敏感。通过阻抗谱分析可实现
@@ -1346,7 +1346,7 @@ export default function RespirationPage() {
                   电容式纳米纤维传感器
                 </h4>
               </div>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">
+              <p className="text-base text-[#94A3B8] leading-relaxed">
                 静电纺丝技术制备的纳米纤维（如PVDF-TrFE、TPU/CNT复合材料）在拉伸时产生可测量的电容变化——灵敏度是传统金属应变片的
                 10-50 倍。纳米纤维的高比表面积（&gt;10 m&sup2;/g）使其对微小的胸腔拉伸（&lt;1% 应变）即产生显著的电容信号。更重要的是，纳米纤维传感器可能从根本上改善
                 <strong className="text-white">运动鲁棒性</strong>
@@ -1367,7 +1367,7 @@ export default function RespirationPage() {
                   ML呼吸模式识别
                 </h4>
               </div>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">
+              <p className="text-base text-[#94A3B8] leading-relaxed">
                 深度学习正在重塑呼吸波形分析的方式。CNN（卷积神经网络）可以直接从原始呼吸波形中学习局部形态特征（如吸/呼比、波峰尖锐度），LSTM（长短期记忆网络）捕获呼吸模式在数分钟尺度上的演变趋势。前沿模型（ResNet-LSTM
                 混合架构）在公开数据集上的呼吸模式分类准确率已达 92%+，可区分正常呼吸、喘息、呼吸暂停、Cheyne-Stokes
                 呼吸等多种模式。在运动场景中，ML模型可以利用ACC+ECG+BioZ多模态输入，在运动伪影高发区间仍能维持较高的呼吸率检测准确率——关键在于模型学会识别"伪影模式"而非仅依赖信号本身。
@@ -1387,7 +1387,7 @@ export default function RespirationPage() {
                   心肺耦合分析
                 </h4>
               </div>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">
+              <p className="text-base text-[#94A3B8] leading-relaxed">
                 心率与呼吸之间的耦合关系（cardiopulmonary coupling,
                 CPC）是近年运动生理学的研究热点。传统上，心率与呼吸的交互分析主要关注呼吸性窦性心律不齐（RSA），但CPC分析走得更远——量化HRV的呼吸频段功率、心肺相位同步指数、以及心肺耦合强度在运动强度递变中的演化。研究发现，VT1
                 和 VT2
@@ -1408,7 +1408,7 @@ export default function RespirationPage() {
                   非接触式方法
                 </h4>
               </div>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">
+              <p className="text-base text-[#94A3B8] leading-relaxed">
                 超宽带（UWB）雷达（如英飞凌 XENSIV 60GHz
                 雷达芯片）可透过衣物检测胸腔壁运动，实现完全无接触的呼吸率监测。热成像（FLIR
                 Leptop核心组件）通过检测鼻孔区域的温度变化（吸气时降温、呼气时升温）间接测量呼吸率和估算潮气量。这些技术不属于胸带方案，但作为
@@ -1431,7 +1431,7 @@ export default function RespirationPage() {
                   柔性电子皮肤
                 </h4>
               </div>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">
+              <p className="text-base text-[#94A3B8] leading-relaxed">
                 这是可穿戴传感器的终极形态愿景——厚度仅 10-50 &micro;m 的超薄电子薄膜（基于聚酰亚胺/PDMS
                 基底）直接贴附在胸部皮肤上，与皮肤的刚度匹配（E &asymp; 1-100 kPa，与表皮相当）。由于传感器与皮肤之间不存在相对运动（无间隙、无剪切），运动伪影在物理层面被最小化，大大降低了后端信号处理的难度。2024年
                 Nature Electronics 刊载的前沿成果（Xu et al.）展示了基于金纳米网（Au
@@ -1483,7 +1483,7 @@ export default function RespirationPage() {
                   </span>
                 </div>
               </div>
-              <p className="text-xs text-[#94A3B8] leading-relaxed mb-3">
+              <p className="text-base text-[#94A3B8] leading-relaxed mb-3">
                 运动伪影是胸带呼吸监测面临的最大工程挑战。跑步时胸带相对皮肤的滑动、骑行时上身的姿态变化、乃至手臂摆动带来的胸部皮肤牵引——这些都会在呼吸波形中叠加低频运动干扰。运动频率（跑步步频 ~2.7
                 Hz）与呼吸频率（0.2-1.0 Hz）并非完全无重叠（高强度运动时RR可达 1 Hz），简单的固定频率滤波无法彻底分离。
               </p>
@@ -1549,7 +1549,7 @@ export default function RespirationPage() {
                   </span>
                 </div>
               </div>
-              <p className="text-xs text-[#94A3B8] leading-relaxed mb-3">
+              <p className="text-base text-[#94A3B8] leading-relaxed mb-3">
                 BioZ信号的精度高度依赖电极-皮肤接触的稳定性。电极接触阻抗从安静时的 ~10-50 k&Omega; 可能飙升至运动时的
                 100-500 k&Omega;（汗水、皮肤牵拉）。接触阻抗的快速变化会导致 BioZ
                 信号中出现阶跃跳变，难以与真实的呼吸变化区分开。此外，完全脱离（连接丢失）将导致数据完全丢失。
@@ -1617,7 +1617,7 @@ export default function RespirationPage() {
                   </span>
                 </div>
               </div>
-              <p className="text-xs text-[#94A3B8] leading-relaxed mb-3">
+              <p className="text-base text-[#94A3B8] leading-relaxed mb-3">
                 在三合一胸带中，ECG放大器（带宽 0.05-150 Hz）、BioZ激励源（50
                 kHz）、温度传感器（I&sup2;C低速率数字信号）共存在一个狭小空间（&lt;50 &times; 30
                 mm）的PCB上。50 kHz BioZ激励电流 &sim;100 &micro;A 虽然微弱，但足以通过电磁耦合干扰 ECG

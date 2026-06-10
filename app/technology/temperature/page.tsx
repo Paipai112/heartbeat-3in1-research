@@ -70,7 +70,7 @@ function InfoCard({ title, subtitle, variant = "default", children }: InfoCardPr
       {subtitle && (
         <p className="text-xs text-[#64748B] mb-3 font-mono">{subtitle}</p>
       )}
-      <div className="text-sm text-[#94A3B8] leading-relaxed">{children}</div>
+      <div className="text-base text-[#94A3B8] leading-relaxed">{children}</div>
     </div>
   );
 }
@@ -104,7 +104,7 @@ function PhaseCard({ phase, title, subtitle, children, highlight = false }: Phas
         {title}
       </h3>
       <p className="text-xs text-[#64748B] mb-3 font-mono">{subtitle}</p>
-      <div className="text-sm text-[#94A3B8] leading-relaxed">{children}</div>
+      <div className="text-base text-[#94A3B8] leading-relaxed">{children}</div>
     </div>
   );
 }
@@ -140,7 +140,7 @@ export default function TemperatureDeepDivePage() {
 
           {/* Narrative */}
           <div className="grid lg:grid-cols-2 gap-8 mb-12">
-            <div className="text-sm text-[#94A3B8] leading-relaxed space-y-4">
+            <div className="text-base text-[#94A3B8] leading-relaxed space-y-4">
               <p>
                 核心体温（Core Body Temperature, T_core）指人体深部器官的温度，正常范围维持在 36.5-37.5°C。
                 在运动中，骨骼肌代谢产热使 T_core 快速上升——在高温高湿环境下，马拉松选手的 T_core 可在 30
@@ -158,7 +158,7 @@ export default function TemperatureDeepDivePage() {
                 CNS 的"中央调控器"已经开始降档。这种中枢疲劳与传统的外周肌肉疲劳（乳酸堆积、糖原耗尽）是完全不同的生理通路。
               </p>
             </div>
-            <div className="text-sm text-[#94A3B8] leading-relaxed space-y-4">
+            <div className="text-base text-[#94A3B8] leading-relaxed space-y-4">
               <p>
                 核心体温数据在训练与比赛中有四个不可替代的应用价值：
               </p>
@@ -240,7 +240,7 @@ export default function TemperatureDeepDivePage() {
           />
 
           <div className="overflow-x-auto mb-8">
-            <table className="w-full text-xs">
+            <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/[0.06]">
                   <th className="text-left py-3 px-3 text-[#94A3B8] font-normal w-[13%]">技术名称</th>
@@ -586,7 +586,7 @@ export default function TemperatureDeepDivePage() {
                 <div key={item.step} className="glass-card p-6 border-t-2 border-cyan-500/30">
                   <span className="text-xs font-mono text-cyan-400">{item.step}</span>
                   <h4 className="text-sm font-semibold text-white mt-1 mb-2">{item.title}</h4>
-                  <p className="text-xs text-[#94A3B8] leading-relaxed">{item.desc}</p>
+                  <p className="text-base text-[#94A3B8] leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -632,7 +632,7 @@ export default function TemperatureDeepDivePage() {
                   <h5 className="text-xs font-semibold text-white mb-1">{metric.name}</h5>
                   <p className="text-[10px] text-[#64748B] font-mono mb-2">{metric.en}</p>
                   <p className="text-xs text-green-400 font-mono mb-1">{metric.formula}</p>
-                  <p className="text-[11px] text-[#94A3B8] leading-relaxed">{metric.desc}</p>
+                  <p className="text-base text-[#94A3B8] leading-relaxed">{metric.desc}</p>
                 </div>
               ))}
             </div>
@@ -953,7 +953,7 @@ export default function TemperatureDeepDivePage() {
               <div key={research.title} className="glass-card p-5 border-t-2 border-amber-500/20">
                 <h5 className="text-xs font-semibold text-white mb-0.5">{research.title}</h5>
                 <p className="text-[10px] text-amber-400 font-mono mb-2">{research.en}</p>
-                <p className="text-[11px] text-[#94A3B8] leading-relaxed">{research.desc}</p>
+                <p className="text-base text-[#94A3B8] leading-relaxed">{research.desc}</p>
               </div>
             ))}
           </div>
@@ -1070,7 +1070,7 @@ export default function TemperatureDeepDivePage() {
             <h3 className="font-heading text-xl font-semibold text-white mb-2">
               核心体温监测 — 从「有了就好」到「测得准」
             </h3>
-            <p className="text-sm text-[#94A3B8] max-w-2xl mx-auto leading-relaxed">
+            <p className="text-base text-[#94A3B8] max-w-2xl mx-auto leading-relaxed">
               CORE 2 验证了市场，但它的精度争议也指明了方向：非侵入式核心体温测量的下一个产品代际
               属于双热流法。将独立验证的 LoA 从 -0.38/+0.72°C 收窄到 ±0.2°C 以内，不仅是技术指标
               的提升，更是从"训练趋势参考"到"比赛日决策工具"的定位跃迁——这是一片尚未被充分占领的蓝海。

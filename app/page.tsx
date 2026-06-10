@@ -285,6 +285,26 @@ export default function Home() {
               title="运动生理学框架"
               description="24 项关键生理指标 — 从 ECG、呼吸与体温三大传感器到 AI 教练的四阶段能力路径，构建完整的运动生理数据飞轮。"
             />
+            <ReportCard
+              href="/technology/sweat"
+              accent="teal"
+              icon={
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#22D3EE"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                </svg>
+              }
+              title="汗液分析技术"
+              description="六大汗液传感路线深度拆解 — 从 ISE 离子选择性电极到微针阵列，FLOWBIO S1 如何在职业车手胸前打开生化传感窗口。"
+            />
           </div>
         </div>
       </section>
