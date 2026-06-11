@@ -6,15 +6,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   // ============================================================
 
   {
-    slug: "ecg-electrocardiogram",
-    term: "心电图",
-    termEn: "ECG (Electrocardiogram)",
+    id: "ecg-electrocardiogram",
+    term: "心电图 (ECG/Electrocardiogram)",
     category: "technology",
     definition:
       "通过体表电极记录心脏在每个心动周期中产生的电活动变化，是胸带式运动传感器的核心技术之一。",
     detail:
       "心电图是记录心肌细胞去极化和复极化过程中产生的微弱电位差的技术，频率范围通常在 0.05-150Hz 之间，信号幅值约为 0.5-4mV。在胸带方案中，ECG 通过紧贴皮肤的干电极采集，由模拟前端（AFE）芯片进行差分放大、滤波和模数转换后输出数字信号。\n\nMAX30001 是胸带方案中广泛采用的单芯片 AFE，支持单导联 ECG 采集，内置 EMI 滤波器、右腿驱动（RLD）输出以提高共模抑制比（CMRR），典型 CMRR 可达 100dB 以上。ECG 信号经过 R 波峰值检测后可计算心率（HR）和心率变异性（HRV），是运动强度监测和心律异常筛查的基础信号源。\n\n在 3-in-1 胸带设计中，ECG 不仅是心率提取的来源，也是 ECG 衍生呼吸（EDR）的基础——通过分析 R 波振幅随呼吸周期的波动提取呼吸信号，从而实现单电极同时获取心率和呼吸率，大幅降低系统复杂度。高信号质量是胸带区别于光电手表的核心竞争优势，尤其在运动状态下，胸带 ECG 的抗运动干扰能力远超腕部 PPG。",
-    relatedSlugs: [
+    references: [
       "max30001",
       "afe-analog-front-end",
       "hrv-heart-rate-variability",
@@ -23,15 +22,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "bioz-bioimpedance",
-    term: "生物阻抗",
-    termEn: "BioZ (Bioimpedance)",
+    id: "bioz-bioimpedance",
+    term: "生物阻抗 (BioZ/Bioimpedance)",
     category: "technology",
     definition:
       "通过对生物组织施加微弱交流电信号并测量其阻抗响应，无创获取生理参数的技术，在胸带中用于呼吸监测。",
     detail:
       "生物阻抗技术的基本原理是向人体组织注入安全范围内的高频微电流（通常为 10-100kHz、50-100μA），通过测量电压响应计算出组织阻抗。人体组织的电导率因含水量、结构密度和生理状态不同而变化，胸腔在呼吸过程中的体积变化会导致可测量的阻抗波动。\n\n在胸带方案中，BioZ 测量通常与 ECG 共用电极或采用四电极配置（两个激励电极、两个测量电极），通过向胸腔注入高频电流并测量电压变化提取呼吸波形。四电极法相比二电极法能有效消除电极-皮肤接触阻抗的干扰，显著提高信噪比。MAX30001 内置了 BioZ 通道，通过独立的 I/Q 驱动电流源和电压测量通道实现呼吸阻抗描记（IP）。\n\n生物阻抗呼吸监测的核心挑战在于运动伪影（motion artifact）的去除——跑步、跳跃等产生的躯干运动会导致电极接触阻抗的剧烈变化，叠加在真实的呼吸信号上。现代方案通常结合 MEMS IMU 的加速度信号和自适应滤波算法来抑制运动干扰，确保动态场景下的呼吸率测量精度。",
-    relatedSlugs: [
+    references: [
       "edr-ecg-derived-respiration",
       "max30001",
       "motion-artifact-removal",
@@ -41,15 +39,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "edr-ecg-derived-respiration",
-    term: "心电衍生呼吸",
-    termEn: "EDR (ECG-Derived Respiration)",
+    id: "edr-ecg-derived-respiration",
+    term: "心电衍生呼吸 (EDR/ECG-Derived Respiration)",
     category: "sensor",
     definition:
       "从心电信号中提取呼吸信息的信号处理技术，利用呼吸对 ECG 波形形态的调制效应实现非专用传感器的呼吸率测量。",
     detail:
       "EDR 技术的理论基础是呼吸对心电图波形的三重调制效应：一是呼吸引起的胸腔容积变化导致心脏位置和ECG 电极的相对位移，引起 R 波和 QRS 轴角变化（电极运动调制），该效应在体表导联上尤为显著；二是吸气时肺部充气增加了胸腔容积的电传导路径，导致 R 波振幅的周期性变化（振幅调制），通常吸气时 R 波幅值最低；三是呼吸周期引起的心率波动——吸气时心率加快、呼气时减慢，即呼吸性窦性心律不齐（RSA），这使 R-R 间期也随呼吸波动。\n\n典型的 EDR 算法流程包括：首先检测所有 QRS 波群的 R 波峰值位置，然后对 R 波幅值序列或 R-R 间期序列进行插值和重采样，再通过 0.1-0.5Hz 带通滤波提取与呼吸频率对应的分量，最后进行峰值检测或过零检测计算呼吸率。对于 QRS 轴角变化的 EDR，还需要通过主成分分析或向量幅度投影来提取呼吸信息。\n\nEDR 的核心价值在于可以在 ECG 专用导联上同步实现心率和呼吸监测而无需额外电极或电路通道，降低了胸带的硬件复杂度。在 3-in-1 胸带中，通常将 EDR 与 BioZ 呼吸进行多模态融合，融合后呼吸率精度（约 1-2 bpm RMSE）接近甚至优于 RIP 电感呼吸带。",
-    relatedSlugs: [
+    references: [
       "ecg-electrocardiogram",
       "bioz-bioimpedance",
       "respiratory-sinus-arrhythmia",
@@ -59,15 +56,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "ppg-photoplethysmography",
-    term: "光电容积描记",
-    termEn: "PPG (Photoplethysmography)",
+    id: "ppg-photoplethysmography",
+    term: "光电容积描记 (PPG/Photoplethysmography)",
     category: "technology",
     definition:
       "通过光电传感器检测皮肤血管床血容量随心动周期的变化，是一种非侵入式的心率和血氧检测技术。",
     detail:
       "PPG 的工作原理基于朗伯-比尔定律：当特定波长的 LED 光（通常为绿光 530nm 或红光 660nm/红外 940nm 组合）照射皮肤时，部分光被血红蛋白吸收，部分被反射回光电探测器。血管中血容量随着心脏搏动周期性变化，导致探测器接收到的光强呈现与脉搏同步的波动。绿光因其对含氧/脱氧血红蛋白的高吸收率和对运动的较低敏感度而成为心率监测的首选波长。\n\nPPG 是主流运动手表和手环的核心心率技术，但其固有局限包括：对运动伪影高度敏感（腕部运动导致的组织位移和外界光干扰）、对肤色差异的有偏响应（深色皮肤光吸收更强导致信噪比降低）、以及受灌注水平影响大（寒冷环境下末梢血管收缩导致信号严重衰减）。在剧烈运动中——特别是跑步、HIIT 和举重——腕部 PPG 的心率精度可能从 1-3bpm 误差恶化至 10-20bpm 甚至更高。\n\n在 3-in-1 胸带研究项目中，PPG 是胸带 ECG 的主要技术对比基准：胸带直接测量心脏电活动（而非血容量波动），响应延迟接近于零，不受末梢灌注影响，运动伪影远低于腕部 PPG。这种电生理信号 vs 光电信号的对比是胸带方案的核心竞争力所在。PPG 在 3-in-1 方案中可作为辅助通道提供血氧（SpO2）信息，但心率主通道由 ECG 担当。",
-    relatedSlugs: [
+    references: [
       "ecg-electrocardiogram",
       "motion-artifact-removal",
       "ble-bluetooth-low-energy",
@@ -76,15 +72,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "afe-analog-front-end",
-    term: "模拟前端",
-    termEn: "AFE (Analog Front-End)",
+    id: "afe-analog-front-end",
+    term: "模拟前端 (AFE/Analog Front-End)",
     category: "sensor",
     definition:
       "将传感器采集到的微弱模拟电信号进行放大、滤波和模数转换的集成电路，是胸带生物电信号采集的关键组件。",
     detail:
       "在胸带方案中，模拟前端承担着从干电极到数字系统之间的信号调理任务。ECG 信号的幅值仅在毫伏级，BioZ 信号更微弱，且两者都叠加了大量的噪声（50/60Hz 工频干扰、基线漂移、肌电噪声等），因此 AFE 的性能直接决定了最终信号质量。典型的生物电 AFE 包含可编程增益放大器（PGA）、高通/低通滤波器、右腿驱动（RLD）电路和 18-24 位的高分辨率 Sigma-Delta ADC。\n\nMAX30001 是集成度最高的单芯片 ECG+BioZ AFE，内置 ECG 通道（增益 20-160x、噪声 <0.49μVrms）、BioZ I/Q 通道、支持 2 电极和 3 电极配置，并通过 SPI 接口输出数字信号。TI 的 ADS129x 系列是另一主流 AFE 系列，支持多达 8 通道同步采样，常用于临床级多导联 ECG 设备。在选型中，MAX30001 因其超高集成度、极小封装（WLP 3.46mm x 3.46mm）和低功耗（典型 ECG 通道功耗 <1mW）而成为消费级胸带的首选方案。\n\nAFE 设计中需要权衡的关键参数包括：输入阻抗（需 >500MΩ 以应对干电极高接触阻抗）、共模抑制比（CMRR >100dB 以抑制工频共模干扰）、等效输入噪声（<1μVrms 以保证 ECG 信号质量）以及功耗（直接决定电池续航）。新型 AFE 还集成了内置的 lead-off 检测、阻抗测量和 AC/DC 导联脱落检测等高级功能。",
-    relatedSlugs: [
+    references: [
       "max30001",
       "ecg-electrocardiogram",
       "bioz-bioimpedance",
@@ -93,15 +88,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "spi-serial-peripheral-interface",
-    term: "SPI 串行外设接口",
-    termEn: "SPI (Serial Peripheral Interface)",
+    id: "spi-serial-peripheral-interface",
+    term: "SPI 串行外设接口 (SPI/Serial Peripheral Interface)",
     category: "technology",
     definition:
       "一种四线制全双工同步串行通信协议，在胸带硬件架构中主要用于 AFE 芯片与主控 MCU 之间的高速数据传输。",
     detail:
       "SPI 是一种主从架构的同步串行通信协议，使用四条逻辑信号线：SCLK（串行时钟，由主设备产生）、MOSI（主出从入）、MISO（主入从出）和 CS/SS（片选信号）。时钟频率通常为数 MHz 至数十 MHz，远高于 I2C 的标准 100kHz/400kHz 和高速 3.4MHz 模式。与 I2C 不同，SPI 支持全双工传输——主设备和从设备可以同时发送和接收数据，这在需要连续读取 ECG/BioZ ADC 数据的高吞吐场景下至关重要。\n\n在胸带硬件设计中，MAX30001 生成的 ECG 和 BioZ 数字数据通过 SPI 接口以最高 400Hz 的采样率传输至 nRF52840 主控，单次读取的数据包可能包含 24 位 ECG 样本、24 位 BioZ I 分量和 24 位 BioZ Q 分量。SPI 的高速、全双工特性确保了实时数据采集不会因通信瓶颈导致丢帧或延迟——这对于需要精确时序的 HRV 分析和呼吸波形重建至关重要。\n\nSPI 的主要缺点是引脚数较多（至少 4 个引脚，每增加一个从设备需额外一个片选引脚），在追求小型化的胸带 PCB 布局中需要谨慎分配 IO 资源。在 3-in-1 胸带中，如果同时使用 MAX30001（通过 SPI）和 TMP117（通常通过 I2C），MCU 需要同时支持两个通信接口，nRF52840 的灵活 GPIO 多路复用功能可以很好地满足这一需求。",
-    relatedSlugs: [
+    references: [
       "i2c-inter-integrated-circuit",
       "afe-analog-front-end",
       "max30001",
@@ -110,15 +104,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "i2c-inter-integrated-circuit",
-    term: "I2C 集成电路互联总线",
-    termEn: "I2C (Inter-Integrated Circuit)",
+    id: "i2c-inter-integrated-circuit",
+    term: "I2C 集成电路互联总线 (I2C/Inter-Integrated Circuit)",
     category: "technology",
     definition:
       "一种两线制同步串行通信协议，在胸带中常用于连接温度传感器等低速外设，以最少的引脚实现多设备共享总线。",
     detail:
       "I2C 使用两条信号线实现多主多从通信：SDA（串行数据线）和 SCL（串行时钟线），两条线均通过上拉电阻接至正电源，设备通过开漏输出驱动总线。总线上每个设备都有唯一的 7 位或 10 位地址，主设备通过发送地址来选择目标从设备进行通信。标准模式 100kHz、快速模式 400kHz 和快速增强模式 1MHz 是常见的时钟速度等级。\n\n在 3-in-1 胸带硬件方案中，I2C 是温度传感器 TMP117 与主控 MCU 之间的首选接口。TMP117 是一款 16 位数字温度传感器，温度精度 ±0.1°C（在 30-45°C 人体温度范围内），通过 I2C 接口以最高 1Hz 的速率传输温度数据。相比热电偶/热敏电阻的模拟信号方案，I2C 数字温度传感器无需额外的 ADC 转换和冷端补偿电路，大幅简化了硬件设计和 PCB 布局。\n\nI2C 的优势在于仅需两个 IO 引脚即可连接多达 127 个设备，极适合 IO 资源紧张的小型化可穿戴设备。其局限性在于带宽较低，不适合高速数据流（ECG/BioZ 的实时数据传输必须走 SPI），且在长走线或高噪声环境下可能出现时钟拉伸、总线锁死等问题。在胸带设计中，I2C 用于配置和低频数据读取的场景（如温度、电池电量监测、LED 驱动器），与 SPI 形成互补。",
-    relatedSlugs: [
+    references: [
       "spi-serial-peripheral-interface",
       "tmp117",
       "nrf52840",
@@ -127,15 +120,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "ble-bluetooth-low-energy",
-    term: "低功耗蓝牙",
-    termEn: "BLE (Bluetooth Low Energy)",
+    id: "ble-bluetooth-low-energy",
+    term: "低功耗蓝牙 (BLE/Bluetooth Low Energy)",
     category: "technology",
     definition:
       "一种专为低功耗设计的短距离无线通信协议，是胸带传感器向智能手机发送实时心率、呼吸和温度数据的主要无线传输方式。",
     detail:
       "BLE 自蓝牙 4.0 规范引入，与经典蓝牙（BR/EDR）在物理层和协议栈上不兼容，但共享 2.4GHz ISM 频段。BLE 支持 40 个 2MHz 宽的信道（3 个广播信道 + 37 个数据信道），采用高斯频移键控（GFSK）调制，物理层速率为 1Mbps（BLE 4.x/5.0）到 2Mbps（BLE 5.0+）。其核心功耗优化在于：设备大部分时间处于深度睡眠状态，仅在传输的短暂数毫秒窗口内唤醒，单次连接事件的平均电流可低至数十微安。\n\nBLE 在运动和健康领域的核心协议包括：GATT 通用属性配置文件——基于服务（Service）和特征（Characteristic）的数据组织架构；Heart Rate Service（0x180D）——标准化的心率和 HRV 数据传输格式；Cycling Power Service（0x1818）和 Running Speed and Cadence Service（0x1814）——运动数据标准化。对于 3-in-1 胸带，ECG 全波形和 BioZ 呼吸波形的实时传输对 BLE 带宽提出了较高要求（400Hz x 24bit x 2通道 ≈ 19.2kbps 原始数据，加上协议开销后约 30-50kbps），通常在 BLE 5.0+ 的 2Mbps PHY 和 LE Data Length Extension 支持下可以满足。\n\nnRF52840 是胸带方案的理想 BLE + ANT+ 双模 MCU，支持 BLE 5.3 和蓝牙 mesh、方向查找等高级特性，内置 Arm Cortex-M4F CPU 和充足的 Flash/RAM 用于运行传感器融合算法。其 BLE 发送功耗约 5.3mA @0dBm，配合智能的连接间隔管理，典型胸带产品（持续 ECG + BioZ 监测并实时传输）可实现 20-40 小时的续航。",
-    relatedSlugs: [
+    references: [
       "ant-plus",
       "nrf52840",
       "ecg-electrocardiogram",
@@ -144,15 +136,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "ant-plus",
-    term: "ANT+ 无线协议",
-    termEn: "ANT+",
+    id: "ant-plus",
+    term: "ANT+ 无线协议 (ANT+)",
     category: "technology",
     definition:
       "由 Garmin 旗下 ANT Wireless 维护的超低功耗无线传感器网络协议，是运动和健身设备互联的事实标准。",
     detail:
       "ANT+ 协议基于 Nordic Semiconductor 的 ANT 协议栈，工作于 2.4GHz ISM 频段，使其频段与 BLE 和 Wi-Fi 共享。ANT+ 的核心特性包括：极低功耗的主从模式（一枚 CR2032 纽扣电池可运行数月甚至一年以上）、确定性时隙通信（时分多址 TDMA 避免同频干扰）、支持一对多广播和多主从拓扑、以及标准化的设备配置文件（Device Profile）体系。\n\nANT+ 的标准化设备配置文件是其最大生态优势——任何品牌的 ANT+ 心率胸带都可以无缝连接任何品牌的 ANT+ 自行车码表、跑步手表或健身设备。核心的运动传感器配置文件包括：Heart Rate Monitor（0x78，支持 RR 间期、HR 和接触状态）、Bicycle Power（0x0B）、Running Speed and Cadence（0x7A）和 Temperature（0x19）。每个配置文件定义了严格的数据页面（Data Page）格式，包括必选页面和可选页面，确保跨品牌互操作性。\n\n在 3-in-1 胸带项目中，ANT+ 和 BLE 双模架构的价值在于：ANT+ 覆盖传统的 Garmin/Wahoo 生态和专业运动场景（同时连接多个显示设备如码表和手表，无需配对，数据对所有监听的设备可用），BLE 覆盖智能手机 App 和新兴的智能设备生态。nRF52840 的硬件无线电支持可以在 ANT+ 和 BLE 之间快速分时切换，实现单芯片双模。需要注意的局限是：ANT+ 标准配置文件涵盖心率、速度和温度，但对呼吸率、BioZ 波形和核心体温缺乏标准化定义，可能需要扩展特定的自定义页面。",
-    relatedSlugs: [
+    references: [
       "ble-bluetooth-low-energy",
       "nrf52840",
       "ecg-electrocardiogram",
@@ -160,15 +151,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "single-heat-flux",
-    term: "单热流法",
-    termEn: "Single Heat Flux Method",
+    id: "single-heat-flux",
+    term: "单热流法 (Single Heat Flux Method)",
     category: "sensor",
     definition:
       "在皮肤表面放置一个热流传感器测量从体核向皮肤表面的稳态热流量，结合皮肤温度推算核心体温的热测量技术。",
     detail:
       "单热流法的基本原理基于傅里叶热传导定律：在稳态条件下，从核心到皮肤表面的热流量与温度梯度成正比。传感器由两个热敏电阻/热电堆和一个热绝缘层组成——一个温度传感器紧贴皮肤测量皮肤温度（T_skin），另一个覆盖在绝缘层上方测量环境侧温度（T_top）。通过测量两个温度差和绝缘层的已知热阻（R_ins），即可计算热流量：Q_flux = (T_skin - T_top) / R_ins。\n\n核心体温 T_core 通过公式 T_core = T_skin + K * Q_flux 估算，其中 K 是校准系数，代表从核心到皮肤表面的等效热阻。该方法在实验室校准后可实现约 ±0.3°C 的静态精度。日本学者 Yamakage 和 Fujii 等人的研究奠定了单热流法的理论基础，并被应用于 CORE Body 温度传感器的早期产品中。\n\n单热流法的主要局限在于：K 值因皮下脂肪厚度和血流灌注状态的个体差异而变化显著，需要个体化校准才能达到较高精度；在非稳态温度变化（如运动开始阶段核心温度快速上升）或环境温度剧烈变化（如从室内到室外）场景下，热平衡未建立导致热流量计算不准确，测量滞后可达 10-20 分钟。这些局限推动了双热流法和零热流法的发展。",
-    relatedSlugs: [
+    references: [
       "dual-heat-flux",
       "zero-heat-flux",
       "core-body-temperature",
@@ -177,15 +167,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "dual-heat-flux",
-    term: "双热流法",
-    termEn: "Dual Heat Flux Method",
+    id: "dual-heat-flux",
+    term: "双热流法 (Dual Heat Flux Method)",
     category: "sensor",
     definition:
       "使用两个不同热阻的独立热流传感器通道同时测量皮肤温度与热流量，通过联立方程消除个体热阻差异，实现无需个体校准的核心体温测量。",
     detail:
       "双热流法的核心创新在于通过两个平行的热流通道来消除单热流法中 K 系数的不确定性。传感器包含两个并排的热流传感器对，每个由皮肤侧温度传感器、绝缘层、顶层温度传感器构成，但两个通道的绝缘层热阻不同（R1 ≠ R2）。在同样的核心体温 T_core 和皮肤温度 T_skin 条件下，两个通道测得不同的热流量 Q1 和 Q2，形成包含两个未知数（T_core 和等效组织热阻 R_tissue）的联立方程。\n\n通过求解方程组可以消去 R_tissue，从而在不需要预先知道个体皮肤下组织热特性（脂肪厚度、血流变化）的情况下直接计算核心体温。这使得双热流法具有自校准特性——对不同体型、不同运动状态的用户无需重新进行侵入式校准。CORE Body 温度传感器的第二代产品以及 greenTEG 公司的 CALERA 技术均采用了双热流法，在骑行和跑步等稳态运动中可实现约 ±0.2-0.3°C 的精度。\n\n双热流法的挑战在于：两个通道的热传感器需要精密匹配和温度稳定性；传感器小型化后两个通道的空间分离可能导致测量的皮肤位置略有不同而引入误差；在强对流（高速骑行、游泳）或环境温度剧烈变化的情况下，绝缘层表面温度和内部温度梯度的测量仍会受到影响。该技术正逐步成为消费级可穿戴核心体温监测的主流方案。",
-    relatedSlugs: [
+    references: [
       "single-heat-flux",
       "zero-heat-flux",
       "core-body-temperature",
@@ -195,15 +184,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "zero-heat-flux",
-    term: "零热流法",
-    termEn: "Zero Heat Flux Method",
+    id: "zero-heat-flux",
+    term: "零热流法 (Zero Heat Flux Method)",
     category: "sensor",
     definition:
       "通过在皮肤表面主动加热使热流量降至零，消除从体核到皮肤的热梯度和测量延迟，直接获取近似核心体温的临床级测量技术。",
     detail:
       "零热流法的原理是：在皮肤表面放置一个主动加热元件和热流传感器，通过闭环控制（通常是 PID 控制器）持续加热皮肤表面，直到热流传感器检测到的热流量为零——即皮肤表面下组织的温度与绝缘层内的温度达到热平衡，不再有热量从深层组织传递到传感器。此时，绝缘层下的温度传感器所测温度近似于皮下约 1-2cm 深度的组织温度，接近真实的核心体温。\n\n零热流法的核心优势在于：消除了从核心到皮肤的热传递延迟，其温度响应速度远快于被动式热流法（单热流/双热流），在运动过程中核心体温快速变化时响应时间可缩短至 2-3 分钟；热平衡建立后的测量精度最高可达 ±0.1°C，与食道温度和直肠温度的临床金标准高度相关（通常 r > 0.95）。3M 的 SpotOn 系统是零热流法的代表产品，广泛用于围手术期核心体温连续监测，已获 FDA 批准。\n\n零热流法在消费可穿戴设备中应用的挑战在于：主动加热元件持续消耗较大功率（数十到数百毫瓦），对电池续航构成压力；在胸带形态下，主动加热区域可能引起局部不适感；PID 控制器需要精密调校以避免振荡或响应迟缓。在一些研究型设备中，零热流法作为实验室参考标准用于校准双热流传感器，而产品化的 low-power 零热流法传感器也在开发中。",
-    relatedSlugs: [
+    references: [
       "dual-heat-flux",
       "single-heat-flux",
       "core-body-temperature",
@@ -212,15 +200,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "rip-respiratory-inductance-plethysmography",
-    term: "呼吸感应体积描记",
-    termEn: "RIP (Respiratory Inductance Plethysmography)",
+    id: "rip-respiratory-inductance-plethysmography",
+    term: "呼吸感应体积描记 (RIP/Respiratory Inductance Plethysmography)",
     category: "technology",
     definition:
       "通过两个缠绕在胸部和腹部的弹性电感线圈测量呼吸引起的截面面积变化，是呼吸体积测量的实验室金标准。",
     detail:
       "RIP 的工作原理基于电磁感应：一根正弦波纹弹性带内嵌细导线线圈，缠绕在胸腔和/或腹部。当呼吸引起胸廓或腹腔截面积变化时，线圈的电感随之变化（截面积增大使线圈长度增加、截面积增加，电感变化量与面积变化近似线性）。通过将电感变化转换为频率变化（通常将线圈作为 LC 振荡器的一部分），再测量频率即可获得呼吸波形。\n\nRIP 是肺功能实验室和睡眠医学中通行的呼吸体积测量技术，能够捕获潮气量（tidal volume）和分钟通气量（minute ventilation）的相对变化，经过个体化校准（使用肺量计描记的定标后）可提供定量体积数据。与 BioZ 和 EDR 相比，RIP 的独特优势在于能同时测量胸腔和腹部两个分量，从而检测胸腹矛盾呼吸（如阻塞性睡眠呼吸暂停的特征性胸腹反向运动）。\n\n在 3-in-1 胸带方案中，BioZ 和 EDR 技术被视为更轻便的替代方案——它们可以使用与 ECG 共用的电极实现呼吸监测，而无需额外的胸带和腹部带。但 RIP 在检测阻塞性呼吸暂停、评估呼吸肌协调性和提供定量潮气量方面具有不可替代的优势。在胸带研究文献和产品对比中，RIP 通常作为 BioZ/EDR 呼吸率精度验证的参考标准。",
-    relatedSlugs: [
+    references: [
       "bioz-bioimpedance",
       "edr-ecg-derived-respiration",
       "tidal-volume",
@@ -229,15 +216,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "imu-inertial-measurement-unit",
-    term: "惯性测量单元",
-    termEn: "IMU (Inertial Measurement Unit)",
+    id: "imu-inertial-measurement-unit",
+    term: "惯性测量单元 (IMU/Inertial Measurement Unit)",
     category: "sensor",
     definition:
       "集成了加速度计、陀螺仪和磁力计的微机电系统（MEMS）传感器，在胸带中用于运动检测、姿态估计和运动伪影消除。",
     detail:
       "典型的 6 轴 IMU 包含 3 轴加速度计（测量线性加速度，包括重力分量，量程 ±2g 到 ±16g）和 3 轴陀螺仪（测量角速度，量程 ±250dps 到 ±2000dps），9 轴 IMU 额外增加了 3 轴磁力计（测量地磁场，用于绝对航向校准）。MEMS 加速度计基于电容式微机械结构，当加速度施加时，微质量块的位移改变差分电容从而实现加速度测量。陀螺仪基于科里奥利力效应，驱动质量块谐振并在旋转时产生正交方向的位移，通过电容检测该位移量。\n\n在胸带应用中，IMU 的身兼三重角色。第一重角色是运动检测——通过加速度计检测跑步、走路、静坐等运动状态，用于自适应调整 ECG/BioZ 信号处理参数；通过加速度计算步频、步幅和运动强度。第二重角色是姿态估计——通过融合加速度计（重力矢量）和陀螺仪（角速度积分）数据，使用互补滤波或 Kalman 滤波器计算胸带的倾角，有助于区分站立、平躺和俯卧姿态。第三重角色也是最具技术挑战的，是作为运动伪影消除的参考信号——将 IMU 加速度信号输入自适应滤波器（如 RLS）以抵消 ECG/BioZ 信号中与运动相关的噪声分量。\n\n消费级 MEMS IMU 芯片（如 Bosch BMI270、ST LSM6DSO）的功耗极低（<10μA 在低采样率模式下），尺寸极小（2.5mm x 3.0mm LGA），极适合胸带集成。IMU 的高频采样（通常 100-200Hz）使其能捕获跑步、跳跃等运动中产生的运动伪影频带（1-10Hz），与呼吸频带（0.1-0.5Hz）和心电频带（0.5-150Hz）有效分离。",
-    relatedSlugs: [
+    references: [
       "motion-artifact-removal",
       "kalman-filter",
       "rls-adaptive-filter",
@@ -246,15 +232,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "tmp117",
-    term: "TMP117 数字温度传感器",
-    termEn: "TMP117 Digital Temperature Sensor",
+    id: "tmp117",
+    term: "TMP117 数字温度传感器 (TMP117 Digital Temperature Sensor)",
     category: "sensor",
     definition:
       "德州仪器公司生产的医疗级精密数字温度传感器，精度 ±0.1°C（-20-50°C 范围），通过 I2C 接口输出温度数据，是胸带皮肤温度测量的首选方案。",
     detail:
       "TMP117 是一款 16 位精密数字温度传感器，其核心架构基于片上带隙基准和精密 Sigma-Delta ADC。传感器经过 NIST 可追溯校准并在出厂时进行全温区校正，无需用户端二次校准。在人体温度相关范围（30-45°C）内典型精度 ±0.05°C、最大误差 ±0.1°C，16 位分辨率对应 0.0078125°C/LSB，完全满足 ASTM E1112 医疗温度计的精度要求。\n\n相比传统的 NTC 热敏电阻方案，TMP117 的优势非常明显：热敏电阻需要额外的精密参考电阻、激励电流源和高分辨率 ADC 通道，且 B 参数的非线性需要复杂的 Steinhart-Hart 方程拟合或查找表校正，整套方案的误差通常 >±0.2°C。TMP117 通过 I2C 直接输出摄氏度数字值，仅需 2 根信号线 + 供电，极简的外围电路使其非常适合胸带的小型化布局。UQFN-6 封装（1.5mm x 1.5mm 或更小的 WCSP 封装）进一步缩小了 PCB 占用面积。\n\n在 3-in-1 胸带方案中，TMP117 安装在胸带内侧紧贴皮肤的位置，用于连续测量皮肤温度。单独的皮肤温度虽然不等于核心体温，但结合热流传感器（如热电堆 TMP007 或 greenTEG gSKIN 热流传感器）后可通过双热流法推算核心体温。TMP117 的低功耗特性（平均电流约 3.5μA @1Hz 连续转换）使其成为电池供电可穿戴设备的理想选择。",
-    relatedSlugs: [
+    references: [
       "i2c-inter-integrated-circuit",
       "thermistor",
       "thermocouple",
@@ -264,15 +249,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "max30001",
-    term: "MAX30001 生物电模拟前端",
-    termEn: "MAX30001 Bioelectric AFE",
+    id: "max30001",
+    term: "MAX30001 生物电模拟前端 (MAX30001 Bioelectric AFE)",
     category: "sensor",
     definition:
       "美信（现亚德诺）公司生产的超低功耗单芯片生物电模拟前端，集成 ECG 和 BioZ 两个独立通道，是消费级 3-in-1 胸带方案的核心信号采集芯片。",
     detail:
       "MAX30001 是 Maxim Integrated（2021 年被 ADI 收购）的旗舰级单芯片生物电 AFE，在单片 WLP 封装（3.46mm x 3.46mm）中集成了三组完整的信号采集通道：单通道 ECG（可编程增益 20-160x，等效输入噪声 0.49μVrms，CMRR >100dB）、单通道 BioZ（内置 I/Q 驱动电流源，合成阻抗频率范围 16-131kHz，驱动电流幅度可调 12.5-100μApp）以及用于 pacemaker 脉冲检测的专用通道。内置 18 位 Sigma-Delta ADC，支持 ECG 采样率 125/250/500sps，BioZ 采样率最高 64sps。\n\nECG 通道支持的硬件特性包括：EMI 低通滤波器、快速恢复模式（应对过载输入如电极接触不良产生的大幅电压跳变后快速恢复基线）、右腿驱动（RLD）输出和导联脱落检测。BioZ 通道支持四电极配置（两个激励电极 ECGP 和 ECGN 通过交流耦合注入高频电流，两个测量电极 BIP 和 BIN 进行差分电压测量），可有效消除电极接触阻抗的干扰。芯片总功耗极低——在 ECG 125sps + BioZ 模式下的典型功耗约为 1.0mW。\n\nMAX30001 通过 4 线 SPI 接口与主控 MCU 通信，提供 FIFO 缓冲（32 个深度 x 32 位宽度）以降低 MCU 实时读取的时序要求。支持的可配置中断包括：FIFO 水位线中断、导联脱落中断、数据就绪中断和低电量检测中断。在 3-in-1 胸带应用中，MAX30001 负责 ECG 心电信号和 BioZ 呼吸信号的同步采集，温度采集由 TMP117 通过 I2C 独立完成，三方数据在主控 MCU（nRF52840）上融合后通过 BLE 发送。",
-    relatedSlugs: [
+    references: [
       "afe-analog-front-end",
       "ecg-electrocardiogram",
       "bioz-bioimpedance",
@@ -282,15 +266,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "nrf52840",
-    term: "nRF52840 多协议 SoC",
-    termEn: "nRF52840 Multiprotocol SoC",
+    id: "nrf52840",
+    term: "nRF52840 多协议 SoC (nRF52840 Multiprotocol SoC)",
     category: "sensor",
     definition:
       "Nordic Semiconductor 公司生产的旗舰级多协议无线 SoC，内置 ARM Cortex-M4F CPU 和 2.4GHz 无线电，是胸带方案中理想的主控 MCU。",
     detail:
       "nRF52840 基于 64MHz ARM Cortex-M4F 内核（带硬件浮点单元 FPU），集成 1MB Flash 和 256KB RAM，足够存储和运行完整的传感器融合算法和 BLE/ANT+ 协议栈。其 2.4GHz 无线电支持 BLE 5.3（包括 2Mbps PHY、LE Coded PHY 长距离模式、Advertising Extensions）、ANT+、Thread、Zigbee 和 2.4GHz 私有协议，并可通过 Nordic 的 SoftDevice 运行时协议栈架构在单个芯片上实现 BLE + ANT+ 并发通信。\n\n对胸带应用的适配性方面：nRF52840 提供多达 48 个可编程 GPIO（部分共享模拟功能），支持多个 SPI Master（连接 MAX30001）、多个 I2C/TWI Master（连接 TMP117 和可选的环境温度/湿度传感器）、QDEC（正交解码器，可选用于旋转编码器）、以及 12 位 200ksps ADC（可用于连接模拟输出的温度或应变传感器）。DMA 控制器和 PPI（可编程外设互联）系统允许外设间数据直接传输而不唤醒 CPU，显著降低系统功耗。\n\nnRF52840 的丰富的电源管理特性（System ON/OFF 模式、多级睡眠、自动外设电源门控）使胸带在持续 ECG+BioZ 采集和 BLE 实时传输的工作条件下可实现数十小时的续航。Nordic 提供的 nRF Connect SDK（基于 Zephyr RTOS）和 nRF5 SDK 提供了丰富的驱动、协议栈示例和低功耗优化工具，以及通过蓝牙 SIG 认证的 Qualified Design ID（QDID），可大幅缩短产品认证周期。此外，Nordic 还内置了硬件 AES-128 加速器，为健康数据传输提供链路层加密支持。",
-    relatedSlugs: [
+    references: [
       "ble-bluetooth-low-energy",
       "ant-plus",
       "spi-serial-peripheral-interface",
@@ -300,15 +283,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "thermistor",
-    term: "热敏电阻",
-    termEn: "Thermistor",
+    id: "thermistor",
+    term: "热敏电阻 (Thermistor)",
     category: "sensor",
     definition:
       "电阻值随温度显著变化的半导体陶瓷元件，是传统的低体温和皮肤温度测量元件，在成本敏感的可穿戴设备中广泛使用。",
     detail:
       "热敏电阻分为 NTC（负温度系数）和 PTC（正温度系数）两大类，在体温测量中几乎全部使用 NTC 型——其电阻值随温度升高呈指数下降。典型的 NTC 热敏电阻（如 Murata NCP 系列、TDK NTCG 系列）在 25°C 时的标称电阻为 10kΩ，B 常数（25/85）约为 3380-4500K。温度-电阻关系由 Steinhart-Hart 方程 1/T = A + B*ln(R) + C*ln(R)^3 描述，三个系数 A、B、C 需要通过三个标定点计算或直接查表。\n\n在可穿戴体温测量中，NTC 热敏电阻通常采用分压电路配置：热敏电阻与精密参考电阻（如 10kΩ ±0.1%）串联，由稳定参考电压（如 MCU 内部带隙基准或外部 LDO）驱动，分压点连接至 MCU 的 ADC 输入。ADC 测量电压并转换为电阻值，再通过 Steinhart-Hart 方程计算温度。整个信号链的误差来源包括：热敏电阻本身的互换性误差（通常 0.1-0.5°C）、参考电阻精度和温漂、ADC 参考电压的精度和漂移、以及自发热效应（流过热敏电阻的电流使其自身温度升高）。\n\n与数字传感器 TMP117 相比，热敏电阻方案的成本更低（BOM 节省 50% 以上），但精度通常较差（综合误差 ±0.2-0.5°C），且需要更多的 PCB 面积和 ADC 资源。在追求最高温度精度的 3-in-1 胸带方案中，TMP117 是首选；但如果采用双热流法需要多个温度测量点、预箅受限，则在非关键位置（如环境温度测量）使用热敏电阻作为补充是合理的。",
-    relatedSlugs: [
+    references: [
       "thermocouple",
       "thermopile",
       "tmp117",
@@ -317,15 +299,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "thermocouple",
-    term: "热电偶",
-    termEn: "Thermocouple",
+    id: "thermocouple",
+    term: "热电偶 (Thermocouple)",
     category: "sensor",
     definition:
       "基于塞贝克效应（Seebeck Effect）的测温元件，由两种不同金属导线焊接成接点，产生与两端温差成正比的微小热电势。",
     detail:
       "热电偶的原理基于塞贝克效应：当两种不同金属或合金导线形成闭合回路，且两个接点处于不同温度时，回路中会产生与温差成正比的热电势（EMF）。热电势的大小取决于金属对的塞贝克系数，常见类型包括 K 型（镍铬-镍铝，-200 至 1260°C）、T 型（铜-康铜，-200 至 350°C，在体温范围内精度最高）。输出信号格式为差分电压，灵敏度通常为 40-60μV/°C，需要进行精密放大和冷端补偿才能获得准确温度读数。\n\n在体温测量场景中，T 型热电偶是最常见的选择，因为其铜/康铜材料对在 30-45°C 范围内具有极好的线性和精度（±0.1°C）。热电偶的独特优势在于极小的接点尺寸（细至 0.1mm 以下）使热响应速度远快于封装的热敏电阻和 IC 温度传感器——可在秒级内跟踪温度变化。在 greenTEG gSKIN 这样的热流传感器产品中，内部使用微型热电偶阵列（热电堆，thermopile）来测量绝缘层两侧的微小温差。\n\n热电偶在胸带消费产品中的使用较少，主要因为：需要冷端补偿（需要另一个精确温度传感器测量冷端绝对温度）、输出的热电势极小需要高增益低噪声放大器（增加了 AFE 复杂度）、以及连接器/导线延伸需要专用补偿材料。但作为零热流法核心体温监测设备和科研级的参考测温手段，热电偶仍占据重要地位。",
-    relatedSlugs: [
+    references: [
       "thermistor",
       "thermopile",
       "tmp117",
@@ -335,15 +316,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "strain-gauge",
-    term: "应变计",
-    termEn: "Strain Gauge",
+    id: "strain-gauge",
+    term: "应变计 (Strain Gauge)",
     category: "sensor",
     definition:
       "将机械形变转换为电阻变化的传感器，在胸带中可用于测量呼吸引起的胸廓周长的微小变化，是一种备选的呼吸监测技术。",
     detail:
       "金属箔应变计基于导体在拉伸/压缩时电阻变化的物理原理：R = ρL/A，拉伸时长度 L 增加、截面积 A 减小（泊松效应），导致电阻值增大。应变计的灵敏度以应变系数（Gauge Factor, GF）表示，金属箔 GF 约为 2-4，半导体/压阻式 GF 可达 100-200。电阻变化通常在毫欧级，需要惠斯通电桥配置将微小电阻变化转换为差分电压信号，再由仪表放大器放大送入 ADC。\n\n在胸带中，应变计可以集成到弹性胸带的织物或基底中，用于感应呼吸引起的胸廓周长变化。吸气时胸廓扩张拉长传感器，呼气时传感器收缩回弹。这种方法的优势在于对呼吸体积变化的直接机械感应——信号不会受到 ECG 电极接触质量或 BioZ 的电极极化效应的影响。但在运动场景下，躯干的扭转、屈伸和加速度产生的惯性力也会产生显著的应变信号，与呼吸信号混叠，分离难度极大。\n\n在 3-in-1 胸带中，应变计通常不作为主呼吸通道，因为 BioZ 和 EDR 提供了更轻量级且可共用电极的呼吸监测方案。但应变计可以作为运动检测和胸腔变形的辅助传感器，在极端运动条件下（如 HIIT 的 Burpee 动作）提供额外的机械参考信号来区分真正的呼吸和躯干运动，提升 BioZ/EDR 信号的运动伪影去除效果。此外，压电薄膜应变传感器（如基于 PVDF 的柔性传感器）因其无需供电和无漂移的特性也值得关注。",
-    relatedSlugs: [
+    references: [
       "bioz-bioimpedance",
       "edr-ecg-derived-respiration",
       "respiratory-rate",
@@ -352,15 +332,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "thermopile",
-    term: "热电堆",
-    termEn: "Thermopile",
+    id: "thermopile",
+    term: "热电堆 (Thermopile)",
     category: "sensor",
     definition:
       "将多个热电偶串联堆叠形成的热辐射/热流量传感器，输出电压与两面温差成正比，在胸带中用于热流量测量以推算核心体温。",
     detail:
-      "热电堆的工作原理是将数十到数百个微型热电偶以串联方式集成在同一芯片上——所有“热端”朝向同一面（通常朝向皮肤或被测热源），所有“冷端”朝向对面（通常背向热源或朝向散热面）。热电堆的输出电压为所有热电偶热电势之和，灵敏度远高于单个热电偶，可达数十到数百 μV/°C。串联连接使信号可被常规的仪表放大器或 ADC 通道直接检测，无需极高的增益。\n\n在热流传感器应用中，热电堆安装在已知热阻的绝缘层的两侧，一面紧贴皮肤（通过导热垫或薄铜箔），另一面暴露于环境或连接散热器。当热流量通过绝缘层时，两侧产生温差 ΔT，热电堆输出电压 V_out = N * α * ΔT（N 为热电偶数量，α 为塞贝克系数），结合已知的热阻即可计算热流量。greenTEG 的 gSKIN 系列和德国 Fraunhofer IPM 开发的热流传感器均采用基于热电堆的架构。\n\n在胸带集成中，热电堆的核心挑战包括：传感器封装需要极薄的导热层以降低热延迟、需要避免胸带运动导致的传感器-皮肤接触压力变化影响热接触、以及环境风速（对流冷却）对传感器顶面温度的影响。单个热电堆的微小信号（典型 <5mV）在 BLE 射频发射产生的 2.4GHz EMI 环境中需要精细的 EMI 防护（差分走线、屏蔽罩等）。双热流法通常需要两个独立的热电堆通道，对传感器的匹配精度提出了更高的要求。",
-    relatedSlugs: [
+      "热电堆的工作原理是将数十到数百个微型热电偶以串联方式集成在同一芯片上——所有「热端」朝向同一面（通常朝向皮肤或被测热源），所有「冷端」朝向对面（通常背向热源或朝向散热面）。热电堆的输出电压为所有热电偶热电势之和，灵敏度远高于单个热电偶，可达数十到数百 μV/°C。串联连接使信号可被常规的仪表放大器或 ADC 通道直接检测，无需极高的增益。\n\n在热流传感器应用中，热电堆安装在已知热阻的绝缘层的两侧，一面紧贴皮肤（通过导热垫或薄铜箔），另一面暴露于环境或连接散热器。当热流量通过绝缘层时，两侧产生温差 ΔT，热电堆输出电压 V_out = N * α * ΔT（N 为热电偶数量，α 为塞贝克系数），结合已知的热阻即可计算热流量。greenTEG 的 gSKIN 系列和德国 Fraunhofer IPM 开发的热流传感器均采用基于热电堆的架构。\n\n在胸带集成中，热电堆的核心挑战包括：传感器封装需要极薄的导热层以降低热延迟、需要避免胸带运动导致的传感器-皮肤接触压力变化影响热接触、以及环境风速（对流冷却）对传感器顶面温度的影响。单个热电堆的微小信号（典型 <5mV）在 BLE 射频发射产生的 2.4GHz EMI 环境中需要精细的 EMI 防护（差分走线、屏蔽罩等）。双热流法通常需要两个独立的热电堆通道，对传感器的匹配精度提出了更高的要求。",
+    references: [
       "dual-heat-flux",
       "single-heat-flux",
       "zero-heat-flux",
@@ -374,15 +353,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   // ============================================================
 
   {
-    slug: "hrv-heart-rate-variability",
-    term: "心率变异性",
-    termEn: "HRV (Heart Rate Variability)",
+    id: "hrv-heart-rate-variability",
+    term: "心率变异性 (HRV/Heart Rate Variability)",
     category: "physiology",
     definition:
       "逐次心跳间 R-R 间期的微小时间差异，反映了自主神经系统对心脏窦房结的动态调控能力，是评估运动恢复、压力和疲劳状态的核心生理指标。",
     detail:
-      "HRV 分析的基本单位是 R-R 间期（NN 间期，即经过伪影剔除的相邻正常窦性心搏的 R 波间期），通常以毫秒（ms）为单位。自主神经系统的两个分支——交感神经（“加速器”）和副交感神经/迷走神经（“刹车”）持续地竞争调控窦房结的自动除极速率，从而产生毫秒级的逐搏间期波动。较高的 HRV 通常与良好的心血管健康、较强的迷走神经调控能力和充分的恢复状态相关；较低的 HRV 可能与过度训练、精神压力、睡眠不足或疾病状态相关。\n\nHRV 指标分为时域、频域和非线性三类。时域指标中 RMSSD（相邻 NN 间期差值的均方根，RMSSD = sqrt(mean((NN_i+1 - NN_i)^2))）主要由迷走神经调控，是最稳健和最广泛使用的恢复评估指标，对呼吸频率变化不敏感；SDNN（所有 NN 间期的标准差，SDNN = std(NN)）反映总体的自主神经变异性，受 24 小时长程记录的影响，是临床心率变异性的标准度量。频域指标通过快速傅里叶变换（FFT）或自回归（AR）模型计算功率谱密度（PSD），分为高频（HF: 0.15-0.4Hz，反映迷走神经活性）、低频（LF: 0.04-0.15Hz，混合交感-迷走）和极低频（VLF: <0.04Hz，机制复杂）。LF/HF 比值传统上被解释为交感-迷走平衡指数，这一解释在运动科学界存在争议，需谨慎解读。\n\n胸带 ECG 在 HRV 测量上相比腕部 PPG 具有先天优势：ECG R 波峰值检测的时间精度远优于 PPG 脉搏波峰值检测（ECG R 波陡峭边缘 vs PPG 脉搏波的平缓峰态），在运动状态下尤为明显。对于 RMSSD 的计算，毫秒级的 R-R 间期测量误差即会导致 RMSSD 值的大幅偏差，因此信噪比和峰值检测精度至关重要。在 3-in-1 胸带中，高质量的 ECG 信号可支持精确的 HRV 分析，结合呼吸数据（胸带可同时提供）可进一步进行 RF（呼吸频率）校正的 HRV 分析，提升恢复状态评估的准确性。",
-    relatedSlugs: [
+      "HRV 分析的基本单位是 R-R 间期（NN 间期，即经过伪影剔除的相邻正常窦性心搏的 R 波间期），通常以毫秒（ms）为单位。自主神经系统的两个分支——交感神经（「加速器」）和副交感神经/迷走神经（「刹车」）持续地竞争调控窦房结的自动除极速率，从而产生毫秒级的逐搏间期波动。较高的 HRV 通常与良好的心血管健康、较强的迷走神经调控能力和充分的恢复状态相关；较低的 HRV 可能与过度训练、精神压力、睡眠不足或疾病状态相关。\n\nHRV 指标分为时域、频域和非线性三类。时域指标中 RMSSD（相邻 NN 间期差值的均方根，RMSSD = sqrt(mean((NN_i+1 - NN_i)^2))）主要由迷走神经调控，是最稳健和最广泛使用的恢复评估指标，对呼吸频率变化不敏感；SDNN（所有 NN 间期的标准差，SDNN = std(NN)）反映总体的自主神经变异性，受 24 小时长程记录的影响，是临床心率变异性的标准度量。频域指标通过快速傅里叶变换（FFT）或自回归（AR）模型计算功率谱密度（PSD），分为高频（HF: 0.15-0.4Hz，反映迷走神经活性）、低频（LF: 0.04-0.15Hz，混合交感-迷走）和极低频（VLF: <0.04Hz，机制复杂）。LF/HF 比值传统上被解释为交感-迷走平衡指数，这一解释在运动科学界存在争议，需谨慎解读。\n\n胸带 ECG 在 HRV 测量上相比腕部 PPG 具有先天优势：ECG R 波峰值检测的时间精度远优于 PPG 脉搏波峰值检测（ECG R 波陡峭边缘 vs PPG 脉搏波的平缓峰态），在运动状态下尤为明显。对于 RMSSD 的计算，毫秒级的 R-R 间期测量误差即会导致 RMSSD 值的大幅偏差，因此信噪比和峰值检测精度至关重要。在 3-in-1 胸带中，高质量的 ECG 信号可支持精确的 HRV 分析，结合呼吸数据（胸带可同时提供）可进一步进行 RF（呼吸频率）校正的 HRV 分析，提升恢复状态评估的准确性。",
+    references: [
       "rmssd",
       "sdnn",
       "lf-hf-ratio",
@@ -392,15 +370,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "rmssd",
-    term: "相邻RR间期差值的均方根",
-    termEn: "RMSSD (Root Mean Square of Successive Differences)",
+    id: "rmssd",
+    term: "相邻RR间期差值的均方根 (RMSSD/Root Mean Square of Successive Differences)",
     category: "physiology",
     definition:
       "测量相邻心跳间 R-R 间期变化的短期变异性的时域指标，是迷走神经介导的心率变异性的最敏感和最常用量度。",
     detail:
       "RMSSD 的数学定义是 RMSSD = sqrt(mean((NN_i - NN_i-1)^2))，其中 NN_i 代表第 i 个正常窦性心搏的 RR 间期（毫秒）。其数学特性决定了它对逐搏间的高度频波动高度敏感而不受较长时间尺度趋势变化的影响——这正是迷走神经张力的核心特征。迷走神经释放乙酰胆碱作用于窦房结 M2 受体，可在一到两拍内快速调节心率，而交感神经的调节效应需要数秒到数十秒才能完全建立。\n\n在运动科学中，RMSSD 被广泛用于运动员的训练负荷管理和恢复评估。晨起 RMSSD 低于个人基线均值减 1 个标准差（即 RMSSD < mean - 1*SD）通常提示恢复不充分，建议降低当日训练强度；连续多日 RMSSD 下降趋势预警过度训练风险。Plews 等人提出的 RMSSD:RR 比率（将 RMSSD 同时对心率水平进行标准化）也是一种有价值的评估方法。RMSSD 还常用于超短程 HRV 测量——仅需 60 秒仰卧静息 ECG 记录，大幅降低了运动员的日常测量负担。\n\n在胸带 3-in-1 方案中，需确保 ECG 采集的时域精度达到 <1ms 级别（500sps 采样率的时间分辨率为 2ms，通过 R 波峰值插值可将时间精度提升至亚 ms），以保证 RMSSD 计算的准确性。结合胸带同时采集的呼吸数据，可以分析呼吸对 RMSSD 的调制效应——深呼吸通常放大 RMSSD 值（迷走神经激活），这在 HRV 生物反馈训练中有重要应用价值。",
-    relatedSlugs: [
+    references: [
       "hrv-heart-rate-variability",
       "sdnn",
       "lf-hf-ratio",
@@ -410,15 +387,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "sdnn",
-    term: "正常窦性RR间期标准差",
-    termEn: "SDNN (Standard Deviation of NN Intervals)",
+    id: "sdnn",
+    term: "正常窦性RR间期标准差 (SDNN/Standard Deviation of NN Intervals)",
     category: "physiology",
     definition:
       "所有正常窦性心搏 RR 间期的标准差，是评估总体心率变异性的临床标准指标，反映交感神经和副交感神经系统的综合调节能力。",
     detail:
       "SDNN 的计算公式为 SDNN = sqrt((1/(N-1)) * sum((NN_i - mean(NN))^2))，其中 N 为正常窦性心搏总数。SDNN 本质上是总功率（Total Power）的平方根（在频域中计算总功率谱密度积分即为方差），因此 SDNN 涵盖了从极低频（VLF, <0.04Hz）、低频（LF, 0.04-0.15Hz）到高频（HF, 0.15-0.4Hz）所有频带的总变异性。\n\n在临床心脏病学中，24 小时动态心电图（Holter）记录的 SDNN 是心血管疾病风险分层的标准指标之一：SDNN <50ms 分类为不健康，50-100ms 为折中，>100ms 为健康。需要注意的是，SDNN 严重依赖于记录时长——5 分钟记录的 SDNN 与 24 小时记录的 SDNN 不可直接比较，因为长程记录能捕获更多极低频和昼夜节律相关的变异性。在运动科学中，同记录长度的 SDNN 比较（如每日晨起 5 分钟记录）仍具有评估慢性适应和恢复趋势的价值。\n\n3-in-1 胸带提供的高质量长程 ECG 数据使得运动员可以在睡眠期间持续记录 HRV，获取类似 Holter 的 8 小时卧床记录的 SDNN 数据，比传统的 1-5 分钟晨起测量提供更全面的自主神经功能评估。结合呼吸率数据，SDNN 的慢速成分（VLF、LF 的昼夜变化）可提供有关恢复、压力激素节律和代谢适应的重要信息。在多日训练负荷监测中，SDNN 和 RMSSD 的同步下降是过度训练的最强预警信号之一。",
-    relatedSlugs: [
+    references: [
       "hrv-heart-rate-variability",
       "rmssd",
       "lf-hf-ratio",
@@ -427,15 +403,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "lf-hf-ratio",
-    term: "低频/高频功率比",
-    termEn: "LF/HF Ratio",
+    id: "lf-hf-ratio",
+    term: "低频/高频功率比 (LF/HF Ratio)",
     category: "physiology",
     definition:
       "心率变异性频域分析中低频功率（0.04-0.15Hz）与高频功率（0.15-0.4Hz）的比值，传统上解释为交感-副交感神经平衡的指标。",
     detail:
-      "LF/HF 比值的计算方法是对去趋势和伪影处理的 RR 间期序列进行频谱分析（FFT 或 AR 模型），计算 0.04-0.15Hz 频带的功率谱积分（LF power）和 0.15-0.4Hz 频带的功率谱积分（HF power），然后取比值。HF 成分主要由迷走神经活性介导，在受控呼吸频率下尤为明确——呼吸频率在 0.15-0.4Hz 范围内的呼吸性窦性心律不齐（RSA）是 HF 的主要来源。LF 成分的来源更为复杂，混合了交感神经调节（Mayer 波，约 0.1Hz）和迷走神经调节，同时受压力反射敏感性和肾素-血管紧张素系统的调控。\n\nLF/HF 比值在运动科学中常用于评估训练负荷引起的自主神经平衡偏移：高强度训练后 LF/HF 比值升高（交感神经优势），充分恢复后比值回到基线。然而这一指标在学术界存在广泛争议——多项阻断研究（使用阿托品阻断迷走神经、使用普萘洛尔阻断交感神经）表明 LF 功率并非纯粹的交感神经指标，其约 50% 来源于迷走神经。因此 LF/HF 比值不应该简单化地理解为“交感/副交感比值”，而更应被解读为自主神经系统的整体响应指标，需与其他 HRV 指标（RMSSD、SDNN、Poincare 图 SD1/SD2）联合解读。\n\n在 3-in-1 胸带应用中，呼吸频率的精确同步测量为 LF/HF 比值的解读提供了关键背景信息：呼吸频率的变化直接改变 HF 频带和功率的分布（呼气与吸气间 RR 间期的变化大小取决于呼吸深度和频率），因此呼吸频率的稳定或其他条件的标准化（如嘱运动员按节拍器呼吸）对于 LF/HF 比值的时间序列比较至关重要。胸带同时提供 ECG 和呼吸数据的能力，使其成为产生高质量 HRV 频域分析的理想数据源。",
-    relatedSlugs: [
+      "LF/HF 比值的计算方法是对去趋势和伪影处理的 RR 间期序列进行频谱分析（FFT 或 AR 模型），计算 0.04-0.15Hz 频带的功率谱积分（LF power）和 0.15-0.4Hz 频带的功率谱积分（HF power），然后取比值。HF 成分主要由迷走神经活性介导，在受控呼吸频率下尤为明确——呼吸频率在 0.15-0.4Hz 范围内的呼吸性窦性心律不齐（RSA）是 HF 的主要来源。LF 成分的来源更为复杂，混合了交感神经调节（Mayer 波，约 0.1Hz）和迷走神经调节，同时受压力反射敏感性和肾素-血管紧张素系统的调控。\n\nLF/HF 比值在运动科学中常用于评估训练负荷引起的自主神经平衡偏移：高强度训练后 LF/HF 比值升高（交感神经优势），充分恢复后比值回到基线。然而这一指标在学术界存在广泛争议——多项阻断研究（使用阿托品阻断迷走神经、使用普萘洛尔阻断交感神经）表明 LF 功率并非纯粹的交感神经指标，其约 50% 来源于迷走神经。因此 LF/HF 比值不应该简单化地理解为「交感/副交感比值」，而更应被解读为自主神经系统的整体响应指标，需与其他 HRV 指标（RMSSD、SDNN、Poincare 图 SD1/SD2）联合解读。\n\n在 3-in-1 胸带应用中，呼吸频率的精确同步测量为 LF/HF 比值的解读提供了关键背景信息：呼吸频率的变化直接改变 HF 频带和功率的分布（呼气与吸气间 RR 间期的变化大小取决于呼吸深度和频率），因此呼吸频率的稳定或其他条件的标准化（如嘱运动员按节拍器呼吸）对于 LF/HF 比值的时间序列比较至关重要。胸带同时提供 ECG 和呼吸数据的能力，使其成为产生高质量 HRV 频域分析的理想数据源。",
+    references: [
       "hrv-heart-rate-variability",
       "rmssd",
       "sdnn",
@@ -444,15 +419,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "vt1-first-ventilatory-threshold",
-    term: "第一通气阈",
-    termEn: "VT1 (First Ventilatory Threshold)",
+    id: "vt1-first-ventilatory-threshold",
+    term: "第一通气阈 (VT1/First Ventilatory Threshold)",
     category: "physiology",
     definition:
       "运动强度增加时分钟通气量相对于氧气消耗量出现第一次非线性拐点的运动强度，标志着有氧代谢向糖酵解供能过渡的开始。",
     detail:
-      "VT1 的生理学基础是乳酸缓冲机制：当运动强度超过线粒体氧化能力时，无氧糖酵解产生的乳酸增加，血液中的碳酸氢盐缓冲系统（HCO3- + H+ -> H2CO3 -> H2O + CO2）中和乳酸产生的 H+，生成的额外 CO2 刺激外周和中枢化学感受器，驱动呼吸深度和/或频率增加。在通气量 vs VO2 或通气量 vs 功率曲线图上，VT1 表现为 VE/VO2 增大的起始点（而 VE/VCO2 尚未增加），这是通气当量法的标准检测标志。这一拐点的出现表明机体开始依赖糖酵解补充有氧供能的不足，但仍然能够通过碳酸氢盐缓冲系统和增加的通气量维持血液 pH 的稳定。\n\nVT1 在运动训练中有重要的应用价值：低于 VT1 的强度是纯有氧训练区域，适合基础耐力训练和脂肪氧化最大化训练；VT1 本身是中等强度和高强度耐力训练的分界线，长距离稳态训练和大多数恢复性训练应以此强度为上限。常用术语中 VT1 对应“谈话测试”的临界强度——低于 VT1 可以正常交谈，高于 VT1 只能说出几个词的短句。\n\n3-in-1 胸带通过同时监测心率（ECG）和呼吸率/分钟通气量的相对变化（BioZ/EDR），可以在不使用气体分析设备的情况下在户外实际运动场景中估算 VT1。虽然胸带的通气量绝对精度低于实验室代谢车，但通过检测心率-VE 关系曲线的拐点，可以帮助运动员设定个性化的训练强度区域而无需进行昂贵的实验室测试。心率在 VT1 处的值（“VT1 HR”）也是耐力训练计划中常用的目标心率区间的关键参数。",
-    relatedSlugs: [
+      "VT1 的生理学基础是乳酸缓冲机制：当运动强度超过线粒体氧化能力时，无氧糖酵解产生的乳酸增加，血液中的碳酸氢盐缓冲系统（HCO3- + H+ -> H2CO3 -> H2O + CO2）中和乳酸产生的 H+，生成的额外 CO2 刺激外周和中枢化学感受器，驱动呼吸深度和/或频率增加。在通气量 vs VO2 或通气量 vs 功率曲线图上，VT1 表现为 VE/VO2 增大的起始点（而 VE/VCO2 尚未增加），这是通气当量法的标准检测标志。这一拐点的出现表明机体开始依赖糖酵解补充有氧供能的不足，但仍然能够通过碳酸氢盐缓冲系统和增加的通气量维持血液 pH 的稳定。\n\nVT1 在运动训练中有重要的应用价值：低于 VT1 的强度是纯有氧训练区域，适合基础耐力训练和脂肪氧化最大化训练；VT1 本身是中等强度和高强度耐力训练的分界线，长距离稳态训练和大多数恢复性训练应以此强度为上限。常用术语中 VT1 对应「谈话测试」的临界强度——低于 VT1 可以正常交谈，高于 VT1 只能说出几个词的短句。\n\n3-in-1 胸带通过同时监测心率（ECG）和呼吸率/分钟通气量的相对变化（BioZ/EDR），可以在不使用气体分析设备的情况下在户外实际运动场景中估算 VT1。虽然胸带的通气量绝对精度低于实验室代谢车，但通过检测心率-VE 关系曲线的拐点，可以帮助运动员设定个性化的训练强度区域而无需进行昂贵的实验室测试。心率在 VT1 处的值（「VT1 HR」）也是耐力训练计划中常用的目标心率区间的关键参数。",
+    references: [
       "vt2-second-ventilatory-threshold",
       "vo2max",
       "minute-ventilation",
@@ -462,15 +436,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "vt2-second-ventilatory-threshold",
-    term: "第二通气阈/呼吸补偿点",
-    termEn: "VT2 (Second Ventilatory Threshold / RCP)",
+    id: "vt2-second-ventilatory-threshold",
+    term: "第二通气阈/呼吸补偿点 (VT2/Second Ventilatory Threshold/RCP)",
     category: "physiology",
     definition:
       "高强度运动中分钟通气量出现第二次非线性加速的拐点，标志碳酸氢盐缓冲系统失代偿、代谢性酸中毒开始，对应可承受的最高稳态运动强度。",
     detail:
-      "VT2 也被称为呼吸补偿点（Respiratory Compensation Point, RCP），其生理学机制是：当运动强度进一步升高，乳酸生成速率超过了碳酸氢盐和通气的缓冲/清除速率，血液 H+ 浓度开始快速升高（pH 下降），H+ 对颈动脉体和延髓化学感受器的直接刺激驱动肺通气出现第二次急剧增加——超越 CO2 需求的“过度通气”（hyperventilation），通过降低血液 PaCO2 来部分代偿代谢性酸中毒。在通气当量法中，VT2 的标志是 VE/VCO2 开始增加的起始点（同时 VE/VO2 持续增加），通气拐点比 VT1 更为陡峭。\n\nVT2 在训练实践中对应的是高强度的乳酸阈值训练和间歇训练的强度边界——在 VT2 以下运动尚可以维持 20-60 分钟的稳态（血乳酸不连续升高），超过 VT2 则进入非稳态高强度短暂运动域，数分钟内就会力竭。VT2 的值受训练水平的强烈影响：未经训练的个体 VT2 出现在 VO2max 的 50-60%，精英耐力运动员可推迟到 85-90% VO2max——这是有氧耐力训练最重要的适应之一。\n\n3-in-1 胸带在 VT2 检测中的潜力在于：通过连续监测心率和呼吸率/通气的相对关系识别“第二拐点”。同时，HRV 的急剧下降（指示交感神经极度激活）和呼吸率的骤然加速（可能伴随呼吸模式从深慢到浅快转变）都可能提供 VT2 附近的附加标志。结合机器学习模型，多模态数据（HR、HRV、呼吸率、呼吸深度、运动加速度强度）可以提高无气体分析条件下 VT2 检测的准确性。",
-    relatedSlugs: [
+      "VT2 也被称为呼吸补偿点（Respiratory Compensation Point, RCP），其生理学机制是：当运动强度进一步升高，乳酸生成速率超过了碳酸氢盐和通气的缓冲/清除速率，血液 H+ 浓度开始快速升高（pH 下降），H+ 对颈动脉体和延髓化学感受器的直接刺激驱动肺通气出现第二次急剧增加——超越 CO2 需求的「过度通气「（hyperventilation），通过降低血液 PaCO2 来部分代偿代谢性酸中毒。在通气当量法中，VT2 的标志是 VE/VCO2 开始增加的起始点（同时 VE/VO2 持续增加），通气拐点比 VT1 更为陡峭。\n\nVT2 在训练实践中对应的是高强度的乳酸阈值训练和间歇训练的强度边界——在 VT2 以下运动尚可以维持 20-60 分钟的稳态（血乳酸不连续升高），超过 VT2 则进入非稳态高强度短暂运动域，数分钟内就会力竭。VT2 的值受训练水平的强烈影响：未经训练的个体 VT2 出现在 VO2max 的 50-60%，精英耐力运动员可推迟到 85-90% VO2max——这是有氧耐力训练最重要的适应之一。\n\n3-in-1 胸带在 VT2 检测中的潜力在于：通过连续监测心率和呼吸率/通气的相对关系识别」第二拐点」。同时，HRV 的急剧下降（指示交感神经极度激活）和呼吸率的骤然加速（可能伴随呼吸模式从深慢到浅快转变）都可能提供 VT2 附近的附加标志。结合机器学习模型，多模态数据（HR、HRV、呼吸率、呼吸深度、运动加速度强度）可以提高无气体分析条件下 VT2 检测的准确性。",
+    references: [
       "vt1-first-ventilatory-threshold",
       "vo2max",
       "minute-ventilation",
@@ -479,15 +452,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "tidal-volume",
-    term: "潮气量",
-    termEn: "Tidal Volume (TV or VT)",
+    id: "tidal-volume",
+    term: "潮气量 (TV/VT/Tidal Volume)",
     category: "physiology",
     definition:
       "每次呼吸周期中吸入或呼出的气体体积量，是衡量呼吸深度和通气效率的基本肺功能参数。",
     detail:
       "潮气量在静息状态下通常为 6-8 mL/kg 理想体重（成人约 400-600mL），受年龄、性别、体态和姿势的影响。运动时潮气量随强度增加而增大，在低至中等强度时主要通过增加潮气量来满足通气需求；当潮气量达到约 50-60% 肺活量后，进一步的通气增加主要依赖呼吸频率提升。潮气量可由 BioZ 或 RIP 胸带获取的相对体积信号经过肺量计定标后推算，也可由胸腹横截面积的线性回归模型估算。\n\n潮气量的直接监测对于运动员呼吸模式优化训练至关重要。许多耐力运动员在亚极限强度下倾向于浅快呼吸（低潮气量、高频率），这种呼吸模式降低了肺泡通气的效率（更多气体消耗在解剖死腔——气管和支气管的非气体交换区域）。通过 BioZ 胸带实时反馈潮气量和呼吸率的相对变化，运动员可以学会深慢呼吸——提高潮气量、降低呼吸频率，减少呼吸肌的氧耗（剧烈运动时呼吸肌可占用高达 10-15% 的心输出量）。\n\n潮气量监测在 3-in-1 胸带中面临的挑战在于 BioZ 的相对阻抗变化需要转换为体积变化的校准——通常需要与肺量计（实验室）或已知体积的定标呼吸进行比对。在无绝对校标的户外场景下，BioZ 信号的相对幅度变化仍可用于监测呼吸深度的趋势变化，这对训练反馈已具有实用价值。此外，潮气量和呼吸率的乘积即为分钟通气量（VE = TV * RR），是评估整体通气需求的关键参数。",
-    relatedSlugs: [
+    references: [
       "minute-ventilation",
       "respiratory-rate",
       "bioz-bioimpedance",
@@ -496,15 +468,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "minute-ventilation",
-    term: "分钟通气量",
-    termEn: "Minute Ventilation (VE)",
+    id: "minute-ventilation",
+    term: "分钟通气量 (VE/Minute Ventilation)",
     category: "physiology",
     definition:
       "每分钟吸入或呼出的气体总体积，潮气量与呼吸频率的乘积（VE = TV x RR），是心肺运动测试中的核心通气参数。",
     detail:
       "分钟通气量是衡量呼吸系统总体通气量的关键指标。静息 VE 通常为 5-8 L/min，极限运动中可增至 150-200 L/min（男子精英运动员甚至可超过 200 L/min），是运动生理学中表示运动强度水平的经典变量。VE 的变化分为两个主要阶段：低中强度运动时 VE 随 VO2 线性增加，斜率反映通气当量；超过 VT2 后 VE 非线性加速增加，反映了代谢性酸中毒驱动的通气过度。\n\n从 BioZ 或 RIP 胸带的信号到分钟通气量的推算途径是：首先获取呼吸波形（BioZ 阻抗变化或 RIP 截面积变化），通过峰/谷检测提取每次呼吸的幅度和频率。幅度通过校准系数转换为潮气量（TV）；频率通过计算相邻呼吸的时间间隔转换为呼吸率（RR）。最终 VE = TV × RR。在未经标定的胸带中，VE 无法输出绝对 L/min 值，但可以输出相对通气量的变化趋势，对训练分区和通气阈检测仍具有实用价值。\n\n分钟通气量与心率的比率（VE/VCO2）以及 VE-VCO2 斜率是心肺运动测试中的经典指标——VE/VCO2 斜率异常升高（>34）提示通气效率降低，与心力衰竭和肺动脉高压等心血管疾病的严重程度和预后相关。3-in-1 胸带同时提供 ECG 心率和 BioZ 呼吸通气数据，为该类高级气体交换等价指标的估算提供了硬件基础，但精确度尚需与代谢车的对比研究验证。",
-    relatedSlugs: [
+    references: [
       "tidal-volume",
       "respiratory-rate",
       "vt1-first-ventilatory-threshold",
@@ -514,15 +485,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "core-body-temperature",
-    term: "核心体温",
-    termEn: "Core Body Temperature (CBT)",
+    id: "core-body-temperature",
+    term: "核心体温 (CBT/Core Body Temperature)",
     category: "physiology",
     definition:
       "人体内部深层组织（脑、心脏、内脏）的温度，是体温调节中枢的下丘脑所感知的体温，是运动热生理学中最重要的关键指标之一。",
     detail:
       "核心体温的正常安静值约为 36.5-37.5°C，呈现昼夜节律波动（清晨最低、傍晚最高，波动幅度约 0.5-1.0°C）。运动中骨骼肌产生的热量（肌肉代谢效率约 20-25%，剩余 75-80% 以热形式释放）使核心体温随运动强度和持续时间升高。核心体温的升高触发了皮肤血管舒张和出汗（蒸发散热）两大散热机制，其中出汗是长时间运动中最重要的散热方式——运动中的最高核心体温可持续升高至 38.5-39.5°C，而一旦超过 40°C，热射病（Heat Stroke）和多器官功能衰竭的风险急剧增加。\n\n核心体温的临床金标准测量部位是食道（食道探针，反映心脏和主动脉弓附近血液温度，响应速度最快）、直肠（直肠探针，广泛使用的现场测量标准，滞后约 5-10 分钟）和胃肠道（可吞服的温度胶囊，PillCam/CoreTemp），后者的精度约为 ±0.1°C 且对使用者友好但成本高。核心体温与皮肤温度的梯度（core-to-skin thermal gradient）的大小决定了热流量的方向和大小：在静息常温环境下梯度约为 3-5°C（核心 37°C，皮肤 32-34°C），运动中因皮肤血管舒张和出汗冷却梯度先减小后增大。\n\n在胸带产品中，核心体温的测量路径经过了皮肤温度+热流量传感器的间接推算——从皮肤表面的温度和热流量反向估算皮下组织的温度，精度受皮下脂肪厚度、皮肤血流（局部血管舒缩）和传感器的热接触质量的显著影响。即使有双热流法的改善，消费级核心体温监测与食道/直肠探针金标准之间仍然存在 0.3-0.5°C 的绝对偏差，这限制了其在临床热射病诊断中的应用，但对于运动热应变监测、热适应评估和训练安全预警具有足够的相对精度和趋势准确度。",
-    relatedSlugs: [
+    references: [
       "dual-heat-flux",
       "single-heat-flux",
       "zero-heat-flux",
@@ -532,15 +502,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "heat-strain",
-    term: "热应变",
-    termEn: "Heat Strain",
+    id: "heat-strain",
+    term: "热应变 (Heat Strain)",
     category: "physiology",
     definition:
       "机体在热环境下运动时，体温调节系统为维持热平衡所承受的生理负担，核心体温持续升高>38.5°C 且不能通过散热机制稳定即视为热应变状态。",
     detail:
-      "热应变的产生是热产生（主要是肌肉代谢产热 + 环境辐射/对流热获得）与散热（皮肤蒸发 + 呼吸 + 对流 + 辐射散热）之间的不平衡所致。当环境湿球黑球温度（WBGT）超过 28°C，蒸发散热的效率急剧降低（高湿度下汗液蒸发受阻），即使运动强度不变，机体也需要更高的核心体温才能驱动足够的热量散失——这意味着心率升高（心脏分配更多血流到皮肤散热，HR 通常增加 10-20bpm/°C 核心体温升高，即所谓的“心血管漂移 cardiovascular drift”）、运动感觉增强和耐力性能下降。\n\n连续的核心体温监测（通过 3-in-1 胸带）可为热适应的进展提供量化评估：经过 7-14 天的热暴露训练（每天 60-90 分钟运动使核心体温维持 >38.5°C），核心体温、心率和皮肤温度随同等运动条件的升高幅度会逐渐减小——这既是热适应的标志，也是热适应训练是否充分的衡量标准。发热适应训练后，出汗阈值降低（在较低核心体温时即开始出汗）、最大出汗率增加、血浆容量扩张、心率在同等核心体温下降低——这些适应的综合效应在定量上可以通过核心体温曲线的变化检测到。\n\n在安全方面，核心体温监测结合预设的阈值预警（如核心体温 >39.5°C 持续 5 分钟触发震动/视觉警报）可以帮助运动员避免热射病（核心体温 >40°C + 中枢神经系统功能障碍）这一导致运动死亡的第二大原因（仅次于心脏骤停）。美军、国际田联和日本体育协会均已将核心体温监测纳入军训和赛事的热安全指南中。3-in-1 胸带集成了高准确度的核心体温监测，为更广泛的运动人群提供了一种预防热射病的早期预警手段。",
-    relatedSlugs: [
+      "热应变的产生是热产生（主要是肌肉代谢产热 + 环境辐射/对流热获得）与散热（皮肤蒸发 + 呼吸 + 对流 + 辐射散热）之间的不平衡所致。当环境湿球黑球温度（WBGT）超过 28°C，蒸发散热的效率急剧降低（高湿度下汗液蒸发受阻），即使运动强度不变，机体也需要更高的核心体温才能驱动足够的热量散失——这意味着心率升高（心脏分配更多血流到皮肤散热，HR 通常增加 10-20bpm/°C 核心体温升高，即所谓的「心血管漂移 cardiovascular drift」）、运动感觉增强和耐力性能下降。\n\n连续的核心体温监测（通过 3-in-1 胸带）可为热适应的进展提供量化评估：经过 7-14 天的热暴露训练（每天 60-90 分钟运动使核心体温维持 >38.5°C），核心体温、心率和皮肤温度随同等运动条件的升高幅度会逐渐减小——这既是热适应的标志，也是热适应训练是否充分的衡量标准。发热适应训练后，出汗阈值降低（在较低核心体温时即开始出汗）、最大出汗率增加、血浆容量扩张、心率在同等核心体温下降低——这些适应的综合效应在定量上可以通过核心体温曲线的变化检测到。\n\n在安全方面，核心体温监测结合预设的阈值预警（如核心体温 >39.5°C 持续 5 分钟触发震动/视觉警报）可以帮助运动员避免热射病（核心体温 >40°C + 中枢神经系统功能障碍）这一导致运动死亡的第二大原因（仅次于心脏骤停）。美军、国际田联和日本体育协会均已将核心体温监测纳入军训和赛事的热安全指南中。3-in-1 胸带集成了高准确度的核心体温监测，为更广泛的运动人群提供了一种预防热射病的早期预警手段。",
+    references: [
       "core-body-temperature",
       "skin-temperature",
       "hrv-heart-rate-variability",
@@ -549,15 +518,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "vo2max",
-    term: "最大摄氧量",
-    termEn: "VO2max (Maximal Oxygen Uptake)",
+    id: "vo2max",
+    term: "最大摄氧量 (VO2max/Maximal Oxygen Uptake)",
     category: "physiology",
     definition:
       "人体在极限运动中能够摄入、运输和利用的最大氧气量，以 mL/kg/min 为单位，是衡量心肺耐力的金标准生理指标。",
     detail:
       "VO2max 代表了心肺系统（氧气摄入/肺扩散）、循环系统（心输出量=每搏输出量×心率，血红蛋白载氧）和肌肉系统（线粒体密度、氧化酶活性、毛细血管密度）协同运输和利用氧气的能力的极限。VO2max 的生理限制因素因个体和训练水平而异：未经训练者 VO2max 主要受中枢因素（心输出量）限制，精英耐力运动员在极限水平下可能受外周因素（骨骼肌的氧提取能力）制约。VO2max 的绝对值和相对值（除以体重）具有高达 80-90% 的遗传度，但对训练的响应度（可训练性）约需要 6-12 周的大强度训练才能显著提高 10-20%。\n\nVO2max 的实验室测量要求通过气体分析仪测量吸入和呼出的 O2 和 CO2 浓度，同时记录 VE，在逐渐递增负荷至力竭的过程中 VO2 出现平台（增加 <2.0 mL/kg/min 或 <150 mL/min）、RER>1.1、HR 接近年龄预测最大心率和 RPE>19/20 作为力竭标准。非实验室的 VO2max 估测方法包括基于心率-功率关系（如 Firstbeat 的 VO2max 估计算法）、基于跑步配速-心率关系和基于亚极限运动测试（如 Cooper 12 分钟跑、Rockport 步行测试、Astrand 自行车测功计测试）的回归模型。\n\n在 3-in-1 胸带的应用背景下，高质量的 HR 数据（来自 ECG）、运动强度数据（来自 IMU 加速度积分估计的 METs）和呼吸率/通气的相对数据（来自 BioZ）为 VO2max 估计算法提供了比单纯基于速度-心率的手表算法更丰富的输入特征。多模态数据可包含心率、心率变异性、跑步/骑行速度、加速度信号和处理过的呼吸变量，输入机器学习模型后可望提高 VO2max 估值与实验室实测值的相关性（从 r~0.8-0.85 水平提升至 r~0.92+），使其更接近亚极限运动实验室测试的精度。",
-    relatedSlugs: [
+    references: [
       "vt1-first-ventilatory-threshold",
       "vt2-second-ventilatory-threshold",
       "minute-ventilation",
@@ -567,15 +535,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "training-load",
-    term: "训练负荷",
-    termEn: "Training Load",
+    id: "training-load",
+    term: "训练负荷 (Training Load)",
     category: "physiology",
     definition:
       "对一次训练或一段时间的训练对外部（机械功、配速、距离）和内部（心率、HRV、通气量）生理系统施加的总刺激大小的量化。",
     detail:
-      "训练负荷可分为外部负荷（External Load）和内部负荷（Internal Load）。外部负荷是“做了什么”——通过 GPS 记录的总距离、通过功率计记录的机械功（kJ）、通过 IMU 评估的加速/减速/变向次数（如 PlayerLoad)、通过配速-时间曲线计算的训练冲量等。内部负荷是“身体经历了什么”——通过心率监测计算的训练冲量（TRIMP）：计算心率在五个加权心率区域内的总时间乘以各自区域的权重系数（基于血乳酸-心率关系）；通过 HRV 计算的训练负荷影响（HRV 的变化相对于基线的偏移量）；通过 sRPE（session RPE，训练后 30 分钟内的主观疲劳感知评级 × 训练时长分钟数）量化自觉训练负荷。\n\n训练负荷的连续监测（通过 3-in-1 胸带）能提供急性/慢性负荷比值（ACWR，Acute:Chronic Workload Ratio）——急性负荷（通常 7 天平均训练负荷）/ 慢性负荷（通常 28 天平均训练负荷）。研究显示 ACWR 在 0.8-1.3 范围内伤害风险最低，ACWR >1.5 时受伤风险显著增加（Gabbett 等），这一框架（尽管存在统计批评，即 ACWR 高值在数学上与低慢性负荷相关，可能反映的是欠训练群体而非真实的风险）仍广泛用于运动队训练负荷管理。\n\n3-in-1 胸带为训练负荷计算带来了范式提升：传统的 TRIMP 仅用到心率一项内部指标，而胸带可同步给出 HRV（捕捉自主神经应激的更快变化）、呼吸率/通气量（反映代谢和通气需求，在热环境中升高独立于 HR）以及核心体温（独立维度，热量应激的量化指标），构成了多维度内部负荷评估，这是单个心率带或心率手表无法实现的。多维度内部负荷的综合指数可能对训练应激的捕捉更加全面和敏感。",
-    relatedSlugs: [
+      "训练负荷可分为外部负荷（External Load）和内部负荷（Internal Load）。外部负荷是「做了什么「——通过 GPS 记录的总距离、通过功率计记录的机械功（kJ）、通过 IMU 评估的加速/减速/变向次数（如 PlayerLoad)、通过配速-时间曲线计算的训练冲量等。内部负荷是」身体经历了什么」——通过心率监测计算的训练冲量（TRIMP）：计算心率在五个加权心率区域内的总时间乘以各自区域的权重系数（基于血乳酸-心率关系）；通过 HRV 计算的训练负荷影响（HRV 的变化相对于基线的偏移量）；通过 sRPE（session RPE，训练后 30 分钟内的主观疲劳感知评级 × 训练时长分钟数）量化自觉训练负荷。\n\n训练负荷的连续监测（通过 3-in-1 胸带）能提供急性/慢性负荷比值（ACWR，Acute:Chronic Workload Ratio）——急性负荷（通常 7 天平均训练负荷）/ 慢性负荷（通常 28 天平均训练负荷）。研究显示 ACWR 在 0.8-1.3 范围内伤害风险最低，ACWR >1.5 时受伤风险显著增加（Gabbett 等），这一框架（尽管存在统计批评，即 ACWR 高值在数学上与低慢性负荷相关，可能反映的是欠训练群体而非真实的风险）仍广泛用于运动队训练负荷管理。\n\n3-in-1 胸带为训练负荷计算带来了范式提升：传统的 TRIMP 仅用到心率一项内部指标，而胸带可同步给出 HRV（捕捉自主神经应激的更快变化）、呼吸率/通气量（反映代谢和通气需求，在热环境中升高独立于 HR）以及核心体温（独立维度，热量应激的量化指标），构成了多维度内部负荷评估，这是单个心率带或心率手表无法实现的。多维度内部负荷的综合指数可能对训练应激的捕捉更加全面和敏感。",
+    references: [
       "recovery-status",
       "hrv-heart-rate-variability",
       "vo2max",
@@ -584,15 +551,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "recovery-status",
-    term: "恢复状态",
-    termEn: "Recovery Status",
+    id: "recovery-status",
+    term: "恢复状态 (Recovery Status)",
     category: "physiology",
     definition:
       "对训练后机体从疲劳中恢复至正常生理基线状态的能力的评估，是基于 HRV、静息心率和呼吸率的综合判据。",
     detail:
-      "恢复状态评估的核心是检测自主神经系统从训练后的交感神经优势回归到基线时的迷走神经优势的速度和程度。高强度训练诱发的自主神经失衡表现为：静息心率升高（交感神经激活 + 迷走神经撤出）、HRV 降低（RMSSD 和 HF 功率下降）、呼吸率可能轻微升高。如果这些指标在 24-48 小时内（取决于训练负荷和个体恢复能力）未能回归到个人基线水平，则表明机体尚未完全恢复，存在增高的训练应激和潜在功能下降风险。\n\n恢复状态的评估方法包括主观和客观两大类。主观恢复评估（如 RESTQ-Sport 问卷、每日恢复质量评分、肌肉酸痛评分）虽然简单但存在自我报告偏差。客观评估通过每日晨起测量（标准化的仰卧位 1-5 分钟内）的心率、HRV（RMSSD 是其中最重要的指标）和呼吸率，与个人 7-14 天滚动均值和标准差比较，使用 Z 分数或 SWC（smallest worthwhile change）阈值法判定显著偏差。\n\n3-in-1 胸带的一个重大优势在于可以在睡眠期间自动执行 8 小时的连续夜戴监测，无需专门的“晨起测量”程序——在 8 小时睡眠 ECG 中，选取慢波睡眠期（通过 HRV 频域特征可较好地检测）的 HRV 基线值（“睡眠基线 HRV”），该值对训练应激的敏感性可能优于 5 分钟静息晨起测量，而且用户负担为零。胸带的 BioZ 呼吸数据还可以评估睡眠期间的呼吸稳定性——不规则的慢呼吸、反复的深呼吸/憋气或周期性呼吸暂停是不良恢复的标志。核心体温的夜间最低值也在恢复良好的状况下出现更低的温度洼点，反映副交感神经主导的降温和代谢恢复过程。",
-    relatedSlugs: [
+      "恢复状态评估的核心是检测自主神经系统从训练后的交感神经优势回归到基线时的迷走神经优势的速度和程度。高强度训练诱发的自主神经失衡表现为：静息心率升高（交感神经激活 + 迷走神经撤出）、HRV 降低（RMSSD 和 HF 功率下降）、呼吸率可能轻微升高。如果这些指标在 24-48 小时内（取决于训练负荷和个体恢复能力）未能回归到个人基线水平，则表明机体尚未完全恢复，存在增高的训练应激和潜在功能下降风险。\n\n恢复状态的评估方法包括主观和客观两大类。主观恢复评估（如 RESTQ-Sport 问卷、每日恢复质量评分、肌肉酸痛评分）虽然简单但存在自我报告偏差。客观评估通过每日晨起测量（标准化的仰卧位 1-5 分钟内）的心率、HRV（RMSSD 是其中最重要的指标）和呼吸率，与个人 7-14 天滚动均值和标准差比较，使用 Z 分数或 SWC（smallest worthwhile change）阈值法判定显著偏差。\n\n3-in-1 胸带的一个重大优势在于可以在睡眠期间自动执行 8 小时的连续夜戴监测，无需专门的「晨起测量」程序——在 8 小时睡眠 ECG 中，选取慢波睡眠期（通过 HRV 频域特征可较好地检测）的 HRV 基线值（「睡眠基线 HRV」），该值对训练应激的敏感性可能优于 5 分钟静息晨起测量，而且用户负担为零。胸带的 BioZ 呼吸数据还可以评估睡眠期间的呼吸稳定性——不规则的慢呼吸、反复的深呼吸/憋气或周期性呼吸暂停是不良恢复的标志。核心体温的夜间最低值也在恢复良好的状况下出现更低的温度洼点，反映副交感神经主导的降温和代谢恢复过程。",
+    references: [
       "hrv-heart-rate-variability",
       "rmssd",
       "training-load",
@@ -602,15 +568,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "respiratory-rate",
-    term: "呼吸率",
-    termEn: "Respiratory Rate (RR)",
+    id: "respiratory-rate",
+    term: "呼吸率 (RR/Respiratory Rate)",
     category: "physiology",
     definition:
       "每分钟呼吸循环（一吸一呼）的次数，是六大生命体征之一，在运动中从静息 12-20bpm 上升到剧烈运动时的 40-60bpm。",
     detail:
-      "呼吸率的控制由脑干（延髓和脑桥）呼吸中枢通过外周化学感受器（颈动脉体，对 PaO2 下降、PaCO2 上升、pH 下降高度敏感）和中枢化学感受器（延髓腹外侧区，主要对 PaCO2 和 pH 敏感）的反馈输入自动调节。运动开始后数秒内呼吸率即开始增加，这一快速反应由联合运动中枢指令的中央前馈（“中央指令”假说）和来自运动的骨骼肌的 III/IV 组传入神经纤维（机械和代谢感受器）驱动，在有意的运动开始前仅想到运动即可引起呼吸率轻微增加。\n\n呼吸率在心肺运动测试和运动训练监测中的应用价值越来越高：呼吸率的变化与运动强度的相关性良好（与心率趋势通常呈现 1:2-1:3 的比例对应关系），且呼吸率的运动响应不受口服 β 受体阻滞剂等心血管药物影响，可作为药物使用者运动强度的替代指标。呼吸率/心率比率（RR/HR）也可用于评估“心血管漂移”——在长时间稳态运动中，HR 因脱水和热应变而稳步上升，如果 RR 保持稳定而心率持续升高，即表明出现了心血管漂移，需降低运动强度或补充水分。\n\n胸带的呼吸率测量优势在于用干电极即可实现无需口鼻面罩或鼻插管（热敏电阻法）的呼吸率监测，具体技术手段包括：BioZ（胸腔阻抗随呼吸变化，R 波式呼吸信号，频率与体积变化一致）、EDR（从 ECG RMS 幅度或 RR 间期的 RSA 成分提取呼吸频率）以及应变计（胸廓周长的机械变化）。三种方法的融合可以提供对呼吸率/深度的更稳健估计。动态场景下（跑步、跳跃），需要 IMU 辅助的运动伪影移除以保持呼吸率提取精度，通常融合后的 RR 误差在 1-2bpm（RMSE）以内。",
-    relatedSlugs: [
+      "呼吸率的控制由脑干（延髓和脑桥）呼吸中枢通过外周化学感受器（颈动脉体，对 PaO2 下降、PaCO2 上升、pH 下降高度敏感）和中枢化学感受器（延髓腹外侧区，主要对 PaCO2 和 pH 敏感）的反馈输入自动调节。运动开始后数秒内呼吸率即开始增加，这一快速反应由联合运动中枢指令的中央前馈（「中央指令「假说）和来自运动的骨骼肌的 III/IV 组传入神经纤维（机械和代谢感受器）驱动，在有意的运动开始前仅想到运动即可引起呼吸率轻微增加。\n\n呼吸率在心肺运动测试和运动训练监测中的应用价值越来越高：呼吸率的变化与运动强度的相关性良好（与心率趋势通常呈现 1:2-1:3 的比例对应关系），且呼吸率的运动响应不受口服 β 受体阻滞剂等心血管药物影响，可作为药物使用者运动强度的替代指标。呼吸率/心率比率（RR/HR）也可用于评估」心血管漂移」——在长时间稳态运动中，HR 因脱水和热应变而稳步上升，如果 RR 保持稳定而心率持续升高，即表明出现了心血管漂移，需降低运动强度或补充水分。\n\n胸带的呼吸率测量优势在于用干电极即可实现无需口鼻面罩或鼻插管（热敏电阻法）的呼吸率监测，具体技术手段包括：BioZ（胸腔阻抗随呼吸变化，R 波式呼吸信号，频率与体积变化一致）、EDR（从 ECG RMS 幅度或 RR 间期的 RSA 成分提取呼吸频率）以及应变计（胸廓周长的机械变化）。三种方法的融合可以提供对呼吸率/深度的更稳健估计。动态场景下（跑步、跳跃），需要 IMU 辅助的运动伪影移除以保持呼吸率提取精度，通常融合后的 RR 误差在 1-2bpm（RMSE）以内。",
+    references: [
       "bioz-bioimpedance",
       "edr-ecg-derived-respiration",
       "tidal-volume",
@@ -620,15 +585,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "skin-temperature",
-    term: "皮肤温度",
-    termEn: "Skin Temperature (T_skin)",
+    id: "skin-temperature",
+    term: "皮肤温度 (T_skin/Skin Temperature)",
     category: "physiology",
     definition:
       "皮肤表面的温度，是体核-皮肤热量梯度的一个终端，受皮肤血流和环境热量交换的强烈影响，是热生理学的基础测量参数。",
     detail:
       "皮肤温度不是恒定的，而是在身体不同部位（躯干核心>四肢近端>四肢远端）和环境条件下呈现显著的空间差异和时间动态。在恒温（29-33°C 环境）中，胸骨周围的躯干皮肤温度约 34°C，手指/脚趾可能仅有 28-30°C。运动开始时，皮肤血管因交感神经缩血管活性增加（为骨骼肌留出更多血流）而首先短暂收缩导致皮肤温度轻微下降，之后随着核心体温升高和代谢产热增加，皮肤血管舒张（交感神经缩血管信号撤出，并由缓激肽和 NO 主动舒张），大量温热的血液灌流皮肤血管床，皮肤温度迅速升高，以增大核心-皮肤温差和促进辐射+对流+传导散热。\n\n在胸带应用中，T_skin 通过紧贴皮肤的 TMP117 或热敏电阻直接测量，是热流法核心体温推算的不可或缺的输入量。在双/单热流法模型中，T_skin 和被绝缘层覆盖的外侧温度（T_top）之间的差值驱动热流量，从而反向计算核心体温。环境温度和对流（风速）是外部影响因子——在有风的环境下，T_skin 和 T_top 之间的温差增大，加大了热流量，如果不校正会导致核心体温的高估。解决方向包括加入第三个传感器（独立的环境温度和风速传感器）做外部热交换校正。\n\n3-in-1 胸带测得的躯干皮肤温度结合核心体温的估算结果可计算核心-皮肤温度梯度（ΔT_core-skin = T_core - T_skin），该梯度是血流动力学和热生理学的综合指标：梯度增大→皮肤血管收缩、核心热量滞留、可能处于冷环境或惊吓/应激状态；梯度减小→皮肤血管舒张、散热活跃、可能处于热环境中运动或发热。对运动训练的辅助指导意义在于——在同等运动强度和环境下，如果核心体温-皮肤体温梯度出现异常偏离趋势，警示可能存在热适应不良、脱水或过度的热应激。",
-    relatedSlugs: [
+    references: [
       "core-body-temperature",
       "heat-strain",
       "single-heat-flux",
@@ -638,15 +602,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "respiratory-sinus-arrhythmia",
-    term: "呼吸性窦性心律不齐",
-    termEn: "Respiratory Sinus Arrhythmia (RSA)",
+    id: "respiratory-sinus-arrhythmia",
+    term: "呼吸性窦性心律不齐 (RSA/Respiratory Sinus Arrhythmia)",
     category: "physiology",
     definition:
       "心跳间期随呼吸周期的节律性变化——吸气时RR间期缩短（心率加快），呼气时RR间期延长（心率减慢），是迷走神经调控的直接体现。",
     detail:
-      "RSA 的生理学机制是多重的：吸气时，胸膜腔负压增大→右心房充盈增加（Bainbridge 反射）→窦房结速率升高；吸气时肺扩张通过迷走传入神经抑制副交感传出神经→迷走神经撤出→心率加快；呼气时上述过程逆转→迷走神经恢复→心率减慢。中枢机制也参与——延髓呼吸中枢与心血管中枢之间存在直接的神经连接，呼吸节律发生器在吸气和呼气时相分别抑制和兴奋迷走运动核团。RSA 对心血管功能有生理学益处——吸气时心率升高配合右心回血增多使肺循环匹配更好（改善肺的 V/Q 通气血流比和换气效率），这被认为是自主神经系统的一种优化机制。\n\nRSA 的大小（幅度）与年龄、体位、呼吸深度和频率密切相关。年轻的、健康的个体在深慢呼吸下（5-7 次/分钟）RSA 幅度可达 15-30bpm；但随着年龄增长和自主神经功能退化，RSA 幅度逐渐减小。RSA 与高频 HRV 功率（0.15-0.4Hz）是同一现象在时域和频域的表现——HF 功率主要是 RSA 的频域反映，因此可以在频谱图上验证呼吸频率是否正确地与 HRV 的 HF 峰对齐（这可作为呼吸率提取准确性的一个交叉确认）。\n\n在 3-in-1 胸带中，ECG（高时间精度 R 波检测→精确 RR 间期）与 BioZ/EDR（同时记录的呼吸波形→精确的呼吸相位信息）的结合使得研究人员和 AI 训练算法可以直接分析 RSA 的完整动态关系：不仅是 RSA 幅度，还可以建立呼吸相位 vs RR 间期的传递函数模型，该模型中的增益（RSA 的“呼吸→心率”耦合强度）和相位延迟（心率变化相对于呼吸相位的滞后时间）可作为自主神经功能状态的精确量度。RSA 增益的降低是 ANS 功能障碍/训练过度/压力过载的超早期信号。",
-    relatedSlugs: [
+      "RSA 的生理学机制是多重的：吸气时，胸膜腔负压增大→右心房充盈增加（Bainbridge 反射）→窦房结速率升高；吸气时肺扩张通过迷走传入神经抑制副交感传出神经→迷走神经撤出→心率加快；呼气时上述过程逆转→迷走神经恢复→心率减慢。中枢机制也参与——延髓呼吸中枢与心血管中枢之间存在直接的神经连接，呼吸节律发生器在吸气和呼气时相分别抑制和兴奋迷走运动核团。RSA 对心血管功能有生理学益处——吸气时心率升高配合右心回血增多使肺循环匹配更好（改善肺的 V/Q 通气血流比和换气效率），这被认为是自主神经系统的一种优化机制。\n\nRSA 的大小（幅度）与年龄、体位、呼吸深度和频率密切相关。年轻的、健康的个体在深慢呼吸下（5-7 次/分钟）RSA 幅度可达 15-30bpm；但随着年龄增长和自主神经功能退化，RSA 幅度逐渐减小。RSA 与高频 HRV 功率（0.15-0.4Hz）是同一现象在时域和频域的表现——HF 功率主要是 RSA 的频域反映，因此可以在频谱图上验证呼吸频率是否正确地与 HRV 的 HF 峰对齐（这可作为呼吸率提取准确性的一个交叉确认）。\n\n在 3-in-1 胸带中，ECG（高时间精度 R 波检测→精确 RR 间期）与 BioZ/EDR（同时记录的呼吸波形→精确的呼吸相位信息）的结合使得研究人员和 AI 训练算法可以直接分析 RSA 的完整动态关系：不仅是 RSA 幅度，还可以建立呼吸相位 vs RR 间期的传递函数模型，该模型中的增益（RSA 的「呼吸→心率」耦合强度）和相位延迟（心率变化相对于呼吸相位的滞后时间）可作为自主神经功能状态的精确量度。RSA 增益的降低是 ANS 功能障碍/训练过度/压力过载的超早期信号。",
+    references: [
       "hrv-heart-rate-variability",
       "rmssd",
       "lf-hf-ratio",
@@ -659,15 +622,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   // ============================================================
 
   {
-    slug: "rls-adaptive-filter",
-    term: "RLS 自适应滤波器",
-    termEn: "RLS Adaptive Filter (Recursive Least Squares)",
+    id: "rls-adaptive-filter",
+    term: "RLS 自适应滤波器 (RLS Adaptive Filter/Recursive Least Squares)",
     category: "algorithm",
     definition:
       "一种通过递归最小二乘方法持续更新滤波器系数以最小化输出信号与参考信号之间的加权平方误差的自适应算法，是胸带生物电信号运动伪影去除的核心算法。",
     detail:
       "RLS 算法的核心思想是在每个采样时刻通过求解加权最小二乘回归问题来更新滤波器权重向量，权重的衰减因子 λ（forgetting factor，遗忘因子，通常 0.95 < λ < 0.9999）决定了旧数据在权重更新中的衰减速度——λ 越接近 1 则滤波器包含的记忆越长，对缓慢变化的适应越好；λ 越小则对信号变化跟踪越快但对噪声敏感。与 LMS（最小均方）算法相比，RLS 每次迭代的计算复杂度为 O(N^2)（N 为滤波器阶数，而 LMS 仅为 O(N)），但其收敛速度快 10-100 倍，这在需要实时处理的胸带嵌入式系统中至关重要。\n\n在胸带应用中，自适应噪声消除（ANC）的配置为：期望信号（primary input）为受到运动干扰的 ECG 或 BioZ 信号（d = s + n，s 为真实信号，n 为运动伪影噪声），参考信号为 IMU 的 3 轴加速度或 3 轴角速度信号（与噪声 n 相关但与真实信号 s 不相关）。RLS 滤波器利用 IMU 参考信号产生噪声估计 y，然后从期望信号中减去该估计以重建真实信号 e = d - y，通过最小化 e 的加权平方和来收敛到最佳的消噪权重。\n\n在实践中，简单的 IMU 到 ECG 的 ANC 配置可能难以应对所有运动模式——跑步中胸带的摩擦、电极-皮肤的挤压力和躯干的扭转产生的复杂多自由度的运动伪影需要多通道 IMU 信号作为参考，高阶 RLS 滤波器（N >50），或者更先进的 Kalman 滤波器或非线性方法（如小波变换去噪、经验模态分解 EMD 作为预处理）。此外，遗忘因子 λ 需要自适应调节——在运动模式转变（如从步行转为跑步）时快速减小 λ 以快速重建噪声模型，在稳态运动时增大 λ 以精细调校。多传感器系统的全局去噪通常比单通道去噪更具鲁棒性。",
-    relatedSlugs: [
+    references: [
       "kalman-filter",
       "motion-artifact-removal",
       "sensor-fusion",
@@ -676,15 +638,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "motion-artifact-removal",
-    term: "运动伪影消除",
-    termEn: "Motion Artifact Removal",
+    id: "motion-artifact-removal",
+    term: "运动伪影消除 (Motion Artifact Removal)",
     category: "algorithm",
     definition:
       "将受试者运动导致的噪声成分从 ECG、BioZ 热流等生物医学信号中去除的信号处理技术体系，是可穿戴传感器的关键工程挑战。",
     detail:
       "运动伪影的来源是多样且与传感器模态相关的。在 ECG 中，运动伪影主要来自：电极-皮肤接口的半电池电位波动（电极相对于皮肤的机械运动和压力变化改变界面电位，产生 mV 级的低频基线漂移）、肌肉电活动（EMG 噪声，频率与 QRS 复合波重叠，不可滤波分离而必须用自适应方法）、以及皮肤拉伸导致的局部电势变化（<1Hz 的准周期伪影）。在 BioZ 中，除电极运动外还包括胸腔机械变形（非呼吸引起的躯干运动导致的阻抗变化，频率与跑步步频重叠）和电导率变化。\n\n应对运动伪影的技术体系分为硬件级和算法级两个层次。硬件级措施包括：干电极材料的优化（银-氯化银 Ag/AgCl 干电极与皮肤的极化电位最低）、胸带的机械稳定性设计（弹性与舒适度的折衷使电极在动态运动中保持贴附稳定而不过度压迫）、差分放大和右腿驱动（消除共模噪声）以及如 MAX30001 的快速恢复模式和 EMI 滤波器。算法级措施包括：自适应滤波（RLS、LMS 利用 IMU 加速度参考信号）、独立成分分析（ICA，将混合信号分解为统计独立成分以分离 ECG 和 EMG）、小波去噪（在频带分离良好的情况下利用母小波分解多层细节系数进行阈值滤波）、经验模态分解（EMD，自适应地将信号分解为本征模态函数 IMFs，去除与运动相关的 IMFs 后重构信号）、以及基于深度学习的端到端降噪模型（如 Conv-TasNet 和 WaveNet 的架构用于学习运动噪声到生物信号的非线性映射）。\n\n3-in-1 胸带的运动伪影消除是有别于腕部手表的核心竞争优势：胸带 ECG 的信号质量天生高于腕部 PPG，但即使是 ECG 也在剧烈运动中会遭遇严重伪影，而 BioZ 和热流信号对运动的敏感度更高。融合多模态传感器信息（ECG + BioZ + IMU + 温度）联合识别和抑制运动伪影是一个活跃的研究前沿——例如，呼吸信号的预测模型可以从 IMU 加速度和 ECG R 波幅值序列建立，用于填充 BioZ 信号被运动严重污染的段落的呼吸数据。这使 3-in-1 胸带在极高强度运动（如 CrossFit、篮球、间歇冲刺训练）中的可用性远高于单一传感器方案。",
-    relatedSlugs: [
+    references: [
       "rls-adaptive-filter",
       "kalman-filter",
       "sensor-fusion",
@@ -694,15 +655,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "sensor-fusion",
-    term: "传感器融合",
-    termEn: "Sensor Fusion",
+    id: "sensor-fusion",
+    term: "传感器融合 (Sensor Fusion)",
     category: "algorithm",
     definition:
       "将来自多个异构传感器的数据进行组合以产生比任何单个传感器更准确、更可靠和更完整的信息的过程，是 3-in-1 胸带产生高级生理指标的核心技术。",
     detail:
-      "传感器融合可以在三个抽象层次上进行：数据层融合（在最底层组合不同传感器的原始数据，如将 IMU 加速度信号与 ECG 信号同步对齐后输入自适应滤波器）、特征层融合（从各传感器信号中分别提取特征然后组合，如从 ECG 提取心率特征、从 BioZ 提取呼吸率特征、从 IMU 提取步频特征，然后组合为多维特征向量输入机器学习模型）和决策层融合（每个传感器独立产生高级决策或估计结果，再将这些结果综合为一个共识输出，如分别从 ECG 和 BioZ 估计呼吸率后取加权中位数）。\n\n在胸带应用中，经典的传感器融合案例包括：ECG + IMU → 运动补偿心率估计（跑步中 ECG 信号受电极运动伪影影响时利用 IMU 信息推测心率范围约束 ECG 峰值检测）；BioZ + IMU + ECG（EDR）→ 呼吸率融合估计（三个独立的呼吸率估计源通过 Kalman 滤波或加权平均算法产生稳健的呼吸率输出，在某个通道严重噪声下自动降权或剔除）；T_skin + 热流量 + 运动状态（由 IMU 分类）→ 环境校正的核心体温估计（利用 IMU 检测的风速/运动强度来估计皮肤的对流散热修正热流模型中的热交换项）。\n\n融合的核心是在线实时处理能力——3-in-1 胸带需要在 nRF52840 有限的 Cortex-M4F 计算资源上运行融合算法，选择高效率的数学运算（如简化的 Kalman 滤波器、固定增益的互补滤波器、或轻量级的加权投票法）至关重要。更复杂的深度学习融合模型可在配套的智能手机 APP 或云端进行后处理——这是闭环“传感器-APP-云端”架构的理想分工。有效融合的结果可以直接产出单传感器无法实现的复合生理指标（如综合压力指数 = f(心率偏差, HRV 下降, 肤温升高, 呼吸率升高, 运动加速度变异度降低)、运动分层及训练分区评估等），极大提升胸带产品的差异化和价值。",
-    relatedSlugs: [
+      "传感器融合可以在三个抽象层次上进行：数据层融合（在最底层组合不同传感器的原始数据，如将 IMU 加速度信号与 ECG 信号同步对齐后输入自适应滤波器）、特征层融合（从各传感器信号中分别提取特征然后组合，如从 ECG 提取心率特征、从 BioZ 提取呼吸率特征、从 IMU 提取步频特征，然后组合为多维特征向量输入机器学习模型）和决策层融合（每个传感器独立产生高级决策或估计结果，再将这些结果综合为一个共识输出，如分别从 ECG 和 BioZ 估计呼吸率后取加权中位数）。\n\n在胸带应用中，经典的传感器融合案例包括：ECG + IMU → 运动补偿心率估计（跑步中 ECG 信号受电极运动伪影影响时利用 IMU 信息推测心率范围约束 ECG 峰值检测）；BioZ + IMU + ECG（EDR）→ 呼吸率融合估计（三个独立的呼吸率估计源通过 Kalman 滤波或加权平均算法产生稳健的呼吸率输出，在某个通道严重噪声下自动降权或剔除）；T_skin + 热流量 + 运动状态（由 IMU 分类）→ 环境校正的核心体温估计（利用 IMU 检测的风速/运动强度来估计皮肤的对流散热修正热流模型中的热交换项）。\n\n融合的核心是在线实时处理能力——3-in-1 胸带需要在 nRF52840 有限的 Cortex-M4F 计算资源上运行融合算法，选择高效率的数学运算（如简化的 Kalman 滤波器、固定增益的互补滤波器、或轻量级的加权投票法）至关重要。更复杂的深度学习融合模型可在配套的智能手机 APP 或云端进行后处理——这是闭环「传感器-APP-云端」架构的理想分工。有效融合的结果可以直接产出单传感器无法实现的复合生理指标（如综合压力指数 = f(心率偏差, HRV 下降, 肤温升高, 呼吸率升高, 运动加速度变异度降低)、运动分层及训练分区评估等），极大提升胸带产品的差异化和价值。",
+    references: [
       "kalman-filter",
       "motion-artifact-removal",
       "multi-modal-fusion",
@@ -711,15 +671,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "kalman-filter",
-    term: "卡尔曼滤波器",
-    termEn: "Kalman Filter",
+    id: "kalman-filter",
+    term: "卡尔曼滤波器 (Kalman Filter)",
     category: "algorithm",
     definition:
       "一种用于从含噪的序列观测值中估计线性动态系统的隐含状态的递归贝叶斯滤波器，广泛用于可穿戴传感器信号的状态估计和传感器融合。",
     detail:
       "卡尔曼滤波器的数学模型包含两个步骤。预测步骤利用系统的状态转移模型（状态转移矩阵 F）和过程噪声协方差矩阵 Q 预测下一时刻的状态先验估计及其协方差。更新步骤在获得新观测值后利用观测模型（观测矩阵 H）和观测噪声协方差矩阵 R 计算卡尔曼增益 K——增益决定了观测值对状态估计的校正权重：当观测噪声 R 小（观测准确）时 K 取高值（信任观测值），当过程噪声 Q 大（系统动态不可靠）时 K 也高（信任观测值）。增益 K 以最优方式权衡了预测状态和观测新息两者的不确定性，结果具有最小的后验误差协方差。\n\n在胸带应用中，卡尔曼滤波器的典型用途包括：心率跟踪（状态 = [心率, 心率变化率]^T，观测 = ECG R 波峰值周期，预测模型为恒定加速度心率模型，过程噪声反映心率自然波动，输出平滑无突变的心率估计和自适应变化的跟踪带宽）；呼吸率跟踪（状态 = [呼吸率, 呼吸率变化率]^T，观测 = BioZ 峰值周期, EDR 峰值周期，融合多通路信息）；IMU 姿态估计（状态 = [俯仰角, 滚转角, 偏航角, 陀螺仪偏置]^T，加速度提供低频重力矢量观测消除陀螺仪积分漂移，陀螺仪提供高频角速度信息以保持动态响应）——这直接影响 IMU 辅助的运动伪影消除算法的性能。\n\n扩展卡尔曼滤波（EKF）和无迹卡尔曼滤波（UKF）将线性的 KF 框架扩展到非线性系统——胸带应用中生理信号的非线性动态（如心率转调——运动开始时心率非线性快速升高然后平缓升达稳态）和温度的非线性热流模型（如热流与 ΔT 的关系仅在有限温度范围内近似线性）可通过 EKF 或 UKF 处理。在胸带实时系统的在线计算中，标准 KF 因其极低的计算量（每个时间步几次矩阵乘法）通常优于 EKF/UKF，除非非线性程度确实很高——这时可考虑使用迭代 EKF 或粒子滤波器的离线后处理模式。",
-    relatedSlugs: [
+    references: [
       "sensor-fusion",
       "rls-adaptive-filter",
       "motion-artifact-removal",
@@ -728,15 +687,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "signal-quality-index",
-    term: "信号质量指数",
-    termEn: "Signal Quality Index (SQI)",
+    id: "signal-quality-index",
+    term: "信号质量指数 (SQI/Signal Quality Index)",
     category: "algorithm",
     definition:
       "对一个时段内的 ECG、BioZ 或其他生理信号的质量进行定量评估的指标，决定下游心率/呼吸率计算的置信度和权重。",
     detail:
-      "信号质量指数的设计通常基于多个信号特性的加权组合。ECG SQI 的常见特征包括：信噪比（SNR）、峰度（kurtosis，高质量心电信号的 R 波尖锐度远高于噪声的均匀分布或 EMG 噪声）、斜率和谱分布（QRS 能量应集中在 5-20Hz 频带）、自相关函数的峰值周期性（周期性信号的自相关呈现清晰的周期峰值，噪声的自相关在零滞后外基本为零）和 R 波检测的一致性/稳定性（相邻检测到的 R 波形态的相关系数衡量形态一致度）。BioZ SQI 关注周期性、峰-谷振幅的变异性和基线漂移幅度。\n\n在嵌入式系统中，SQI 可以通过滑动时间窗口（如 5-10 秒，即包含 5-20 次呼吸的心跳窗口）以中低频率（如每 2 秒输出一次新的滑动 SQI）运行，从而控制计算开销。SQI 的输出可以是连续的（0-100 分）或离散的（如优质/一般/不可用三级），其关键下游用途是：根据各通路的 SQI 来调整传感器融合中各通道的权重——SQI 高的通道权重高，SQI 低的通道自动退化为辅助/备用甚至剔除；根据可用通道的 SQI 在线决定心率/呼吸率计算的时域/频域模式切换——当 SQI 低时（高运动伪影）使用更保守的跟踪算法（如 Kalman 滤波的观测噪声协方差 R 大幅提升，等价于对原始观测信号的信任度大幅降低）。\n\n3-in-1 胸带特有的多模态 SQI 可以比单模态更高层次地评估整体信号质量——多源 SQI 联合矩阵可以导出“融合后质量评分”——即使 ECG 在冲刺段信号质量短暂下降到不能单独使用，但结合质量良好的呼吸通道的间接信息和 IMU 运动约束信息仍然能可靠地估计出整体传感器数据质量，区分“真正需要丢弃的噪声段”和“低但可靠的低 SQI 段”，最终评估该 2 秒窗口的数据是否足够达到 AI 训练和实时推送的要求。",
-    relatedSlugs: [
+      "信号质量指数的设计通常基于多个信号特性的加权组合。ECG SQI 的常见特征包括：信噪比（SNR）、峰度（kurtosis，高质量心电信号的 R 波尖锐度远高于噪声的均匀分布或 EMG 噪声）、斜率和谱分布（QRS 能量应集中在 5-20Hz 频带）、自相关函数的峰值周期性（周期性信号的自相关呈现清晰的周期峰值，噪声的自相关在零滞后外基本为零）和 R 波检测的一致性/稳定性（相邻检测到的 R 波形态的相关系数衡量形态一致度）。BioZ SQI 关注周期性、峰-谷振幅的变异性和基线漂移幅度。\n\n在嵌入式系统中，SQI 可以通过滑动时间窗口（如 5-10 秒，即包含 5-20 次呼吸的心跳窗口）以中低频率（如每 2 秒输出一次新的滑动 SQI）运行，从而控制计算开销。SQI 的输出可以是连续的（0-100 分）或离散的（如优质/一般/不可用三级），其关键下游用途是：根据各通路的 SQI 来调整传感器融合中各通道的权重——SQI 高的通道权重高，SQI 低的通道自动退化为辅助/备用甚至剔除；根据可用通道的 SQI 在线决定心率/呼吸率计算的时域/频域模式切换——当 SQI 低时（高运动伪影）使用更保守的跟踪算法（如 Kalman 滤波的观测噪声协方差 R 大幅提升，等价于对原始观测信号的信任度大幅降低）。\n\n3-in-1 胸带特有的多模态 SQI 可以比单模态更高层次地评估整体信号质量——多源 SQI 联合矩阵可以导出「融合后质量评分「——即使 ECG 在冲刺段信号质量短暂下降到不能单独使用，但结合质量良好的呼吸通道的间接信息和 IMU 运动约束信息仍然能可靠地估计出整体传感器数据质量，区分」真正需要丢弃的噪声段「和」低但可靠的低 SQI 段」，最终评估该 2 秒窗口的数据是否足够达到 AI 训练和实时推送的要求。",
+    references: [
       "sensor-fusion",
       "motion-artifact-removal",
       "peak-detection",
@@ -745,15 +703,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "peak-detection",
-    term: "峰值检测",
-    termEn: "Peak Detection",
+    id: "peak-detection",
+    term: "峰值检测 (Peak Detection)",
     category: "algorithm",
     definition:
       "从 ECG 信号中精准定位 R 波峰值位置以及从呼吸波形中定位吸气和呼气极值的信号处理算法，是所有后续生理参数提取的基础。",
     detail:
-      "ECG R 波峰值检测的经典算法是 Pan-Tompkins 算法，其核心步骤包括：带通滤波（5-15Hz，最大化 QRS 能量与 P/T 波和噪声的区分）、微分（平方或绝对值增强陡峭的 QRS 复波与较平缓的 P/T 波的对比）、移动窗口积分（产生有助于设定自适应检测阈值的包络）、自适应双阈值检测（在信号和噪声水平上分别维持滑动阈值且自动升降以适应信号质量变化）、以及不应期和回溯检测（限制检测间隔并回溯搜索未检出的低幅度 R 波以防止漏检）。该算法的 MIT-BIH 心律失常数据库灵敏度 >99.5% 且正向预测度 >99.5%。\n\n呼吸波形的峰值检测面临不同于 ECG 的挑战：呼吸波形缺乏 ECG QRS 复波那样标准化和尖锐的峰值形态——不同呼吸模式（胸式呼吸 vs 腹式呼吸）、不同个体（浅呼吸者整体幅度小）和运动状态（跑步中呼吸叠加躯干运动）导致波形变异极大。呼吸峰值检测算法采用自相关和自校准基线漂移估计——在数分钟窗口内估计呼吸基线并计算自适应幅度阈值（如信号范围的 40-60% 和 50-70% 分别作为吸气和呼气极值检测阈值），辅助以呼吸频率的上下文约束（相邻峰值间隔应在 0.5-10 秒范围内）和形态约束（上峰和下峰交替出现，连续两上峰需要回溯修正）。\n\n3-in-1 胸带的峰值检测可以受益于跨通道的互信息——当 ECG R 波与呼吸的 RSA 调制出现节律性关联时（吸气→RR 间期缩短→R 波出现频率略高于呼气），利用 ECG RR 间期的呼吸成分来辅助呼吸波形的极值检测（例如，如果 RR 间期的 RSA 成分指示当前在“吸气”相位，但呼吸波形尚未出现上升，可据此调节呼吸峰值检测的敏感度）。这种多模态一致性约束可显著提升噪声环境下的呼吸峰值检测精度。",
-    relatedSlugs: [
+      "ECG R 波峰值检测的经典算法是 Pan-Tompkins 算法，其核心步骤包括：带通滤波（5-15Hz，最大化 QRS 能量与 P/T 波和噪声的区分）、微分（平方或绝对值增强陡峭的 QRS 复波与较平缓的 P/T 波的对比）、移动窗口积分（产生有助于设定自适应检测阈值的包络）、自适应双阈值检测（在信号和噪声水平上分别维持滑动阈值且自动升降以适应信号质量变化）、以及不应期和回溯检测（限制检测间隔并回溯搜索未检出的低幅度 R 波以防止漏检）。该算法的 MIT-BIH 心律失常数据库灵敏度 >99.5% 且正向预测度 >99.5%。\n\n呼吸波形的峰值检测面临不同于 ECG 的挑战：呼吸波形缺乏 ECG QRS 复波那样标准化和尖锐的峰值形态——不同呼吸模式（胸式呼吸 vs 腹式呼吸）、不同个体（浅呼吸者整体幅度小）和运动状态（跑步中呼吸叠加躯干运动）导致波形变异极大。呼吸峰值检测算法采用自相关和自校准基线漂移估计——在数分钟窗口内估计呼吸基线并计算自适应幅度阈值（如信号范围的 40-60% 和 50-70% 分别作为吸气和呼气极值检测阈值），辅助以呼吸频率的上下文约束（相邻峰值间隔应在 0.5-10 秒范围内）和形态约束（上峰和下峰交替出现，连续两上峰需要回溯修正）。\n\n3-in-1 胸带的峰值检测可以受益于跨通道的互信息——当 ECG R 波与呼吸的 RSA 调制出现节律性关联时（吸气→RR 间期缩短→R 波出现频率略高于呼气），利用 ECG RR 间期的呼吸成分来辅助呼吸波形的极值检测（例如，如果 RR 间期的 RSA 成分指示当前在「吸气」相位，但呼吸波形尚未出现上升，可据此调节呼吸峰值检测的敏感度）。这种多模态一致性约束可显著提升噪声环境下的呼吸峰值检测精度。",
+    references: [
       "ecg-electrocardiogram",
       "bioz-bioimpedance",
       "signal-quality-index",
@@ -762,15 +719,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "machine-learning-core-temp",
-    term: "核心体温机器学习估算",
-    termEn: "Machine Learning Core Temperature Estimation",
+    id: "machine-learning-core-temp",
+    term: "核心体温机器学习估算 (Machine Learning Core Temperature Estimation)",
     category: "algorithm",
     definition:
       "利用从皮肤温度、热流量、心率、IMU 和环境传感器采集的多维特征，通过监督学习模型预测核心体温的数据驱动方法。",
     detail:
       "基于物理模型的核心体温估计方法（如单热流法、双热流法）的局限在于其简化假设——皮下组织被视为均匀热阻层、仅考虑一维稳态热传导而忽略血流对流散热/三维热扩散/代谢产热的时空动态变化。这些假设在稳态或准稳态运动中可以近似，但在运动瞬态（如间歇冲刺训练中的走走停停导致的热产生-散热快速波动）、环境剧变和高/低温环境中的偏离显著。机器学习方法通过数据驱动的方式隐式地学习这些复杂非线性关系的近似模型。\n\n典型的 ML 核心体温估计模型的输入特征包括：皮肤温度 T_skin 及其变化率、热流量 Q 及其变化率、心率 HR（与代谢产热强相关，HR 每升高约 10bpm，核心体温约升高 0.1-0.3°C）、心率变异性 HRV（迷走神经和体温调节交互）、加速度信号的积分（AI 或 PACER 型运动强度指标）、环境温度、相对湿度、以及这些变量的时间延迟和多时间尺度特征（滑动均值和标准差）。模型架构涵盖经典机器学习（Random Forest、Gradient Boosting XGBoost/LightGBM，因训练效率高和可解释性中高等适合嵌入式部署）到轻量级深度学习（1D-CNN + LSTM 的网络学习温度生理延时和运动-温度耦合动态的时间序列模式）。\n\n核心挑战在于训练数据获取——食道或直肠探针作为金标准标注的同步非侵入式传感器数据需要临床级实验室环境，样本量受限（通常 20-50 名受试者，有限运动和环境条件范围），而个体差异（体脂率、热适应度、心肺适能、年龄性别）对核心体温动态的热模型影响巨大。迁移学习和域适应（Domain Adaptation）技术可用于在新的目标用户上仅需少量金标准校准数据即可将通用模型重校准为个体化模型。在 3-in-1 胸带方案实施的 roadmap 中，第一阶段（MVP）采用物理模型（双热流法+IMU辅助环境校正），第二阶段积累金标准标注数据后开发 ML 模型以提升跨个体和跨场景的泛化精度。",
-    relatedSlugs: [
+    references: [
       "dual-heat-flux",
       "sensor-fusion",
       "multi-modal-fusion",
@@ -779,15 +735,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "multi-modal-fusion",
-    term: "多模态融合",
-    termEn: "Multi-Modal Fusion",
+    id: "multi-modal-fusion",
+    term: "多模态融合 (Multi-Modal Fusion)",
     category: "algorithm",
     definition:
       "将来自 ECG、BioZ、温度和 IMU 的异质信号数据在时间对齐后通过统计模型或神经网络联合处理以产生单一模态无法生成的高级生理状态信息。",
     detail:
-      "多模态融合的核心价值——将各模态视为互补的“信息视角”。ECG 提供了高时间精度的自主神经调控视图（心率、HRV 的逐搏动态）；BioZ/EDR 提供了呼吸深度和频率的视图（代谢需求、通气效率的间接反映）；热传感器提供了核心/皮肤体温的热量平衡视图（代谢产热与散热的净平衡状态）；IMU 提供了运动和姿态的机械视图（运动强度、步态—为呼吸和心率的预期提供动态先验约束）。这四种视图的“交集”可揭示单一视图无法直接看到的生理现象（如早期过度训练的征兆：心率尚在正常波动范围，但呼吸率轻微升高且核心体温升高 0.2°C——三者的组合信号远早于任何单一指标的显著偏差出现）。\n\n多模态融合的典型架构分为三个层次。早期融合（Early Fusion）：将多个对齐和归一化的模态特征在输入端拼接后送入单一 ML/DL 模型（如 Random Forest、MLP 或 LSTM），优点是模型可以自动学习跨模态交互特征，但计算压力集中在融合层。中期融合（Intermediate/Middle Fusion）：各模态分别经过特征提取（如 ECG 通过 1D-CNN 提取心率变异性特征，BioZ 通过卷积提取呼吸波形质量特征，IMU 通过浅层 LSTM 提取运动强度/模式特征），然后在隐藏层维度拼接后再进行联合决策。晚期融合（Late Fusion）：各模态独立训练“模态专家模型”（如一个模型基于 ECG 预测运动强度，另一个基于 BioZ+IMU 预测呼吸率，第三个基于热数据预测核心体温），然后再由轻量级融合器（加权平均、逻辑回归或 LightGBM）整合多个专家的输出。\n\n在胸带资源受限的嵌入式系统上，晚期融合的延迟低、更新的灵活性高（可以独立升级各模态专家模型），但跨模态交互的建模能力不足。离线或云端推理的场景下，中期融合可以在计算和建模深度之间取得最佳平衡。多模态融合在训练和推广性方面的主要挑战是各模态数据非完全同步性（温度传感器的低采样率 vs ECG 高采样率的时间对齐/插值策略）、单一模态缺失的数据缺失对策（如由于皮肤电极脱落导致一段时间 ECG 不可信的情况下的模型鲁棒性处理，可采用模态 Dropout 进行训练）和跨个体的模态特性迁移（身体成分等因素导致不同个体的热传感器-核心体温关系的迁移学习）。",
-    relatedSlugs: [
+      "多模态融合的核心价值——将各模态视为互补的「信息视角「。ECG 提供了高时间精度的自主神经调控视图（心率、HRV 的逐搏动态）；BioZ/EDR 提供了呼吸深度和频率的视图（代谢需求、通气效率的间接反映）；热传感器提供了核心/皮肤体温的热量平衡视图（代谢产热与散热的净平衡状态）；IMU 提供了运动和姿态的机械视图（运动强度、步态—为呼吸和心率的预期提供动态先验约束）。这四种视图的」交集「可揭示单一视图无法直接看到的生理现象（如早期过度训练的征兆：心率尚在正常波动范围，但呼吸率轻微升高且核心体温升高 0.2°C——三者的组合信号远早于任何单一指标的显著偏差出现）。\n\n多模态融合的典型架构分为三个层次。早期融合（Early Fusion）：将多个对齐和归一化的模态特征在输入端拼接后送入单一 ML/DL 模型（如 Random Forest、MLP 或 LSTM），优点是模型可以自动学习跨模态交互特征，但计算压力集中在融合层。中期融合（Intermediate/Middle Fusion）：各模态分别经过特征提取（如 ECG 通过 1D-CNN 提取心率变异性特征，BioZ 通过卷积提取呼吸波形质量特征，IMU 通过浅层 LSTM 提取运动强度/模式特征），然后在隐藏层维度拼接后再进行联合决策。晚期融合（Late Fusion）：各模态独立训练」模态专家模型」（如一个模型基于 ECG 预测运动强度，另一个基于 BioZ+IMU 预测呼吸率，第三个基于热数据预测核心体温），然后再由轻量级融合器（加权平均、逻辑回归或 LightGBM）整合多个专家的输出。\n\n在胸带资源受限的嵌入式系统上，晚期融合的延迟低、更新的灵活性高（可以独立升级各模态专家模型），但跨模态交互的建模能力不足。离线或云端推理的场景下，中期融合可以在计算和建模深度之间取得最佳平衡。多模态融合在训练和推广性方面的主要挑战是各模态数据非完全同步性（温度传感器的低采样率 vs ECG 高采样率的时间对齐/插值策略）、单一模态缺失的数据缺失对策（如由于皮肤电极脱落导致一段时间 ECG 不可信的情况下的模型鲁棒性处理，可采用模态 Dropout 进行训练）和跨个体的模态特性迁移（身体成分等因素导致不同个体的热传感器-核心体温关系的迁移学习）。",
+    references: [
       "sensor-fusion",
       "machine-learning-core-temp",
       "kalman-filter",
@@ -796,15 +751,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "ecg-respiration-sync",
-    term: "心电呼吸同步分析",
-    termEn: "ECG-Respiration Synchronization Analysis",
+    id: "ecg-respiration-sync",
+    term: "心电呼吸同步分析 (ECG-Respiration Synchronization Analysis)",
     category: "algorithm",
     definition:
       "利用同时记录的高分辨 ECG 和呼吸波形信号，分析呼吸相位与心率瞬时变化间的耦合动态和传递函数的时域和频域分析方法。",
     detail:
-      "心电呼吸同步分析的经典方法是从 ECG 的 RR 间期序列和呼吸波形序列构建双变量时间序列模型。时域分析包括：计算呼吸相位（将呼吸波形通过希尔伯特变换转换为解析信号提取瞬时相位 0-2π）与对应时刻的 RR 间期之间的相位-幅值关系曲线，该曲线的幅度即为 RSA 增益、曲线的形状反映呼吸-心率耦合的线性度。频域分析包括：交叉功率谱密度（ECG 和呼吸的互功率谱）、平方一致性（coherence）分析——在 0.15-0.4Hz 频带内 ECG RR 间期与呼吸波形的相干性通常 >0.8（两者高度相干），相干性的降低反映了自主神经耦合的减弱，与自主神经病变、老化和训练过量相关。\n\n在 3-in-1 胸带的独特优势下——同时提供高时间精度的 ECG（RR 间期精度亚 ms 级）和高形态保真的呼吸波形（BioZ 或 EDR），可以构建比单一 PPG 心率手表更精细的心-呼吸耦合分析。特别是可以计算“向呼吸相位的 RR 间期条件分布”——吸气早期 vs 吸气晚期 vs 呼气早期 vs 呼气晚期的 RR 间期直方图，这些分布的均值和方差构成一个 4D 或 8D 特征向量，该向量随自主神经状态的变化比单变量 RMSSD 更为灵敏。\n\n心跳和呼吸的同步分析未来应用方向之一是封闭环路——将胸带实时心-呼吸耦合度反馈与呼吸节拍器（breathing pacer）结合，帮助运动员实现共振频率呼吸（Resonance Frequency Breathing，通常在 5-7 次/分钟，该频率能最大化 RSA 幅度和 HRV 功率），这已被证明是降低焦虑、改善压力应对能力和加速运动恢复的有效的 HRV 生物反馈技术。",
-    relatedSlugs: [
+      "心电呼吸同步分析的经典方法是从 ECG 的 RR 间期序列和呼吸波形序列构建双变量时间序列模型。时域分析包括：计算呼吸相位（将呼吸波形通过希尔伯特变换转换为解析信号提取瞬时相位 0-2π）与对应时刻的 RR 间期之间的相位-幅值关系曲线，该曲线的幅度即为 RSA 增益、曲线的形状反映呼吸-心率耦合的线性度。频域分析包括：交叉功率谱密度（ECG 和呼吸的互功率谱）、平方一致性（coherence）分析——在 0.15-0.4Hz 频带内 ECG RR 间期与呼吸波形的相干性通常 >0.8（两者高度相干），相干性的降低反映了自主神经耦合的减弱，与自主神经病变、老化和训练过量相关。\n\n在 3-in-1 胸带的独特优势下——同时提供高时间精度的 ECG（RR 间期精度亚 ms 级）和高形态保真的呼吸波形（BioZ 或 EDR），可以构建比单一 PPG 心率手表更精细的心-呼吸耦合分析。特别是可以计算「向呼吸相位的 RR 间期条件分布」——吸气早期 vs 吸气晚期 vs 呼气早期 vs 呼气晚期的 RR 间期直方图，这些分布的均值和方差构成一个 4D 或 8D 特征向量，该向量随自主神经状态的变化比单变量 RMSSD 更为灵敏。\n\n心跳和呼吸的同步分析未来应用方向之一是封闭环路——将胸带实时心-呼吸耦合度反馈与呼吸节拍器（breathing pacer）结合，帮助运动员实现共振频率呼吸（Resonance Frequency Breathing，通常在 5-7 次/分钟，该频率能最大化 RSA 幅度和 HRV 功率），这已被证明是降低焦虑、改善压力应对能力和加速运动恢复的有效的 HRV 生物反馈技术。",
+    references: [
       "respiratory-sinus-arrhythmia",
       "hrv-heart-rate-variability",
       "peak-detection",
@@ -813,15 +767,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "artifact-robust-hrv",
-    term: "抗伪影 HRV 分析",
-    termEn: "Artifact-Robust HRV Analysis",
+    id: "artifact-robust-hrv",
+    term: "抗伪影 HRV 分析 (Artifact-Robust HRV Analysis)",
     category: "algorithm",
     definition:
       "在 ECG 信号含有运动伪影和异位搏动的情况下仍能产生可靠的心率变异性指标估计的算法策略集合。",
     detail:
-      "运动中的抗伪影 HRV 分析是整个胸带算法链中最大的技术挑战之一——剧烈运动中 ECG 信号的电极运动伪影可能持续数秒，异位搏动（Ectopic Beat，如室性早搏 PVC）在运动员中更常见于高强度和恢复期，均会引入错误的 RR 间期值，严重污染 HRV 计算结果（一个异常的 PVC RR 间期可导致 RMSSD 计算值数倍失真）。经典的 RR 伪影滤波方法包括阈值法（剔除与前后相邻 RR 间期差异 >20-30% 的间期，但可能误噬真实 HRV 信息）和百分位数法（剔除 RR 间期分布的最高和最低 5% 的离群值）。\n\n更先进的抗伪影方法包括：模型化的概率方法——基于 RR 间期时间序列在短窗口内应服从正态分布或 t 分布的假设，计算每个 RR 间期的后验概率作为正常值的概率，低于阈值的间期标记为伪影并逐点更替为前后正常 RR 的插值。基于 ECG 信号形态的方法——ECG 信号的伪影 R 波通常具有异常形态（更宽、更低幅、R-S 非对称），通过在 R 波检测时同步评估每个候选 R 波的形态得分（与当段优质 ECG 模板的相关度）标记为伪影 R 波或异位搏动 R 波。SQI 引导的加权法——RR 间期来源的 SQI 低的 ECG 段落自动标记相应的 RR 为不可靠，参与计算时赋予低权重甚至零权重。\n\n3-in-1 胸带特有的多通道一致性可用于辅助 ECG RR 伪影筛选——如果 BioZ 呼吸波形和 IMU 加速度信号揭示当前的胸腔内压力（BioZ）、脊柱加速度（IMU）和心率变化（ECG）之间的正常呼吸-心率耦合关系在该段 RR 间期中完全缺失，提示该 RR 间期很可能是不真实的、由 ECG 伪影峰值被误检为非生理性 R 波所致。这种“生理一致性交叉验证”可大幅提高伪影 RR 间期的检出率。最终目标是保证胸带即使在 HIIT 运动中也能够提供足量（例如 90% 以上的 1 分钟窗口有优质的 HRV 数据）且可靠的质量标志的 HRV 数据流。",
-    relatedSlugs: [
+      "运动中的抗伪影 HRV 分析是整个胸带算法链中最大的技术挑战之一——剧烈运动中 ECG 信号的电极运动伪影可能持续数秒，异位搏动（Ectopic Beat，如室性早搏 PVC）在运动员中更常见于高强度和恢复期，均会引入错误的 RR 间期值，严重污染 HRV 计算结果（一个异常的 PVC RR 间期可导致 RMSSD 计算值数倍失真）。经典的 RR 伪影滤波方法包括阈值法（剔除与前后相邻 RR 间期差异 >20-30% 的间期，但可能误噬真实 HRV 信息）和百分位数法（剔除 RR 间期分布的最高和最低 5% 的离群值）。\n\n更先进的抗伪影方法包括：模型化的概率方法——基于 RR 间期时间序列在短窗口内应服从正态分布或 t 分布的假设，计算每个 RR 间期的后验概率作为正常值的概率，低于阈值的间期标记为伪影并逐点更替为前后正常 RR 的插值。基于 ECG 信号形态的方法——ECG 信号的伪影 R 波通常具有异常形态（更宽、更低幅、R-S 非对称），通过在 R 波检测时同步评估每个候选 R 波的形态得分（与当段优质 ECG 模板的相关度）标记为伪影 R 波或异位搏动 R 波。SQI 引导的加权法——RR 间期来源的 SQI 低的 ECG 段落自动标记相应的 RR 为不可靠，参与计算时赋予低权重甚至零权重。\n\n3-in-1 胸带特有的多通道一致性可用于辅助 ECG RR 伪影筛选——如果 BioZ 呼吸波形和 IMU 加速度信号揭示当前的胸腔内压力（BioZ）、脊柱加速度（IMU）和心率变化（ECG）之间的正常呼吸-心率耦合关系在该段 RR 间期中完全缺失，提示该 RR 间期很可能是不真实的、由 ECG 伪影峰值被误检为非生理性 R 波所致。这种「生理一致性交叉验证」可大幅提高伪影 RR 间期的检出率。最终目标是保证胸带即使在 HIIT 运动中也能够提供足量（例如 90% 以上的 1 分钟窗口有优质的 HRV 数据）且可靠的质量标志的 HRV 数据流。",
+    references: [
       "hrv-heart-rate-variability",
       "rmssd",
       "signal-quality-index",
@@ -835,15 +788,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   // ============================================================
 
   {
-    slug: "fda-510k",
-    term: "FDA 510(k) 上市前通知",
-    termEn: "FDA 510(k) Premarket Notification",
+    id: "fda-510k",
+    term: "FDA 510(k) 上市前通知 (FDA 510(k) Premarket Notification)",
     category: "business",
     definition:
       "美国食品药品监督管理局（FDA）对中低风险医疗器械（Class II）的上市前核准途径，要求证明待审批器械与已合法上市的参照器械在安全性和有效性方面实质等同。",
     detail:
-      "510(k) 审批不需要进行全面的临床研究（与 III 类设备所需的前置市场批准 PMA 相比），通常需要提交以下类型证据：与至少一个已清除 510(k) 的参照器械的逐项技术、性能和生物相容性对比分析；电气安全和电磁兼容性（IEC 60601-1 和 IEC 60601-1-2 标准测试报告）；生物相容性测试（ISO 10993 系列）；软件验证和确认文档（对于包含固件/软件算法的器械，需遵循 IEC 62304 软件开发生命周期标准）；以及有时的人因/可用性工程（IEC 62366）和适当的性能测试。\n\n对于 3-in-1 胸带在美国市场的影响，核心问题是产品的预期用途（Intended Use）措辞决定其分类和审批路径。如果预期用途措辞为“一般健康管理”（General Wellness，如监测运动中心率和体温趋势以优化训练但不用于诊断或治疗疾病），则可能不需要 510(k) 出清，FDA 对一般健康产品的政策指南（General Wellness: Policy for Low Risk Devices, 2019）中明确指出促进健康生活方式的产品不符合医疗器械定义。如果预期用途措辞为“检测心律失常”、“诊断发热”或任何类似诊断/筛查/监测/治疗疾病状态的陈述，则需 510(k) 出清。\n\n510(k) 出清的战略决策需要考虑其商业成本（系统测试和监管咨询费可高达 10-30 万美元）、时间线（从 IDE 到出清约 6-12 个月）、和竞争优势（在消费品市场，FDA 出清可作为差异化标志，特别是面向认真运动员和健康敏感人群会认为这是质量和准确度的背书）。许多著名的胸带品牌（Polar H10、Garmin HRM-Pro 等）被归入一般健康类别而不依赖医疗设备出清路径，同时维持市场上高质量的形象——这是可循证的策略。对于 3-in-1 胸带，重点在于是否进入医疗诊断市场，这取决于商业战略抉择。",
-    relatedSlugs: [
+      "510(k) 审批不需要进行全面的临床研究（与 III 类设备所需的前置市场批准 PMA 相比），通常需要提交以下类型证据：与至少一个已清除 510(k) 的参照器械的逐项技术、性能和生物相容性对比分析；电气安全和电磁兼容性（IEC 60601-1 和 IEC 60601-1-2 标准测试报告）；生物相容性测试（ISO 10993 系列）；软件验证和确认文档（对于包含固件/软件算法的器械，需遵循 IEC 62304 软件开发生命周期标准）；以及有时的人因/可用性工程（IEC 62366）和适当的性能测试。\n\n对于 3-in-1 胸带在美国市场的影响，核心问题是产品的预期用途（Intended Use）措辞决定其分类和审批路径。如果预期用途措辞为「一般健康管理「（General Wellness，如监测运动中心率和体温趋势以优化训练但不用于诊断或治疗疾病），则可能不需要 510(k) 出清，FDA 对一般健康产品的政策指南（General Wellness: Policy for Low Risk Devices, 2019）中明确指出促进健康生活方式的产品不符合医疗器械定义。如果预期用途措辞为」检测心律失常「、」诊断发热」或任何类似诊断/筛查/监测/治疗疾病状态的陈述，则需 510(k) 出清。\n\n510(k) 出清的战略决策需要考虑其商业成本（系统测试和监管咨询费可高达 10-30 万美元）、时间线（从 IDE 到出清约 6-12 个月）、和竞争优势（在消费品市场，FDA 出清可作为差异化标志，特别是面向认真运动员和健康敏感人群会认为这是质量和准确度的背书）。许多著名的胸带品牌（Polar H10、Garmin HRM-Pro 等）被归入一般健康类别而不依赖医疗设备出清路径，同时维持市场上高质量的形象——这是可循证的策略。对于 3-in-1 胸带，重点在于是否进入医疗诊断市场，这取决于商业战略抉择。",
+    references: [
       "ce-mdr",
       "general-wellness",
       "iec-60601",
@@ -852,15 +804,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "ce-mdr",
-    term: "CE MDR 医疗器械法规",
-    termEn: "CE MDR (Medical Device Regulation)",
+    id: "ce-mdr",
+    term: "CE MDR 医疗器械法规 (CE MDR/Medical Device Regulation)",
     category: "business",
     definition:
       "欧盟 2017/745 号医疗器械法规（MDR），自 2021 年 5 月起强制性取代医疗器械指令 MDD 93/42/EEC，是欧盟市场医疗器械上市的法规框架。",
     detail:
-      "MDR 相比 MDD 的主要升级包括：显著收紧的临床评价要求——制造商需要生成装置特定（device-specific）的临床证据，不能仅依赖等效器械的文献评审；对公告机构（Notified Bodies）的指定和监督更严格（减少公告机构的随意性和选择性，同时减少了符合条件的公告机构数量导致了行业瓶颈）；全面升级的唯一器械标识系统（UDI，Unique Device Identification）——每个器械都需要携带机器和人类可读的唯一序列号、批号或版本号，增强上市后监测（Post-Market Surveillance, PMS）和不良事件跟踪。此外，MDR 对所有有源植入式器械、所有 III 类器械和 IIb 类（包括大多数有源的软件决策器械如心律失常检测/诊断的算法）引入了强制性定期安全更新报告（PSUR）和临床评价更新报告（CEUR）。\n\n对 3-in-1 胸带的影响取决于其在欧盟市场中的定位——作为 I 类器械（自我声明符合性），IIa 类器械（需公告机构审查），还是作为不受 MDR 管辖的一般健康产品（但不可做任何医学声明）。设备中声称能“检测”或“筛查”心律失常（即使标记为“非诊断性”），在欧盟新 MDR 下极可能需要 IIa 分类和公告机构介入。同样，声明测量核心体温并用于“预防热射病”也模糊了健康/医疗边界——监管律师和法规专家在这一类功能性声明的边界问题上的专业知识至关重要，应在产品概念设计早期咨询。\n\nCE MDR 也要求对软件（包括固件和 APP 算法）进行更严格的文件记录、风险管理和验证——如果胸带的固件/APP 提供指导运动员训练负荷调整或体温预警功能，那么软件本身根据 MDR 附件 VIII 规则 11 可能被归类为独立软件（Software as Medical Device, SaMD），需要 IEC 62304 软件开发报告、人因工程报告和网络安全评估。3-in-1 胸带的法规路线分析是需要及早规划的核心商业问题。",
-    relatedSlugs: [
+      "MDR 相比 MDD 的主要升级包括：显著收紧的临床评价要求——制造商需要生成装置特定（device-specific）的临床证据，不能仅依赖等效器械的文献评审；对公告机构（Notified Bodies）的指定和监督更严格（减少公告机构的随意性和选择性，同时减少了符合条件的公告机构数量导致了行业瓶颈）；全面升级的唯一器械标识系统（UDI，Unique Device Identification）——每个器械都需要携带机器和人类可读的唯一序列号、批号或版本号，增强上市后监测（Post-Market Surveillance, PMS）和不良事件跟踪。此外，MDR 对所有有源植入式器械、所有 III 类器械和 IIb 类（包括大多数有源的软件决策器械如心律失常检测/诊断的算法）引入了强制性定期安全更新报告（PSUR）和临床评价更新报告（CEUR）。\n\n对 3-in-1 胸带的影响取决于其在欧盟市场中的定位——作为 I 类器械（自我声明符合性），IIa 类器械（需公告机构审查），还是作为不受 MDR 管辖的一般健康产品（但不可做任何医学声明）。设备中声称能「检测」或「筛查「心律失常（即使标记为」非诊断性「），在欧盟新 MDR 下极可能需要 IIa 分类和公告机构介入。同样，声明测量核心体温并用于」预防热射病」也模糊了健康/医疗边界——监管律师和法规专家在这一类功能性声明的边界问题上的专业知识至关重要，应在产品概念设计早期咨询。\n\nCE MDR 也要求对软件（包括固件和 APP 算法）进行更严格的文件记录、风险管理和验证——如果胸带的固件/APP 提供指导运动员训练负荷调整或体温预警功能，那么软件本身根据 MDR 附件 VIII 规则 11 可能被归类为独立软件（Software as Medical Device, SaMD），需要 IEC 62304 软件开发报告、人因工程报告和网络安全评估。3-in-1 胸带的法规路线分析是需要及早规划的核心商业问题。",
+    references: [
       "fda-510k",
       "iec-60601",
       "iso-13485",
@@ -869,15 +820,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "nmpa-registration",
-    term: "NMPA 医疗器械注册",
-    termEn: "NMPA Medical Device Registration",
+    id: "nmpa-registration",
+    term: "NMPA 医疗器械注册 (NMPA Medical Device Registration)",
     category: "business",
     definition:
       "中国国家药品监督管理局（NMPA）对医疗器械上市前审批的监管系统，是中国市场销售医疗器械的强制性法规要求。",
     detail:
-      "NMPA 将医疗器械分为三类：Class I（低风险，备案管理）、Class II（中等风险，省级药监局注册审评审批）和 Class III（高风险，NMPA 国家局审评审批）。大多数可穿戴健康监测设备（心率带、智能手表 ECG 功能、体温监测仪等）为二类医疗器械，需经省级药监局或国家局审评、通过医疗器械注册检测（在中国境内认可的检测实验室进行）后取得医疗器械注册证（有效期 5 年）方可上市销售。\n\n关键差异在于：中国的医疗器械注册流程需要参考国内强制性标准（GB 9706 系列，等同于 IEC 60601 系列但有若干中国特有的补充要求）、软件注册审查指导原则（包括算法性能验证、网络安全性评估）以及中文标签和使用说明书。境外生产商可委托中国境内的代理人代为申请二类或三类注册证，或者通过跨境电商渠道绕过国内 NMPA 注册（但这一灰色地带正在收紧——海关和药监局已多次明确严查无证进口医疗器械，尤其是有诊断/监测功能声明的设备）。\n\n对于 3-in-1 胸带在中国市场的战略意义——中国是全球最大可穿戴设备市场（用户基数超 5 亿），“一般健康”与“医疗器械”声明之间的灰色地带竞争激烈。如果选择不注册——允许作为一般电子产品销售，避免使用“监测”、“检测”、“异常”等诊断性/监测性词汇，而代之以“记录”、“测量”、“数值”、“训练”等中性描述——这是一种法律风险与商业灵活性之间的权衡。如果目标客户包括高校运动科学实验室、军队和运动队等，医疗器械注册可能成为必要门槛和竞争优势。注册时间和成本需评价（二类注册约 12-24 个月，费用 20-100 万人民币不等），应与整体的市场进入策略综合决定。",
-    relatedSlugs: [
+      "NMPA 将医疗器械分为三类：Class I（低风险，备案管理）、Class II（中等风险，省级药监局注册审评审批）和 Class III（高风险，NMPA 国家局审评审批）。大多数可穿戴健康监测设备（心率带、智能手表 ECG 功能、体温监测仪等）为二类医疗器械，需经省级药监局或国家局审评、通过医疗器械注册检测（在中国境内认可的检测实验室进行）后取得医疗器械注册证（有效期 5 年）方可上市销售。\n\n关键差异在于：中国的医疗器械注册流程需要参考国内强制性标准（GB 9706 系列，等同于 IEC 60601 系列但有若干中国特有的补充要求）、软件注册审查指导原则（包括算法性能验证、网络安全性评估）以及中文标签和使用说明书。境外生产商可委托中国境内的代理人代为申请二类或三类注册证，或者通过跨境电商渠道绕过国内 NMPA 注册（但这一灰色地带正在收紧——海关和药监局已多次明确严查无证进口医疗器械，尤其是有诊断/监测功能声明的设备）。\n\n对于 3-in-1 胸带在中国市场的战略意义——中国是全球最大可穿戴设备市场（用户基数超 5 亿），「一般健康「与」医疗器械「声明之间的灰色地带竞争激烈。如果选择不注册——允许作为一般电子产品销售，避免使用」监测「、」检测「、」异常「等诊断性/监测性词汇，而代之以」记录「、」测量「、」数值「、」训练」等中性描述——这是一种法律风险与商业灵活性之间的权衡。如果目标客户包括高校运动科学实验室、军队和运动队等，医疗器械注册可能成为必要门槛和竞争优势。注册时间和成本需评价（二类注册约 12-24 个月，费用 20-100 万人民币不等），应与整体的市场进入策略综合决定。",
+    references: [
       "fda-510k",
       "ce-mdr",
       "iec-60601",
@@ -886,15 +836,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "general-wellness",
-    term: "一般健康产品",
-    termEn: "General Wellness Product",
+    id: "general-wellness",
+    term: "一般健康产品 (General Wellness Product)",
     category: "business",
     definition:
       "美国 FDA 定义的非医疗器械类（低风险通用健康用途）产品：旨在促进健康生活方式的设备或软件，不声称诊断、缓解、治疗、预防或检测特定的疾病或医学状况。",
     detail:
-      "FDA 在 2016 年首次发布、2019 年更新的《General Wellness: Policy for Low Risk Devices》指南中清晰界定了一般健康产品与医疗器械的边界。一般健康产品的合法用途声明包括两类：（1）维持或鼓励一般健康状态或健康活动的产品（如宣称“帮助跟踪心率以优化运动训练效果”、“监测呼吸模式以改善放松和正念/冥想”、“连续记录体温趋势以了解昼夜节律”）；（2）通过健康的生活方式选择降低某些疾病的风险或影响的声明（如“帮助通过心率训练改善心血管健康”、“评估睡眠质量以建议改善睡眠习惯”，前提是这些声明仅涉及健康生活方式而非诊断疾病）。\n\n关键红线是：不得声明或暗示可以诊断、筛查、治疗、缓解疾病或状况——如“检测心律失常”、“指导心房颤动管理”、“检测发热”等。一旦跨过此线，监管方就会认为该设备构成医疗器械需要出清或批准。在产品营销材料和用户界面的内容措辞上，“Monitors”（监测/监视，暗示判断和风险）可能引向医疗器械，“Measures”和“Tracks”（测量和跟踪）属于中性词语——一些法律判断中甚至是这词的一字之差划定了医疗 vs 非医疗的法律边界。\n\n对 3-in-1 胸带的商业影响——如果战略选择为“General Wellness”类别——产品营销上完全避免医疗声明、产品定位为运动健康和表现优化工具（而非疾病管理工具）——这提供了快速上市、低监管负担和最低合规成本的路径。但如果竞争格局中出现医疗级通过认证的胸带抢占了“可信度巅峰”定位，“一般健康”定位可能失去一部分严谨用户，这是产品经理、品牌与法务团队需要共同评估的商业/法律权衡。",
-    relatedSlugs: [
+      "FDA 在 2016 年首次发布、2019 年更新的《General Wellness: Policy for Low Risk Devices》指南中清晰界定了一般健康产品与医疗器械的边界。一般健康产品的合法用途声明包括两类：（1）维持或鼓励一般健康状态或健康活动的产品（如宣称「帮助跟踪心率以优化运动训练效果「、」监测呼吸模式以改善放松和正念/冥想「、」连续记录体温趋势以了解昼夜节律「）；（2）通过健康的生活方式选择降低某些疾病的风险或影响的声明（如」帮助通过心率训练改善心血管健康「、」评估睡眠质量以建议改善睡眠习惯「，前提是这些声明仅涉及健康生活方式而非诊断疾病）。\n\n关键红线是：不得声明或暗示可以诊断、筛查、治疗、缓解疾病或状况——如」检测心律失常「、」指导心房颤动管理「、」检测发热」等。一旦跨过此线，监管方就会认为该设备构成医疗器械需要出清或批准。在产品营销材料和用户界面的内容措辞上，「Monitors」（监测/监视，暗示判断和风险）可能引向医疗器械，「Measures」和「Tracks」（测量和跟踪）属于中性词语——一些法律判断中甚至是这词的一字之差划定了医疗 vs 非医疗的法律边界。\n\n对 3-in-1 胸带的商业影响——如果战略选择为「General Wellness」类别——产品营销上完全避免医疗声明、产品定位为运动健康和表现优化工具（而非疾病管理工具）——这提供了快速上市、低监管负担和最低合规成本的路径。但如果竞争格局中出现医疗级通过认证的胸带抢占了「可信度巅峰」定位，「一般健康」定位可能失去一部分严谨用户，这是产品经理、品牌与法务团队需要共同评估的商业/法律权衡。",
+    references: [
       "fda-510k",
       "ce-mdr",
       "iec-60601",
@@ -903,15 +852,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "over-the-counter",
-    term: "非处方/直接面向消费者",
-    termEn: "Over-the-Counter (OTC) / Direct-to-Consumer",
+    id: "over-the-counter",
+    term: "非处方/直接面向消费者 (OTC/Over-the-Counter/Direct-to-Consumer)",
     category: "business",
     definition:
       "无需医生处方或医疗专业人员监督即可直接销售的医疗器械或健康产品，在胸带市场中指针对大众消费者的可直接购买的穿戴产品。",
     detail:
-      "OTC 医疗器械在美国的监管路径较处方器械增加了额外的消费者可用性要求：必须证明目标用户（普通消费者，而非医学专业人士）可以在没有专业培训的情况下安全和有效地使用器械并合理解读结果。这包括人因工程验证——器械的用户界面、说明书、输出和告警必须为普通消费阅读水平设计（约 6-8 年级阅读难度、避免医学术语）、误用风险评估以及可用性测试（IEC 62366 流程中包含了 15 名以上代表用户的模拟使用测试）。\n\n在胸带领域中，市场绝大多数产品存在于一个“类 OTC”灰色地带——虽然可能未获 FDA/CE 正式出清为 OTC 医疗器械，却以消费电子/运动配件的形态直销给消费者。Polar H10 和 Garmin HRM-Pro 系列均是典型范例。这些产品避免正式医疗请求（不做“诊断”声明），但在健身房、电商平台上作为高端心率带销售。消费者期望值设定在运动表现提升而非疾病检测，降低了制造商的法律风险。\n\n对于 3-in-1 胸带——核心体温和呼吸监测功能的加入与单纯心率胸带拉开了质的功能差别——这在 OTC 定位下是巨大的差异化优势（“一种带来实验室级体温和呼吸的胸带”），但同时也带来了一个未解决的关键问题：在 OTC/一般健康模式下如何为普通用户解释“核心体温超过 39°C 时应停止运动”这一信息，而不跨入“预防热射病”的医疗声称领域？“预防 XX 疾病”的声明即构成医疗声称。这种语义上的微妙平衡决定了产品的法律边界和商业空间——需要法务、医学、产品和市场团队协同打造的安全信息框架。",
-    relatedSlugs: [
+      "OTC 医疗器械在美国的监管路径较处方器械增加了额外的消费者可用性要求：必须证明目标用户（普通消费者，而非医学专业人士）可以在没有专业培训的情况下安全和有效地使用器械并合理解读结果。这包括人因工程验证——器械的用户界面、说明书、输出和告警必须为普通消费阅读水平设计（约 6-8 年级阅读难度、避免医学术语）、误用风险评估以及可用性测试（IEC 62366 流程中包含了 15 名以上代表用户的模拟使用测试）。\n\n在胸带领域中，市场绝大多数产品存在于一个「类 OTC」灰色地带——虽然可能未获 FDA/CE 正式出清为 OTC 医疗器械，却以消费电子/运动配件的形态直销给消费者。Polar H10 和 Garmin HRM-Pro 系列均是典型范例。这些产品避免正式医疗请求（不做「诊断」声明），但在健身房、电商平台上作为高端心率带销售。消费者期望值设定在运动表现提升而非疾病检测，降低了制造商的法律风险。\n\n对于 3-in-1 胸带——核心体温和呼吸监测功能的加入与单纯心率胸带拉开了质的功能差别——这在 OTC 定位下是巨大的差异化优势（「一种带来实验室级体温和呼吸的胸带」），但同时也带来了一个未解决的关键问题：在 OTC/一般健康模式下如何为普通用户解释「核心体温超过 39°C 时应停止运动」这一信息，而不跨入「预防热射病」的医疗声称领域？「预防 XX 疾病」的声明即构成医疗声称。这种语义上的微妙平衡决定了产品的法律边界和商业空间——需要法务、医学、产品和市场团队协同打造的安全信息框架。",
+    references: [
       "fda-510k",
       "general-wellness",
       "ce-mdr",
@@ -919,15 +867,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "iec-60601",
-    term: "IEC 60601 医疗电气设备安全标准",
-    termEn: "IEC 60601 Medical Electrical Equipment Safety Standards",
+    id: "iec-60601",
+    term: "IEC 60601 医疗电气设备安全标准 (IEC 60601 Medical Electrical Equipment Safety Standards)",
     category: "medical",
     definition:
       "国际电工委员会（IEC）制定的医疗电气设备基本安全和基本性能的系列标准，是全球医疗设备进入监管市场的设计、测试和认证的强制性要求。",
     detail:
       "IEC 60601 标准家族的核心标准包括：IEC 60601-1（基本安全和基本性能通用要求）——涵盖电击防护（漏电流限值、绝缘要求、保护接地）、机械防护（运动部件、稳定性的物理安全）和辐射防护（电磁辐射 X 射线射频等的暴露限值）；IEC 60601-1-2（电磁兼容性 EMC 要求和测试）——规定了医疗设备在典型使用环境中（医院、家庭、运动场）应具有的电磁辐射限值和抗扰度水平，防止对其他设备的干扰并在此电磁环境下保持设备的基本性能；IEC 60601-1-11（家用医疗环境）——增加了对家庭环境使用的医疗设备特有的要求包括跌落测试、防水防尘（IP 等级）、环境条件（温度、湿度、大气压力）容差和易用性。\n\n对于胸带和其附属充电器/移动应用组成的医疗电气系统，60601-1 的适用性与分类路径密切相关：如果胸带被归类为医疗器械并由内部电池供电，则需满足内部供电设备（Internally Powered ME Equipment）的漏电流和绝缘要求、应用部分（Applied Part, 电极和皮肤接触的传感器面）的 BF 或 CF 型隔离要求（胸带电极属于 BF 型即与患者导电接触、CF 型要求更严——适用于直接与心脏电接触的场合如心内心电图电极）。胸带电极的电流密度限值（<0.1mA/cm^2 DC，对高频 BioZ 电流另有频率依赖的限值以保护组织免受电热损伤）是 BioZ 技术在满足 60601-1 合规时的核心安全参数。\n\n对于 3-in-1 胸带设计这一具体产品，IEC 60601-1-2 EMC 测试涉及蓝牙/BLE/ANT+ 射频发射在 2.4GHz ISM 频段内的合规性，以及胸带在外部电磁场（如健身设备、跑步机、手机、高压线产生）干扰下的工作稳定性——BioZ 激励信号本身会在电极-皮肤回路产生电压、不应对其他设备造成干扰的同时，还要保证 BioZ 电路不受环境 50/60Hz 工频磁场干扰。此外，软件的 IEC 62304 合规要求（软件开发生命周期）和可用性 IEC 62366 也应被视作 IEC 60601 标准家族的间接要求。",
-    relatedSlugs: [
+    references: [
       "fda-510k",
       "ce-mdr",
       "iso-13485",
@@ -936,15 +883,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "iso-13485",
-    term: "ISO 13485 医疗器械质量管理体系",
-    termEn: "ISO 13485 Medical Device Quality Management System",
+    id: "iso-13485",
+    term: "ISO 13485 医疗器械质量管理体系 (ISO 13485 Medical Device Quality Management System)",
     category: "medical",
     definition:
       "专门针对医疗器械行业的质量管理体系的国际标准，规定了从设计开发、采购、生产、质量控制和上市后监督的全过程质量管理要求。",
     detail:
       "ISO 13485 是医疗器械行业特有的质量管理体系标准，基于并超越了通用的 ISO 9001 标准框架。其核心额外要求包括：风险管理（要求按照 ISO 14971 标准实施贯穿整个产品生命周期的风险管理——包括风险分析、风险评价、风险控制和生产后信息收集，并将风险管理整合到质量体系的每个流程节点中）；设计控制（对医疗器械设计开发全过程的系统性控制包括设计输入、设计输出、设计评审、设计验证、设计确认和设计变更管理，每个阶段的产出必须可溯源到设计输入和用户需求）；过程控制（生产和服务全过程的环境控制——适用于洁净间环境生产的无菌组件、关键工序验证/再验证、标识和可追溯性——从原材料批号到成品系列号和最终用户的完全可追溯性）。\n\n对于 3-in-1 胸带研发过程中的直接影响体现为设计历史文件（Design History File, DHF）的完整维护——需要详细记录从初始用户需求（Voice of Customer）发现到产品设计、验证、确认过程中所有决策的理由和演变过程。DHF 是 FDA 质量体系法规（QSR 21 CFR Part 820）的核心审查对象。设备主记录（Device Master Record, DMR）包含了胸带制造的完整文件——物料清单、装配SOP、检查指导、PCB 制造文件/固件烧录和测试步骤等。\n\n在实践中，取得 ISO 13485 认证对企业意味着：能够在 CE MDR 下使用自我声明合规途径或简化公告机构审查；在 FDA 体系下符合质量体系法规（QSR）的要求，使 510(k) 申请审查和现场检查更加顺利；在 NMPA 体系下使医疗器械生产许可和产品注册审查通过率大幅提升。但 ISO 13485 的建立和维护资源需求不菲——首次认证全过程约 6-12 个月，组织内投入一至两名全职质量专业人员，加上外部咨询和认证机构费用，这应是 3-in-1 胸带商业企划中支出预算的组成部分。",
-    relatedSlugs: [
+    references: [
       "fda-510k",
       "ce-mdr",
       "iec-60601",
@@ -953,15 +899,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "astm-e1112",
-    term: "ASTM E1112 医疗温度计精度标准",
-    termEn: "ASTM E1112 Medical Thermometer Accuracy Standard",
+    id: "astm-e1112",
+    term: "ASTM E1112 医疗温度计精度标准 (ASTM E1112 Medical Thermometer Accuracy Standard)",
     category: "medical",
     definition:
       "美国试验与材料学会（ASTM）制定的电子医疗温度计临床精度和实验室测试方法的标准规范，定义了标准接触和非接触测温设备的准确性要求。",
     detail:
-      "ASTM E1112 标准的温度计实验室精度要求规定了在恒温水浴中不同温度点（通常 37°C ±1°C 区域）测试时，电子测温设备的偏差不应超过规定的最大允许误差。在核心和标准温度段（37.0-39.0°C）的最大允许实验室误差限值为 ±0.1°C，在低温段（<35.8°C）和高温段（>41°C）可放宽至 ±0.2°C。此外，该标准还规定了临床精度测试方案——需要在对照临床金标准（如肺动脉导管、食道探针、或直肠探针）的对比下对至少 50-80 名受试者（包括发热者和非发热者）进行检测，计算绝对偏差的标准差和 95% 一致性界限。\n\n对于 3-in-1 胸带而言，TMP117 的皮肤温度测量在 30-45°C 内的 ±0.1°C 精度符合 ASTM E1112 实验室标准的要求——但这仅是皮肤温度，不等于核心体温。核心体温通过皮肤温度 + 热流二次计算得到，最终的临床精度瓶颈在于热流计算模型及其校准而非温度传感器本身——换言之，即使 TMP117 达到了 ±0.1°C 的皮肤温度准确度，由此计算的核心体温受热流模型精度（受个体组织热阻变化、环境对流误差影响）的最终综合误差往往会扩大到 ±0.3-0.5°C 甚至更高，不符合 ASTM E1112 核心体温部分 ±0.1°C 的要求。\n\n这不会阻止胸带在消费运动市场中成功（消费级运动设备的核心体温精度 ±0.3-0.5°C 已具有重要训练和安全价值），但它意味着如果产品声明“符合 ASTM E1112 标准”，只能在皮肤温度测量的层面做出，不能在核心体温层面做出——核心体温的声明需基于进一步的数据积累，可能涉及临床对比研究并提供 Bland-Altman 图的详细注释说明实际偏差和限度。在法规、产品包装和法律声明中这一技术标准的细微引述可能极为关键。",
-    relatedSlugs: [
+      "ASTM E1112 标准的温度计实验室精度要求规定了在恒温水浴中不同温度点（通常 37°C ±1°C 区域）测试时，电子测温设备的偏差不应超过规定的最大允许误差。在核心和标准温度段（37.0-39.0°C）的最大允许实验室误差限值为 ±0.1°C，在低温段（<35.8°C）和高温段（>41°C）可放宽至 ±0.2°C。此外，该标准还规定了临床精度测试方案——需要在对照临床金标准（如肺动脉导管、食道探针、或直肠探针）的对比下对至少 50-80 名受试者（包括发热者和非发热者）进行检测，计算绝对偏差的标准差和 95% 一致性界限。\n\n对于 3-in-1 胸带而言，TMP117 的皮肤温度测量在 30-45°C 内的 ±0.1°C 精度符合 ASTM E1112 实验室标准的要求——但这仅是皮肤温度，不等于核心体温。核心体温通过皮肤温度 + 热流二次计算得到，最终的临床精度瓶颈在于热流计算模型及其校准而非温度传感器本身——换言之，即使 TMP117 达到了 ±0.1°C 的皮肤温度准确度，由此计算的核心体温受热流模型精度（受个体组织热阻变化、环境对流误差影响）的最终综合误差往往会扩大到 ±0.3-0.5°C 甚至更高，不符合 ASTM E1112 核心体温部分 ±0.1°C 的要求。\n\n这不会阻止胸带在消费运动市场中成功（消费级运动设备的核心体温精度 ±0.3-0.5°C 已具有重要训练和安全价值），但它意味着如果产品声明「符合 ASTM E1112 标准」，只能在皮肤温度测量的层面做出，不能在核心体温层面做出——核心体温的声明需基于进一步的数据积累，可能涉及临床对比研究并提供 Bland-Altman 图的详细注释说明实际偏差和限度。在法规、产品包装和法律声明中这一技术标准的细微引述可能极为关键。",
+    references: [
       "iec-60601",
       "core-body-temperature",
       "tmp117",
@@ -973,15 +918,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   // ============================================================
 
   {
-    slug: "sweat-rate",
-    term: "出汗率",
-    termEn: "Sweat Rate",
+    id: "sweat-rate",
+    term: "出汗率 (Sweat Rate)",
     category: "physiology",
     definition:
       "单位时间内皮肤表面分泌的汗液体积，通常以 L/h 或 mg/cm^2/min 为单位，是评估运动强度、热应激水平和体液平衡状态的核心指标。",
     detail:
       "出汗率受多种因素的综合调控：运动强度（代谢产热速率是出汗的主要驱动力，每 1°C 核心体温升高约驱动出汗率增加 0.5-1.0 L/h）、环境条件（温度、湿度、风速和辐射热共同决定蒸发散热的效率，高湿度环境下出汗率升高但蒸发效率降低）、个体的热适应状态（热适应后出汗阈值降低、最大出汗率可从 1.0-1.5 L/h 提升至 2.0-3.0 L/h）以及水合状态（脱水 2% 体重后出汗率开始下降）。测量方法包括：全身称重法（运动前后裸体称重并校正饮水量和排尿量，精度 ±50mL）、局部通风胶囊法（ventilated capsule，在局部皮肤区域通过干燥气流收集汗液并测量进出口湿度差计算蒸发率）和微流控汗液收集法（通过微流控通道定量收集局部汗液后测量体积流率）。\n\n出汗率的局部差异非常显著——躯干（胸部、背部）和额头的出汗率通常远高于四肢，这与汗腺密度的区域分布一致（胸部汗腺密度约 150-250 glands/cm²，前臂仅约 80-150 glands/cm²）。在 3-in-1 胸带中，胸部位置的传感器天然位于高出汗率区域，这既有利于汗液样本的充足供应以确保连续监测，也对传感器的流体管理能力提出了更高要求——高出汗率下微流控通道可能出现溢流（overflow）或新旧汗液混合，导致电极测量的汗液成分不反映即时分泌状态而反映混合后的滞后浓度。\n\n出汗率本身作为独立生理指标的价值在于：结合环境条件和运动强度可评估个体的热适应度、体液平衡风险和汗液电解质流失总量。高水平运动员在马拉松中的出汗率可高达 2-3 L/h，相应汗钠流失量在比赛中可达 2-5g（远超每日推荐的钠摄入量 2g），这突出了运动补液策略中联合考虑出汗率和汗液电解质浓度的必要性。",
-    relatedSlugs: [
+    references: [
       "sweat-sodium",
       "dehydration-monitoring",
       "core-body-temperature",
@@ -991,15 +935,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "ion-selective-electrode",
-    term: "离子选择性电极",
-    termEn: "Ion-Selective Electrode (ISE)",
+    id: "ion-selective-electrode",
+    term: "离子选择性电极 (ISE/Ion-Selective Electrode)",
     category: "sensor",
     definition:
       "基于选择性离子载体薄膜（ionophore membrane）产生与目标离子活度对数成正比的电位信号的电化学传感器，其核心工作原理由能斯特方程描述，是汗液电解质分析的核心传感元件。",
     detail:
       "离子选择性电极的核心结构由三部分组成：离子选择性膜（ion-selective membrane）——含有特异性的离子载体（ionophore，如钠离子载体 X、钾离子载体缬氨霉素 valinomycin、钙离子载体 ETH 129），仅选择性地结合目标离子并在膜-溶液界面形成电荷分离层，产生膜电位；内参比电极（internal reference electrode，通常为 Ag/AgCl）——浸没在恒定氯离子浓度的内充液中提供稳定的参考电位；以及外参比电极（external reference electrode）——提供与样品溶液无关的稳定参考电位，通过盐桥（salt bridge）与样品连接，构成完整的电位测量回路。\n\nISE 的输出信号是电位差（mV），在理想条件下遵循能斯特方程：E = E⁰ + (RT/zF) * ln(a_i)，其中 E⁰ 为常数电位、R 为气体常数、T 为绝对温度、z 为离子电荷数、F 为法拉第常数、a_i 为目标离子的活度（活度 = 活度系数 × 浓度，在稀溶液中活度系数约为 1）。在 25°C 时，对于一价离子（Na⁺、K⁺、Cl⁻）能斯特斜率为理论值 59.16 mV/log[a] 浓度十倍变化，对于二价离子（Ca²⁺）为 29.58 mV/log[a] 浓度十倍变化。实际 ISE 的斜率通常偏离理论值（Super-Nernstian 或 Sub-Nernstian），需要通过两点或三点标准液校准在每次测量前后进行校正。\n\n在汗液分析中，ISE 面临的核心挑战包括：汗液样本量极小（微升级至毫升级）要求 ISE 微型化和微流控集成，微体积下蒸发会导致离子浓缩效应影响测量精度；汗液成分的个体差异和时效变化（如出汗初期汗液钠浓度快速上升后趋于稳态）要求多点连续测量而非单点测量；以及离子载体膜在长期接触汗液中的生物污损（biofouling）导致的灵敏度和选择性随时间漂移。可穿戴 ISE 通常与微流控汗液采集系统和 Ag/AgCl 参考电极集成在柔性 PET 或 PDMS 基底上，形成即用型一次性汗液传感贴片——这是当前汗液分析从实验室走向可穿戴的核心传感器技术路线。",
-    relatedSlugs: [
+    references: [
       "nernst-equation",
       "electrolyte",
       "sweat-sodium",
@@ -1009,15 +952,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "electrolyte",
-    term: "电解质",
-    termEn: "Electrolyte",
+    id: "electrolyte",
+    term: "电解质 (Electrolyte)",
     category: "physiology",
     definition:
       "体液中溶解后能导电的矿物质离子，主要包括钠（Na⁺）、钾（K⁺）、氯（Cl⁻）和钙（Ca²⁺），在维持神经传导、肌肉收缩、体液渗透压和酸碱平衡中发挥关键作用。",
     detail:
       "电解质的生理功能高度分化：钠离子（Na⁺）是细胞外液的主要阳离子和渗透压的主要决定因素（占细胞外液渗透压的 90% 以上），维持血容量和血压，其跨膜梯度驱动神经动作电位的去极化相（快钠通道开放）和肠道/肾脏的葡萄糖与氨基酸协同转运；钾离子（K⁺）是细胞内液的主要阳离子（细胞内 K⁺浓度约 140mmol/L，细胞外仅 3.5-5.0mmol/L），细胞内外的巨大钾梯度是细胞膜静息电位的基础，心肌细胞和骨骼肌细胞的动作电位复极化依赖于钾外流，血钾紊乱（低钾或高钾血症）可导致危及生命的心律失常；氯离子（Cl⁻）是细胞外液中最重要的阴离子，跟随钠离子维持电中性和体液渗透压，在肾脏的肾小球-肾小管反馈和胃酸（HCl）分泌中也必不可少；钙离子（Ca²⁺）仅有约 1% 参与电解质功能（其余 99% 储存于骨骼），在心肌和平滑肌的兴奋-收缩耦联、神经末梢突触囊泡的递质释放、以及血小板聚集和凝血级联反应中作为关键的细胞内第二信使。\n\n运动中电解质的流失途径主要是汗液——汗液中钠浓度为 10-90 mmol/L（对应 230-2070 mg/L）、钾浓度为 2-10 mmol/L、氯浓度接近但略低于钠、钙浓度极低（<1 mmol/L）。在长时间高温运动中（如夏季马拉松、铁人三项），汗液钠流失总量可高达 5-10g，而血液钠浓度仅需下降 5-10 mmol/L（正常 135-145 mmol/L）即进入低钠血症（Hyponatremia），表现为头痛、恶心、意识模糊甚至危及生命的脑水肿。运动相关低钠血症（EAH, Exercise-Associated Hyponatremia）是耐力运动中的严重可致死医疗事件——主要成因是过量饮水（稀释了血液钠）而非钠摄入不足，这凸显了精准监测汗液钠浓度和出汗率对于个性化补液策略的核心价值。\n\n汗液电解质监测在运动训练中的价值还体现在：电解质的个体内变异（同一运动员在不同热适应阶段、不同饮食下的汗钠浓度差异）和个体间差异（某些运动员是「咸汗者」汗钠浓度 >70 mmol/L、有些则在 20-40 mmol/L）影响了补液的钠需求，基于群体平均值（标准的运动饮料约 20-30 mmol/L 钠）可能对高钠流失者补钠不足、对低钠流失者过量补钠，通过可穿戴汗液传感的个体化测量可实现精准补液和最佳运动表现维持。",
-    relatedSlugs: [
+    references: [
       "sweat-sodium",
       "sweat-rate",
       "ion-selective-electrode",
@@ -1027,15 +969,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "microfluidics",
-    term: "微流控",
-    termEn: "Microfluidics",
+    id: "microfluidics",
+    term: "微流控 (Microfluidics)",
     category: "technology",
     definition:
       "在亚毫米尺度（通常 10-500μm 通道宽度）的微通道网络中精确操控微升至纳升级流体的科学与技术，是可穿戴汗液传感器实现汗液自动采集、定量输送和时序管理的核心平台。",
     detail:
       "微流控系统利用微尺度下流体物理的独特特性来实现精准操控：在微米级通道中，雷诺数（Re）通常远小于 1（层流占绝对主导，惯性力可忽略），粘性力和表面张力主导流体行为，两种流体相遇不产生湍流混合而仅在扩散界面进行分子扩散——这允许在微通道内精确设计化学反应或电化学检测的时间和空间序列。毛细作用（capillary action）是驱动被动式微流控的核心机制——微通道的亲水性内壁（如经氧等离子体处理的 PDMS 或亲水改性的 PET）通过表面张力自发地将汗液从皮肤表面吸入微流道，无需外部泵或电源。\n\n在可穿戴汗液分析中，微流控系统通常包含以下几个功能模块：汗液采集口（sweat inlet，与皮肤直接接触的微孔阵列，单个孔径约 50-200μm，使得分泌的汗液直接进入微通道而减少蒸发损失）、定量输送通道（蛇形延时通道 serpentine channel 通过长度和截面积设计来控制汗液到达传感电极的时间，用于时序分离不同批次汗液样本以消除新旧汗液混合造成的测量滞后）、被动混合器（如交错人字形微槽 staggered herringbone microgrooves，在需要混合多种试剂或样品时通过混沌混合在微尺度下实现高效混合）以及储液池/废液池（reservoir，储存多余汗液防止溢流、维持微通道内液面压力和防止环境污染进入传感器区域）。\n\n微流控在可穿戴设备中的关键性能指标包括：采样时间分辨率——从汗液分泌到到达传感电极的延迟（通常需 <5 分钟以保持与生理变化的同步）；填充体积——激活传感器所需的最小汗液体积（通常 <5-10 μL，以减少启动延迟）；流量稳定性——汗液在微通道内的流速受出汗率、皮肤侧向压力和体温变化的影响，通道设计需保证在出汗率 0.1-5 μL/min/cm² 的宽范围内保持稳定的层流和可控的电极表面更新速率；以及器件机械柔韧性——PDMS 和 PET 柔性微流控贴片可适应皮肤拉伸和弯曲而无泄漏或通道塌陷，是胸带汗液传感器皮肤贴合的基础。",
-    relatedSlugs: [
+    references: [
       "sweat-rate",
       "ion-selective-electrode",
       "colorimetric-sensor",
@@ -1044,15 +985,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "sweat-sodium",
-    term: "汗液钠离子",
-    termEn: "Sweat Sodium Concentration",
+    id: "sweat-sodium",
+    term: "汗液钠离子 (Sweat Sodium Concentration)",
     category: "physiology",
     definition:
       "汗液中的钠离子（Na⁺）浓度，通常范围在 10-90 mmol/L 之间，是评估运动水合状态、电解质流失量和个性化补液策略中最重要的汗液生物标志物。",
     detail:
       "汗液钠浓度的生理调控发生在汗腺的腺泡（分泌线圈）和导管（重吸收段）两个部位。在腺泡段，血浆超滤液（近似等渗于血液，Na⁺约 140 mmol/L）作为初级汗液被分泌到汗腺腔中。在导管段，上皮细胞通过钠通道（ENaC, Epithelial Sodium Channel）主动重吸收钠离子，重吸收率在低出汗率时最高（可达 80-90%，最终汗钠浓度可低至 10-20 mmol/L），但随着出汗率的增加，汗液在导管中的流速加快、停留时间缩短使得重吸收不完全，汗钠浓度飙升至接近初级分泌液的浓度（60-90 mmol/L）。这便是运动强度/出汗率与汗液钠浓度之间的正相关生理基础——出汗越快，汗液越咸。\n\n影响汗钠浓度的因素还包括：个体的长期饮食钠摄入量（高钠饮食上调汗腺钠重吸收能力，长期低钠饮食则下调，这是身体的钠保存适应机制）；热适应状态（热适应后通过醛固酮介导的汗腺导管钠重吸收增强，同等出汗率下的汗钠浓度显著降低 20-40%，从而保留更多血液钠）；和性别/遗传因素（女性汗钠浓度在月经周期的黄体期因孕酮拮抗醛固酮而略高于卵泡期；囊性纤维化 CF 由于 CFTR 通道缺陷导致汗氯和汗钠浓度病理性升高至 >60 mmol/L，这正是汗氯测试作为 CF 诊断金标准的生理基础）。\n\n在可穿戴汗液传感领域，汗液钠的连续监测通过钠离子选择性电极（Na⁺-ISE）来实现——基于钠离子载体 X 的选择性膜产生毫伏级电位信号，再通过能斯特方程转换为钠浓度。在胸带产品中，汗钠监测与出汗率监测的结合可提供高价值的闭环反馈：根据测量的汗钠浓度和出汗率计算实时钠流失速率（mg/min），与预设的用户个体化补钠目标对比，提示用户当前的运动中钠摄入速率是否匹配实际流失速率——这在 3 小时以上的长距离耐力赛事（如 Ironman、马拉松、长途越野跑/骑行）中尤其关键，可有效预防运动相关低钠血症（EAH）。",
-    relatedSlugs: [
+    references: [
       "sweat-rate",
       "electrolyte",
       "ion-selective-electrode",
@@ -1062,15 +1002,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "sweat-lactate",
-    term: "汗液乳酸",
-    termEn: "Sweat Lactate",
+    id: "sweat-lactate",
+    term: "汗液乳酸 (Sweat Lactate)",
     category: "physiology",
     definition:
       "汗液中存在的乳酸，是骨骼肌无氧糖酵解代谢的副产物经血液循环和汗腺分泌进入汗液的代谢物，可作为非侵入式运动强度和代谢状态的替代标志物。",
     detail:
       "汗液乳酸的来源是双重的。主要来源是血液循环中的乳酸——运动中活跃的骨骼肌在氧供不足时（运动强度超过线粒体氧化磷酸化能力）加速糖酵解产生丙酮酸，丙酮酸在乳酸脱氢酶（LDH）的作用下转化为乳酸后释放入血液。血乳酸随后通过汗腺周围毛细血管网的灌注，在汗液分泌的初级过程中被动地（或经部分主动转运可能）进入腺泡分泌液。次要来源是汗腺本身和局部皮肤细胞的局部代谢产生的乳酸——皮肤表皮的有氧和无氧代谢产生的乳酸可能进入汗液，尤其在低出汗率时皮肤局部的贡献占比更高，可能导致低出汗率下汗液乳酸明显高于血液乳酸（汗液/血液比在安静状态下可 >10）。\n\n汗液乳酸的测量主要通过电流型乳酸传感器（amperometric lactate sensor）实现——该传感器通常基于乳酸氧化酶（LOx, Lactate Oxidase）的酶促反应：乳酸 + O₂ → 丙酮酸 + H₂O₂（在 LOx 催化下），生成的过氧化氢（H₂O₂）在工作电极上被氧化（在 +0.6V 至 +1.0V vs Ag/AgCl 的工作电位下）产生与乳酸浓度成正比的电流信号。另一种配置使用电子介体（如普鲁士蓝 Prussian Blue 介体）将工作电位降低至 0V 左右以减少汗液中其他电活性物质（抗坏血酸、尿酸等）的非特异干扰，提高选择性。\n\n汗液乳酸与血液乳酸之间的浓度相关性是运动科学界研究的热点问题——在稳态运动条件下（恒定强度 >5-10 分钟）和出汗率较高的状态下，汗液乳酸与血液乳酸的时程和幅度呈现中等程度的相关性（通常 r = 0.6-0.85），但仍受到个体分泌差异、出汗率、汗液乳酸在导管中的代谢和皮肤局部因素的显著干扰而存在个体内/个体间变异。汗液乳酸的连续监测潜力在于：它提供了一种完全非侵入式（无需反复采指尖血或植入微传感器）的乳酸趋势跟踪手段，可帮助运动员实时了解自身代谢强度（低于、高于还是接近乳酸阈），配合心率和呼吸率的监测形成多维度的运动强度和代谢状态画像。",
-    relatedSlugs: [
+    references: [
       "sweat-sodium",
       "sweat-rate",
       "amperometric-sensor",
@@ -1080,15 +1019,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "colorimetric-sensor",
-    term: "比色传感器",
-    termEn: "Colorimetric Sensor",
+    id: "colorimetric-sensor",
+    term: "比色传感器 (Colorimetric Sensor)",
     category: "sensor",
     definition:
       "利用化学染料或酶促反应在与目标分析物接触后产生肉眼可见或光学读出的颜色变化来定量检测汗液成分的传感器方案，是可穿戴汗液监测中最低成本、最直观的传感方式之一。",
     detail:
       "比色传感器的核心组件是：固定化在纤维素纸、棉基材或亲水改性膜上的特异性比色试剂或酶促反应体系。当汗液通过微流控通道输送至比色反应区时，待测物与试剂发生化学反应（如金属离子-显色螯合物的形成、pH 指示剂的质子化/去质子化、酶-底物-显色剂的级联反应），反应区的颜色强度或色相变化与目标物浓度呈函数关系。颜色的读取方式可以是：基于智能手机摄像头+APP 分析（提取 RGB/Lab 色彩空间的颜色值并与预储存在校准曲线上的数据比较以输出浓度值）——这是目前最实用的可穿戴比色汗液传感器的数据读取方案；也可以是基于集成在传感器贴片上的微型反射式光电探测器（LED 光源+光电二极管）进行自动连续的光学信号读出。\n\n比色传感器的突出优势包括：极低成本和简化的制作工艺（无需精密金属电极和电化学工作站、可在普通实验室甚至洁净工作台上制造）、无需电源（被动式汗液采集和比色反应，仅在光学读出时需要供电）、以及不受电磁干扰影响（与电化学传感器不同，比色反应区不受 BLE/ANT+ 射频发射和周围电子设备产生的电磁场干扰）。这些特点使比色传感器非常适合作为一次性汗液分析贴片的大规模消费品方案。\n\n比色法在可穿戴汗液分析中的典型应用包括：汗液 pH 测量（使用通用 pH 指示剂如刚果红染料混合物，运动汗液 pH 范围 4.5-7.0，pH 下降反映汗腺导管碳酸氢盐重吸收和酸性代谢产物增多）、汗液氯离子（通过 Hg(SCN)₂-Fe³⁺ 硫氰酸铁反应显色，临床 CF 诊断截断值 60 mmol/L Cl⁻）、汗液葡萄糖和乳酸（葡萄糖氧化酶/乳酸氧化酶 + HRP/显色染料的酶联级联比色反应）、以及汗液多种离子的多参数同时比色（在微流控阵列的不同反应池中——每个固定化不同比色试剂——实现同一样品多参数同时测量）。其关键局限在于不可逆消耗性（试剂在单次反应后耗尽无法重复使用，连续监测需时序采样多个反应区）和颜色读出的环境光照依赖性（不同环境光波长可能导致手机摄像头颜色校准偏差，需在 APP 中使用比色参考卡或内置白光照明+暗室测量模式进行环境光校正）。",
-    relatedSlugs: [
+    references: [
       "microfluidics",
       "amperometric-sensor",
       "ion-selective-electrode",
@@ -1097,15 +1035,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "interstitial-fluid",
-    term: "组织间液",
-    termEn: "Interstitial Fluid (ISF)",
+    id: "interstitial-fluid",
+    term: "组织间液 (ISF/Interstitial Fluid)",
     category: "physiology",
     definition:
       "填充于细胞和毛细血管之间组织间隙的细胞外液，约占体重的 15-20%，是血液与细胞之间进行营养、氧气、代谢废物和信号分子交换的中转介质，也是汗液前体和微针连续监测的替代血液指标来源。",
     detail:
       "组织间液的化学组成与血浆高度相似但不完全相同——ISF 中蛋白质浓度极低（约 2-3 g/dL，仅为血浆的 1/3-1/5，因为毛细血管内皮仅允许分子量极小的分子自由通过，大分子蛋白被保留在血液中）、小分子溶质（葡萄糖、乳酸、肌酐、钠钾氯离子、尿素等）的浓度与血浆接近（受 Donnan 效应和毛细管渗透性系数微调），这使得 ISF 的葡萄糖、乳酸和电解质浓度可作为血液浓度的良好替代指标进行经皮无创监测。细胞将代谢垃圾排入 ISF，再从 ISF 吸收氧气和营养——ISF 是整个细胞外液循环的核心枢纽。\n\n截至目前，ISF 分析在可穿戴医疗中的应用最成功的案例是连续血糖监测（CGM）——Abbott Freestyle Libre、Dexcom G6/G7 和 Medtronic Guardian 系列微针 CGM 通过插入皮下的微针（深度约 3-5mm，仅进入 ISF 层面而不刺入毛细血管）测量 ISF 中的葡萄糖浓度，通过氧化酶/介体电流反应或基于荧光寿命的传感产出连续的近乎实时的血糖估计。CGM 的成功证明了 ISF 替代血液指标进行慢病管理和运动代谢监测在技术和商业上的可行性。然而 ISF 葡萄糖不能 1:1 等同于血糖——生理状态下血糖快速变化时 ISF 葡萄糖通常有 5-15 分钟的生理滞后（由 ISF-血浆间的葡萄糖传质速率决定），在快速的运动中可能更长，这限制了 ISF 在精确血糖调节场景下的使用。\n\n在体汗液分析中，ISF 与汗液的关系至关重要但又尚未被充分阐明——初级汗液（等渗腺泡分泌液）的主要成分反映了围绕汗腺的 ISF 而非直接反映血液——ISF 中可测量的离子浓度和代谢物会就近进入汗腺的分泌线圈参与汗液生成。因此，汗液中测得的葡萄糖、乳酸等生物标志物本质上更接近 ISF 浓度而非血液浓度，这也解释了为何血液-汗液葡萄糖/乳酸的相关性并非完美而受到 ISF-血液滞后和汗液导管自身代谢的复合影响。ISF 在可穿戴传感科学中作为血液的邻近替代（proximal surrogate）而非直接替代（direct surrogate）的角色需要准确理解——汗液分析本质上是 ISF 的非侵入观察窗口。",
-    relatedSlugs: [
+    references: [
       "sweat-glucose",
       "sweat-lactate",
       "microneedle-array",
@@ -1114,15 +1051,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "microneedle-array",
-    term: "微针阵列",
-    termEn: "Microneedle Array",
+    id: "microneedle-array",
+    term: "微针阵列 (Microneedle Array)",
     category: "technology",
     definition:
       "由数十到数千根长度在 100-1500μm 之间的微米级针状结构组成的阵列，可无痛穿透皮肤角质层屏障进入表皮或真皮上层，用于采集组织间液或汗液、或植入微型传感器进行皮下连续监测。",
     detail:
       "微针阵列可根据材料和制造工艺分为四类：固体微针（如硅或金属微针，先刺孔再敷贴传感区域，不传送液体，功能类似透皮促渗）；空心微针（内置微米级内腔流体通道，可通过毛细作用或微泵将 ISF 从真皮层抽吸至传感器表面进行分析，实现连续流体输送路径）；可溶/可降解微针（由生物相容性可溶性聚合物如透明质酸、聚乙烯吡咯烷酮 PVP 或海藻糖制成，穿刺皮肤后完全溶解于组织液中释放载带的药物、疫苗或传感标记物，无锐器废物产生）；以及涂层微针（固体针表面涂层目标传感材料或药物，穿透后涂层保留在皮肤内发挥作用）。\n\n在可穿戴汗液分析中，微针阵列的价值在于突破角质层这一皮肤屏障——角质层（stratum corneum）是表皮最外层仅 10-20μm 厚的死细胞层，但其高密度的角蛋白-脂质矩阵极大地阻碍了汗液的自由外流和 ISF 的被动提取。微针阵列穿透角质层后，汗液可以从不受角质层阻滞的真皮层直接外溢至传感器（无滞后、无稀释），或者可以在角质层下方直接进行 ISF 成分的实时监测（绕过了汗腺分泌和重吸收过程的不确定性和时间延迟），这大大提升了非侵入式体内化学参数测量的响应速度和准确度。\n\n微针在可穿戴设备中的关键工程挑战包括：机械强度和锋锐度保持（微针的杨氏模量需大于皮肤的临界应力以防止穿刺时弯曲或断裂，同时尖端曲率半径 <5-10μm 以有效穿刺下层组织而不引起疼痛）；与柔性基底和微流控系统的集成（刚性的硅/金属微针与柔性的 PDMS 贴片基底需要可靠的电/流体连接和机械固定，防止在运动中微针松脱移位）；生物相容性和皮肤反应（材料需具备 ISO 10993 生物相容性认证，长期佩戴（数天）需评估局部的异物反应（foreign body response, FBR）导致的纤维包绕和传感器信号衰减）；以及微针在皮肤基质中的再生和更换（持续运动出汗和皮肤代谢/脱落可能需要定期更换微针贴片而非长期单次使用）。",
-    relatedSlugs: [
+    references: [
       "interstitial-fluid",
       "microfluidics",
       "sweat-glucose",
@@ -1131,15 +1067,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "amperometric-sensor",
-    term: "安培传感器",
-    termEn: "Amperometric Sensor",
+    id: "amperometric-sensor",
+    term: "安培传感器 (Amperometric Sensor)",
     category: "sensor",
     definition:
       "在工作电极与参比电极之间施加固定电位差，测量目标分子在电极表面发生氧化或还原反应所产生的法拉第电流的电化学传感器，是汗液代谢物（乳酸、葡萄糖、乙醇等）和酶底物定量检测的主流技术。",
     detail:
       "安培传感器的核心原理是电化学安培法（amperometry）——在工作电极（working electrode, WE）和参比电极（reference electrode, RE）之间固定一个恒电位（由恒电位仪 potentiostat 通过闭环反馈电路维持 WE vs RE 电位恒定），使目标分析物在工作电极表面被电氧化或电还原，产生的电子转移在外电路形成可测量的法拉第电流（Faradaic current）。该电流在扩散控制条件下与溶液中目标物的局域浓度成正比（i = nFADC/δ，其中 n 为反应电子数、F 为法拉第常数、A 为电极面积、D 为扩散系数、C 为目标物本体浓度、δ 为扩散层厚度）。施加电位根据目标物的氧化还原电位设定——通常选在扩散极限电流平台电压（略高于半波电位 E₁/₂ 约 +150mV），以确保反应为扩散控制且不受干扰物电氧化的影响。\n\n在汗液代谢物分析中，绝大多数安培传感器的电极表面修饰了固定化的氧化还原酶以实现对特定分析物的选择性催化。最经典的配置是：工作电极（如铂、金、玻碳或丝网印刷碳电极）上固定化对应的氧化酶——葡萄糖氧化酶（GOx）用于葡萄糖检测、乳酸氧化酶（LOx）用于乳酸检测、醇氧化酶（AOx）用于乙醇检测、胆固醇氧化酶（ChOx）用于胆固醇检测——酶催化底物发生氧化反应并生成 H₂O₂ 副产物，H₂O₂ 在 +0.6V 至 +1.0V（vs Ag/AgCl）的电位下被氧化生成 O₂ 和 H⁺ 同时释放电子，产生的电流与底物浓度成正比。为避免高工作电位同时氧化汗液中存在的其他电活性干扰物（抗坏血酸、尿酸、对乙酰氨基酚等），可采用电子介体策略——在工作电极表面上共固定电子导电介体（如普鲁士蓝 PB、二茂铁 Ferrocene 衍生物、锇聚合物 Os-polymer 或有机导电聚合物 PEDOT:PSS），将 H₂O₂ 的氧化电位降至 0V 至 -0.1V 区间，大幅减少干扰信号比率。\n\n安培传感器在可穿戴汗液监测中的关键技术指标包括：灵敏度（通常借助酶的高转换数可达到 10⁻⁸ - 10⁻⁶ A/M 级电流密度）、检测限（LOD, 典型酶电极 LOD 为 1-10 μmol/L 满足汗液代谢物检测需求）、线性范围（需要覆盖运动汗液的实际浓度范围，如汗液乳酸 0-25 mmol/L、汗液葡萄糖 0-0.5 mmol/L 的较宽动态范围）、在长时间运动监测中的信号稳定性（酶活性随时间、温度和 pH 变化的衰减——连续数小时的漂移 <10% 通常可接受，单次使用 24h 终端偏差 <20%）以及与微流控汗液输送的集成能力（薄层流动电极设计提升传质速率和传感器时间响应可至 <30 秒，以适应运动的生理状态变化）。",
-    relatedSlugs: [
+    references: [
       "ion-selective-electrode",
       "nernst-equation",
       "sweat-lactate",
@@ -1149,15 +1084,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "nernst-equation",
-    term: "能斯特方程",
-    termEn: "Nernst Equation",
+    id: "nernst-equation",
+    term: "能斯特方程 (Nernst Equation)",
     category: "algorithm",
     definition:
       "描述电化学电池的平衡电极电位与溶液中参与电极反应的离子活度（浓度）之间定量关系的核心方程，是离子选择性电极和所有电位型电化学传感器信号-浓度转换的理论基础。",
     detail:
       "能斯特方程的完整形式为 E = E⁰ - (RT/zF) * ln(a_red / a_ox)，用于氧化还原对 Ox + ze⁻ → Red 的电化学半反应，其中 E 为电极电位，E⁰ 为氧化还原对的标准电极电位（在标准态条件下，所有反应物活度 = 1 时测量的平衡电位）、R 为理想气体常数 8.314 J/(mol·K)、T 为绝对温度（K）、z 为参与电极反应的电子转移数、F 为法拉第常数 96485 C/mol、a_red 和 a_ox 分别为还原态和氧化态物质的活度。对于离子选择性电极（测量单一的特定离子而非氧化还原电对），公式简化为 E = E⁰ + (RT/zF) * ln(a_i)，在 25°C 时，斜率 (RT/F)*ln(10) = 0.05916 V/log[a]，即目标离子活度变化 10 倍（一个 log 单位）对应的电位变化为 59.16 mV（一价离子）或 29.58 mV（二价离子），这就是能斯特斜率的理论值。\n\n在实际的 ISE 中，电位 E 偏离理论能斯特斜率的常见原因包括：离子选择性膜并非 100% 选择性（根据 Nicklskii-Eisenman 方程，干扰离子 j 的贡献为 K_ij^{pot} * a_j^{z_i/z_j}，其中 K_ij^{pot} 是电位选择性系数——该值越小选择性越好，对主要干扰离子通常需 <10⁻³）；离子载体的活度系数在汗液离子强度下偏离 1（汗液离子强度约为 0.1-0.15 mol/L，Debye-Huckel 理论在此范围内需要活度校正）；ISE 膜本身的质子干扰（pH 变化影响离子载体和膜基质的质子状态，大多数阳离子选择性 ISE 的测量 pH 范围约为 4-9）；以及温度对能斯特斜率的直接影响——温度变化 5°C 导致斜率变化约 2%，对于连续运动场景中皮肤温度可能从 30°C 变化至 35°C（相差 5°C），须使用集成的温度传感器实时补偿能斯特斜率的温度效应。\n\n在可穿戴汗液传感器中，能斯特方程的实用性体现于通过两点或多点标准液校准（calibration）来确定实际传感器的表观 E⁰（根据二次校准液或标准浓度已知的汗液替代品测量电位线性回归得到的截距）和修正的实际斜率（不等于理论 59.16 mV/log[a]，而是与理论值的偏差系数）。对于连续测量中的中短期传感漂移，需在测量段前后均进行校准（前校准/后校准），通过漂移修正推算出测量段内各时间点的修正浓度。更先进的方案包括使用片上集成微流控校准储液器的自主校准——间隔固定时间交替引入已知浓度的参比溶液和待测汗液样本，实时修正传感器漂移，实现长效无需离体校准的连续离子监测。",
-    relatedSlugs: [
+    references: [
       "ion-selective-electrode",
       "amperometric-sensor",
       "sweat-sodium",
@@ -1166,15 +1100,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "dehydration-monitoring",
-    term: "脱水监测",
-    termEn: "Dehydration Monitoring",
+    id: "dehydration-monitoring",
+    term: "脱水监测 (Dehydration Monitoring)",
     category: "medical",
     definition:
       "通过对出汗率、汗液电解质浓度、体重变化、心率漂移和核心体温的综合连续监测，评估运动中体液丢失程度和脱水风险的主动预警系统，是运动安全和体能维持的核心医疗应用。",
     detail:
       "脱水的严重度分级通常按体重减少的百分比来定义：轻度脱水（体重损失 1-2%）表现为口渴、轻度心率升高（5-15 bpm）；中度脱水（体重损失 3-5%）出现明显心率升高（15-30 bpm）、运动自我感知费力程度（RPE）增加、尿量减少尿液浓缩加深（尿比重>1.025）、甚至肌肉协调性下降和认知功能轻微受损；重度脱水（体重损失 6-10%）表现为严重的运动能力丧失、体温调控严重障碍（核心体温上限无法稳定散热，存在高热和中暑风险）、精神障碍和循环衰竭风险。脱水程度与核心体温的关系极强——每公斤体重的失水量使核心体温额外升高约 0.1-0.3°C（取决于心肺适能和热环境），两者呈线性且叠加风险关系，而这正是中暑的温床。\n\n传统脱水监测方法存在严重的现实局限——体重称重法虽是金标准但对于日常反复使用过于繁琐不便、赛场上不现实（无法脱衣称重并精确记录饮水量尿量）；尿液颜色比重反映的是肾脏浓缩程度和数小时前的水合状态（滞后严重，运动中尿生成大幅减少使该指标更不可用）；血浆渗透压和钠测定需要静脉血侵入式样本无法连续实时监测。可穿戴汗液传感器为脱水监测提供了一种全新而更具连续性和直接性的替代方案——汗液钠浓度和出汗率的连续联合监测可给出实时总钠流失速率，由此推算出实时血液浓缩程度、估算脱水的速率和时间进程，在预设报警阈值被突破时（如体重损失估计值>2% 或>3%）发出振动/声音补水警报，这一功能在长距离耐力赛事、军队长途行军和高热工作环境安全监测中具有至关重要的生命保护价值。\n\n3-in-1 胸带的潜在监护优势在于多模态数据的互补——胸带 ECG 实时提供心血管漂移（HR 持续升高而运动强度不变是脱水的强信号）、BioZ/EDR 呼吸频率/通气量的变化（脱水和高热时呼吸速率升高可能独立于心率变化）、核心体温持续升高趋势（脱水降低散热效率导致核心体温额外升高）以及可选集成的汗液分析通道提供汗液钠和出汗率的直接流失定量数据，这多源数据的同步联合分析远比任一单一信号或主观评估更有预测脱水和预防与热相关的早期预警价值，使完整的穿戴式脱水监测和响应系统成为可实现的目标。",
-    relatedSlugs: [
+    references: [
       "sweat-rate",
       "sweat-sodium",
       "core-body-temperature",
@@ -1184,15 +1117,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "sweat-glucose",
-    term: "汗液葡萄糖",
-    termEn: "Sweat Glucose",
+    id: "sweat-glucose",
+    term: "汗液葡萄糖 (Sweat Glucose)",
     category: "physiology",
     definition:
       "汗液中可检测到的微量葡萄糖（通常在 0.01-0.5 mmol/L 浓度范围），其浓度在一定条件下与血液葡萄糖水平呈正相关，是非侵入式连续血糖趋势监测的候选替代指标之一。",
     detail:
       "汗液葡萄糖的浓度远低于血液——正常空腹血糖约 4.0-5.5 mmol/L（72-99 mg/dL），而汗液葡萄糖浓度仅为血糖的约 1/100 至 1/500 量级（即 0.01-0.2 mmol/L 空腹下，餐后或高血糖情况下可上升至 0.2-1.0 mmol/L）。这种大幅稀释的机制在于：汗腺在从 ISF 生成初级汗液过程中，葡萄糖经由细胞旁路被动扩散进入汗液的比例极低（毛细血管内皮和汗腺导管对葡萄糖的通透性低，部分葡萄糖被汗腺导管细胞直接代谢消耗），且在导管重吸收过程中进一步的稀释和消耗使得最终排出的汗液葡萄糖浓度微乎其微。\n\n测量这种微量浓度的汗液葡萄糖需要使用超高灵敏度的安培传感器——工作电极上修饰固定化的葡萄糖氧化酶（GOx）催化葡萄糖与 O₂ 反应产生葡萄糖酸和 H₂O₂，H₂O₂ 在还原态普鲁士蓝或钴酞菁介体的低电位（-0.1V 至 +0.1V vs Ag/AgCl）催化下将电子导入电极，或用直接电子传递酶（如使用氧化还原聚合物的电线和共固定酶 FAD-GDH（葡萄糖脱氢酶）的改性来实现非氧依赖性信号，可避免局部氧气波动的影响）。信号增益策略包括使用纳米结构电极（如碳纳米管 CNT 或石墨烯修饰电极增加电活性表面积和酶载量）和微纳通道预浓缩（汗液在微流控通道中蒸发微浓缩使葡萄糖浓度数倍提高后流经传感区，同时需校正预先浓缩倍数）。\n\n汗液葡萄糖与血液葡萄糖的相关性研究得出了一个关键的结论——在稳定的被动/中等强度条件下，汗液葡萄糖浓度的趋势与血糖的变化方向一致，能够用作无创血糖趋势追踪器而非精确血糖定量仪。运动的引入使得情况更加复杂——骨骼肌对葡萄糖的大量摄取导致血糖变动迅速且难以被高滞后的 ISF（和更高滞后的汗液系统——汗液葡萄糖对血糖变化的滞后时间长达 10-30 分钟）精确跟踪。因此目前的汗液葡萄糖监测的价值定位在：作为便捷、无创（无需微针刺入）的血糖变化趋势的初步筛查和日波动监控工具，而非替代糖尿病管理中需要高精度和高确定性的指尖采血或微针 CGM 系统。对于健康运动员的血糖监测优势——仅需了解大致趋势以预防运动中低血糖的风险和建议补碳时机，而非精确的血糖 mg/dL 值，汗液葡萄糖监测足以胜任。",
-    relatedSlugs: [
+    references: [
       "sweat-lactate",
       "interstitial-fluid",
       "amperometric-sensor",
@@ -1201,15 +1133,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "sweat-cortisol",
-    term: "汗液皮质醇",
-    termEn: "Sweat Cortisol",
+    id: "sweat-cortisol",
+    term: "汗液皮质醇 (Sweat Cortisol)",
     category: "physiology",
     definition:
       "由肾上腺皮质分泌的应激激素（皮质醇）经血液循环和汗腺分泌进入汗液中的脂溶性类固醇激素，在汗液中的浓度可反映身体的生理和心理应激水平，是运动训练负荷和压力评估的新兴生物标志物。",
     detail:
       "皮质醇是下丘脑-垂体-肾上腺轴（HPA 轴）的终末激素产物。心理和生理应激（包括高强度训练、低血糖、脱水、情绪压力、睡眠不足等）刺激下丘脑释放促肾上腺皮质激素释放激素（CRH）→刺激垂体前叶释放促肾上腺皮质激素（ACTH）→刺激肾上腺皮质束状带分泌皮质醇进入血液循环。正常人的血浆皮质醇呈现昼夜节律——清晨醒来时浓度最高（10-20 μg/dL，约 276-552 nmol/L），傍晚和深夜降至低点。运动中皮质醇的变化反映运动的生理应激——中等强度以上运动中血浆皮质醇升高（促进脂肪分解提供游离脂肪酸作为替代能源、糖异生维持血糖和保护性抑制过强免疫反应），运动后 10-60 分钟皮质醇回归正常水平。长期的过度训练引起的皮质醇基线升高与运动能力下降和过度训练综合征密切相关，因此皮质醇是训练负荷和恢复状态评估的潜在标记物之一。\n\n汗液中的皮质醇来源于血浆——作为脂溶性小分子（分子量 362 Da），皮质醇可以跨毛细血管内皮和汗腺细胞膜自由扩散进入初级汗液分泌液（与依赖于载体转运的大型水溶性分子不同），因此汗液皮质醇浓度应在原则上与血浆自由态皮质醇浓度保持良好的一致性。由于 >90% 的血浆皮质醇与皮质醇结合球蛋白（CBG）和血清白蛋白结合，剩余的 5-10% 自由态皮质醇（自由态才是生物活性部分和可能扩散进入汗液的部分）决定了汗液皮质醇浓度极低（汗液皮质醇大约是血液自由态皮质醇的 0.5-1.0 倍，通常 <1 ng/mL）。\n\n检测汗液中皮克级的皮质醇需要超高灵敏度的技术——经典的酶联免疫吸附测定（ELISA）的灵敏度下限约 0.1-0.5 ng/mL 勉强覆盖了汗液皮质醇的低端但不够稳定。由此发展出的替代技术包括：电化学适配体/分子印迹传感器——利用高亲和力的皮质醇特异性 DNA 适配体或分子印迹聚合物（MIP）作为识别元件，将皮质醇结合事件转换为可测电流或阻抗信号，可获得 10⁻¹² 至 10⁻¹⁰ M 的检测限，且免标记设计适合可穿戴的连续监测；表面增强拉曼散射（SERS）传感器；以及基于智能手机摄像头的比色/荧光测定法用于一次性汗液皮质醇贴片。目前在可穿戴汗液皮质醇监测中，仍需克服的核心挑战是超低浓度的信号可靠性、汗液中与皮质醇化学结构相似的类固醇（睾丸酮、孕酮、雌激素等）交叉反应导致的假信号以及一天中皮质醇节律性的个体高变异性——同一时间点的单次测量意义有限，时间趋势的连续监测才能真实揭示 HPA 轴的节律性偏移和异常。",
-    relatedSlugs: [
+    references: [
       "sweat-lactate",
       "sweat-glucose",
       "amperometric-sensor",
@@ -1219,19 +1150,18 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
 
   {
-    slug: "biofuel-cell",
-    term: "生物燃料电池",
-    termEn: "Biofuel Cell",
+    id: "biofuel-cell",
+    term: "生物燃料电池 (Biofuel Cell)",
     category: "technology",
     definition:
       "利用固定化的氧化还原酶（或微生物）作为催化剂，将汗液中富含能量的代谢物（如乳酸和葡萄糖）的化学能直接转化为电能的电化学装置，是可穿戴自供能汗液传感系统中能量自给自足的潜在实现途径。",
     detail:
       "生物燃料电池按催化剂类型分为酶生物燃料电池（Enzymatic Biofuel Cell, EBFC）和微生物燃料电池（Microbial Fuel Cell, MFC），在可穿戴汗液应用中主要使用 EBFC，因其体积小、功率密度较高且反应速率可控。EBFC 的结构包括：生物阳极（bioanode）——固定化氧化酶（如乳酸氧化酶 LOx 或葡萄糖氧化酶 GOx）催化汗液中的乳酸/葡萄糖氧化并生成电子，电子经由酶辅因子（如 FAD/FADH₂）传递到导电介体（如锇聚合物 Os-polymer 或萘醌 NQ 衍生物）再传递到碳纳米管/碳纤维等导电电极基底形成电流；生物阴极（biocathode）——固定化还原酶（如胆红素氧化酶 BOD 或漆酶 laccase）将来自阳极的电子和汗液中的溶解氧（O₂）或大气中的 O₂ 还原为水（H₂O），完成整个电子传递回路。电子从阳极到阴极通过外电路流动形成可被采集利用的电流。\n\n汗液中乳酸是运动全程中最持续且浓度最高的可氧化代谢燃料（静息 1-2 mmol/L，运动强度增加可达 15-25 mmol/L），其氧化可提供约每摩尔乳酸 1.4 MJ 的能量（乳酸 → 丙酮酸 + 2e⁻ + 2H⁺，相对于 O₂/H₂O 电对的阳极反应电位约为 -0.2V vs SHE），因此汗液乳酸是 EBFC 在运动场景下的理想燃料。目前文献中报道的最高运动汗液 EBFC 功率密度约为 0.5-2.0 mW/cm² 量级（乳酸氧化酶/碳纳米管阳极 + BOD/碳纳米管阴极配置，在恒电位仪帮助下），虽然仅能提供微瓦到毫瓦级的输出功率，已足够驱动低功耗的传感器前端电路（如温度传感器、pH 计和间歇性 BLE 数据收发）并减少或替代锂电池，实现概念上的自供能传感器——即「汗液供电的汗液传感器」。\n\n生物燃料电池在可穿戴汗液传感商业化中仍需攻坚的核心挑战包括：酶在长时间运动和汗液酸性/高盐浓度环境下活性的保持（酶在 1-3 小时后失活是实验室中的常态，需要包埋/交联策略延缓失活）和功率输出的稳定性和可预测性（功率随汗液乳酸浓度和出汗率大幅波动，需要超级电容器或微型电池缓冲以保证传感器电子系统的平稳工作，不受瞬态低功率或高功率涌的干扰）。长远来看，EBFC 的更宏伟愿景是作为皮肤可穿戴电子系统的生物能源收割机（由身体自身产生的代谢废料供电），实现真正意义上的无需外界充电/更换电池的全自主自持续可穿戴传感平台。",
-    relatedSlugs: [
+    references: [
       "sweat-lactate",
       "sweat-glucose",
       "amperometric-sensor",
       "microfluidics",
     ],
   },
-] as const;
+];

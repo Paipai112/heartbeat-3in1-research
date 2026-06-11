@@ -8,7 +8,7 @@ interface PageHeroProps {
   description?: string;
   badge?: {
     text: string;
-    color?: 'green' | 'teal';
+    color?: string; // hex color or layer id
   };
   children?: React.ReactNode;
 }
@@ -21,29 +21,20 @@ export function PageHero({
   badge,
   children,
 }: PageHeroProps) {
-  const badgeColor = badge?.color ?? 'green';
-
-  const badgeBorderColor =
-    badgeColor === 'green' ? 'border-green-500/20' : 'border-teal-500/20';
-  const badgeBgColor =
-    badgeColor === 'green' ? 'bg-green-500/10' : 'bg-teal-500/10';
-  const dotColor =
-    badgeColor === 'green' ? 'bg-green-400' : 'bg-teal-400';
-  const glowBg =
-    badgeColor === 'green'
-      ? 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(34, 197, 94, 0.08) 0%, transparent 70%)'
-      : 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(8, 145, 178, 0.08) 0%, transparent 70%)';
+  const accentHex = badge?.color ?? "#4ADE80";
 
   return (
     <section
       className="relative min-h-[40vh] flex items-center py-20 lg:py-28"
-      style={{ background: glowBg }}
+      style={{
+        background: `radial-gradient(ellipse 60% 50% at 50% 0%, ${accentHex}10 0%, transparent 70%)`,
+      }}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+      <div className="max-w-[72rem] mx-auto px-6 lg:px-8 w-full">
         {/* Back link */}
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-sm text-[#64748B] hover:text-green-400 transition-colors duration-200 mb-8"
+          className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text-primary transition-colors duration-200 mb-8"
         >
           <svg
             width="14"
@@ -64,27 +55,41 @@ export function PageHero({
         {/* Badge */}
         {badge && (
           <div
-            className={`inline-flex items-center gap-2 rounded-full ${badgeBgColor} border ${badgeBorderColor} px-3 py-1 mb-6`}
+            className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-6 text-xs"
+            style={{
+              backgroundColor: accentHex + "15",
+              border: `1px solid ${accentHex}30`,
+              color: "#A3A3A3",
+            }}
           >
-            <span className={`relative flex h-2 w-2`}>
+            <span className="relative flex h-2 w-2">
               <span
-                className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${dotColor}`}
+                className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+                style={{ backgroundColor: accentHex }}
               />
               <span
-                className={`relative inline-flex rounded-full h-2 w-2 ${dotColor}`}
+                className="relative inline-flex rounded-full h-2 w-2"
+                style={{ backgroundColor: accentHex }}
               />
             </span>
-            <span className="text-xs text-[#94A3B8]">{badge.text}</span>
+            {badge.text}
           </div>
         )}
 
         {/* Title */}
-        <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
+        <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-text-primary leading-tight">
           {titleGradient ? (
             <>
               {title}
               <br />
-              <span className="text-gradient">{titleGradient}</span>
+              <span
+                className="bg-clip-text text-transparent"
+                style={{
+                  backgroundImage: `linear-gradient(135deg, ${accentHex}, #60A5FA)`,
+                }}
+              >
+                {titleGradient}
+              </span>
             </>
           ) : (
             title
@@ -92,11 +97,11 @@ export function PageHero({
         </h1>
 
         {/* Subtitle */}
-        <p className="text-lg text-[#94A3B8] mt-4 max-w-2xl">{subtitle}</p>
+        <p className="text-lg text-text-secondary mt-4 max-w-2xl">{subtitle}</p>
 
         {/* Description */}
         {description && (
-          <p className="text-sm text-[#64748B] max-w-2xl mt-3">
+          <p className="text-sm text-text-muted max-w-2xl mt-3">
             {description}
           </p>
         )}
