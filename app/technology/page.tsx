@@ -740,24 +740,6 @@ export default function TechnologyPage() {
                 ),
               },
               {
-                href: "/technology/combinations",
-                title: "硬件组合方案",
-                desc: "二合一到三合一，六种芯片方案BOM与功耗完整对比",
-                icon: (
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#4ADE80"
-                    strokeWidth="1.5"
-                  >
-                    <rect x="2" y="3" width="20" height="14" rx="2" />
-                    <path d="M8 21h8M12 17v4" />
-                  </svg>
-                ),
-              },
-              {
                 href: "/technology/sweat",
                 title: "汗液分析",
                 desc: "ISE vs 微流控 vs 微针阵列，胸带集成可行性深度分析",
@@ -771,6 +753,24 @@ export default function TechnologyPage() {
                     strokeWidth="1.5"
                   >
                     <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                  </svg>
+                ),
+              },
+              {
+                href: "/technology/combinations",
+                title: "硬件组合方案",
+                desc: "四层架构从传感器到AI教练，全栈BOM与功耗完整对比",
+                icon: (
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#4ADE80"
+                    strokeWidth="1.5"
+                  >
+                    <rect x="2" y="3" width="20" height="14" rx="2" />
+                    <path d="M8 21h8M12 17v4" />
                   </svg>
                 ),
               },
